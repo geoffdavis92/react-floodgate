@@ -5,14 +5,18 @@ const webpack = require("webpack");
 
 module.exports = {
 	entry: {
-		floodgate: "./src/index.js"
+		demo: "./demo.js",
+		floodgate: "./"
 	},
 	devtool: "inline-source-map",
 	output: {
-		path: path.join(__dirname,'dist'),
+		path: path.join(__dirname, "dist"),
 		filename: "[name].js?hash=[hash]"
 	},
 	resolve: {
+		alias: {
+			floodgate: path.resolve(__dirname, "src/")
+		},
 		enforceExtension: false,
 		extensions: [".js", ".jsx", ".json"]
 	},
