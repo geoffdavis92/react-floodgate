@@ -1,4 +1,5 @@
 # floodgate ignores... 
 node_modules/ 
 .DS_Store 
-*log
+*log 
+dist
