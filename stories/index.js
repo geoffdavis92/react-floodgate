@@ -23,11 +23,6 @@ storiesOf('Button', module)
   .add('with text', () => <Button onClick={action('clicked')}>Hello Button</Button>)
   .add('with some emoji', () => <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>);
 
-// storiesOf('Utilities/functions/displayIf', module)
-// 	.add('string: "Hello World"', () => <pre {...PreProps}>{displayIf('Hello World')}</pre>)
-// 	.add('string: ""', () => <pre {...PreProps}>{displayIf(false)}</pre>)
-// 	.add('boolean: false', () => <pre {...PreProps}>{displayIf(false)}</pre>)
-
 storiesOf('Floodgate', module)
 	.add('Numbers up to 100', () => <p>Coming soon!</p>)
 
