@@ -1,79 +1,73 @@
 {
-  "name": "floodgate",
-  "version": "0.0.0",
-  "description": "Configurable React component for loading and displaying data.",
-  "main": "index.js",
-  "repository": "https://github.com/geoffdavis92/floodgate.git",
-  "author": "Geoff Davis <geoffdavis92@gmail.com>",
-  "license": "MIT",
-  "private": false,
-  "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-jest": "^21.2.0",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.0",
-    "babel-preset-react": "^6.24.1",
-    "httpster": "^1.0.3",
-    "jest": "^21.2.1",
-    "prettier": "^1.7.4",
-    "webpack": "^3.6.0",
-    "@storybook/react": "^3.2.12",
-    "@storybook/addon-actions": "^3.2.12",
-    "@storybook/addon-links": "^3.2.12"
-  },
-  "dependencies": {
-    "flow": "^0.2.3",
-    "flow-bin": "^0.57.2",
-    "prop-types": "^15.6.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
-  },
-  "scripts": {
-    "build": "NODE_ENV=production ./node_modules/.bin/webpack",
-    "demo": "./node_modules/.bin/httpster -p 8901 docs",
-    "flow": "./node_modules/.bin/flow",
-    "prettier": "./node_modules/.bin/prettier {.,src,__tests__}/*.{js,json} --write",
-    "start": "NODE_ENV=dev ./node_modules/.bin/webpack --watch",
-    "test": "jest",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
-  },
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "browsers": [
-              "last 10 versions"
-            ]
-          }
-        }
-      ],
-      "react"
-    ],
-    "plugins": [
-      "transform-class-properties",
-      "transform-object-rest-spread"
-    ]
-  },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "node_modules"
-    ],
-    "transform": {
-      "^.+\\.js$": "babel-jest"
-    }
-  },
-  "prettier": {
-    "bracketSpacing": true,
-    "jsxBracketSameLine": false,
-    "parser": "flow",
-    "printWidth": 80,
-    "semi": true,
-    "singleQuote": false,
-    "useTabs": true
-  }
+	"name": "floodgate",
+	"version": "0.0.0",
+	"description":
+		"Configurable React component for loading and displaying data.",
+	"main": "index.js",
+	"repository": "https://github.com/geoffdavis92/floodgate.git",
+	"author": "Geoff Davis <geoffdavis92@gmail.com>",
+	"license": "MIT",
+	"private": false,
+	"devDependencies": {
+		"babel-core": "^6.26.0",
+		"babel-jest": "^21.2.0",
+		"babel-loader": "^7.1.2",
+		"babel-plugin-transform-class-properties": "^6.24.1",
+		"babel-plugin-transform-object-rest-spread": "^6.26.0",
+		"babel-preset-env": "^1.6.0",
+		"babel-preset-react": "^6.24.1",
+		"flow-bin": "^0.57.2",
+		"httpster": "^1.0.3",
+		"jest": "^21.2.1",
+		"prettier": "^1.7.4",
+		"webpack": "^3.6.0",
+		"@storybook/react": "^3.2.12",
+		"@storybook/addon-actions": "^3.2.12",
+		"@storybook/addon-links": "^3.2.12"
+	},
+	"dependencies": {
+		"prop-types": "^15.6.0",
+		"react": "^16.0.0",
+		"react-dom": "^16.0.0"
+	},
+	"scripts": {
+		"build": "NODE_ENV=production ./node_modules/.bin/webpack",
+		"build-storybook": "build-storybook",
+		"demo": "./node_modules/.bin/httpster -p 8901 docs",
+		"flow": "./node_modules/.bin/flow",
+		"prettier":
+			"./node_modules/.bin/prettier {.,src,__tests__}/*.{js,json} --write",
+		"start": "NODE_ENV=dev ./node_modules/.bin/webpack --watch",
+		"storybook": "start-storybook -p 6006",
+		"test": "jest"
+	},
+	"babel": {
+		"presets": [
+			[
+				"env",
+				{
+					"targets": {
+						"browsers": ["last 10 versions"]
+					}
+				}
+			],
+			"react"
+		],
+		"plugins": ["transform-class-properties", "transform-object-rest-spread"]
+	},
+	"jest": {
+		"testPathIgnorePatterns": ["node_modules"],
+		"transform": {
+			"^.+\\.js$": "babel-jest"
+		}
+	},
+	"prettier": {
+		"bracketSpacing": true,
+		"jsxBracketSameLine": false,
+		"parser": "flow",
+		"printWidth": 80,
+		"semi": true,
+		"singleQuote": false,
+		"useTabs": true
+	}
 }
