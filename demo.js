@@ -9,7 +9,7 @@ const errorNotification = ({ errorMessage }) => (
 			color: "#e33",
 			fontFamily: '"Roboto",sans-serif',
 			lineHeight: 1,
-			padding: '1em'
+			padding: "1em"
 		}}
 	>
 		{errorMessage}
