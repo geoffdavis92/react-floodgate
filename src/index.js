@@ -1,29 +1,34 @@
 // @flow
+// @flow-ignore
+import type { FloodgateProps, FloodgateState } from './types'
 import React, { Component } from "react";
 // @flow-ignore
 import PropTypes from "prop-types";
 
-class Floodgate extends Component {
-	state: Object;
-	// @flow-ignore
+class Floodgate extends Component<FloodgateProps,FloodgateState> {
+	// static props
+	static displayName = "Floodgate";
 	static propTypes = {
 		children: PropTypes.func.isRequired,
 		datasource: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
 			.isRequired
 	};
-	// @flow-ignore
 	static defaultProps = {
 		errorDisplay: props => <p>{props.errorMessage}</p>
 	};
+
+	// fields
+	state = {
+		floodgateDidCatch: false,
+		floodgateErrorMessage: "",
+		isFetching: false,
+		data: [],
+		fetchDidCatch: false
+	};
+
+	// methods
 	constructor(props: any) {
 		super(props);
-		this.state = {
-			floodgateDidCatch: false,
-			floodgateErrorMessage: "",
-			isFetching: false,
-			data: [],
-			fetchDidCatch: false
-		};
 	}
 	componentWillMount() {
 		if (this.props.datasource) {
@@ -94,7 +99,7 @@ class Floodgate extends Component {
 			floodgateErrorMessage: info
 		}));
 	}
-	render(): ReactElement {
+	render() {
 		if (!this.state.floodgateDidCatch) {
 			return this.props.children(this.state);
 		} else {
