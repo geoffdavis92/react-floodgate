@@ -69,7 +69,8 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 									throw `FloodgateError: ${data.error}`;
 								} else {
 									this.setState(prevState => ({
-										data
+										data,
+										isFetching: false
 									}));
 								}
 							})
@@ -93,12 +94,22 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 			}));
 		}
 	}
+
 	componentDidCatch(err: string, info: string) {
 		this.setState(prevState => ({
 			floodgateDidCatch: true,
 			floodgateErrorMessage: info
 		}));
 	}
+
+	dataStepper = function*(data, startIndex = 0, iterationLength = 2) {
+		let currentIndex = startIndex;
+		yield [...data].splice(startIndex, iterationLength);
+		while (currentIndex <= data.length - 1) {
+			currentIndex = currentIndex + iterationLength;
+			yield [...data].splice(currentIndex, iterationLength);
+		}
+	};
 	render() {
 		if (!this.state.floodgateDidCatch) {
 			return this.props.children(this.state);
