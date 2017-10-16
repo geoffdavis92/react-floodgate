@@ -6,9 +6,9 @@ const generator = function* generator(data, yieldLength, initialYieldLength) {
 		let firstYield = currentIndex === 0;
 		yield [...data].splice(
 			currentIndex,
-			firstYield && initialYieldLength ? initialYieldLength : yieldLength
+			firstYield && initialYieldLength >= 0 ? initialYieldLength : yieldLength
 		);
-		currentIndex = currentIndex + yieldLength;
+		currentIndex = firstYield && initialYieldLength >= 0 ? (currentIndex + initialYieldLength) : (currentIndex + yieldLength);
 	}
 };
 
