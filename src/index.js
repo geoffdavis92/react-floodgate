@@ -16,18 +16,17 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 	// static props
 	static propTypes = {
 		data: PropTypes.array.isRequired,
-		stepCount: PropTypes.number,
-		initialLoad: PropTypes.number
+		loadCount: PropTypes.number.isRequired,
+		initialLoadCount: PropTypes.number
 	};
 	static defaultProps = {
-		stepCount: 10,
-		initialLoad: 10
+		initialLoadCount: undefined
 	};
 
 	// methods
 	constructor(props: FloodgateProps) {
 		super();
-		this.queue = generator(props.data, props.stepCount, props.initialLoad);
+		this.queue = generator(props.data, props.loadCount, props.initialLoadCount);
 		this.data = props.data;
 		this.state = {
 			renderedData: [],
@@ -52,7 +51,7 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 					...(valueIsAvailable ? value : [])
 				];
 				const dataLengthMatches = newRenderedData.length === this.data.length;
-				const nextYieldIsPartial = value && value.length < this.props.stepCount;
+				const nextYieldIsPartial = value && value.length < this.props.loadCount;
 
 				return {
 					renderedData: newRenderedData,
