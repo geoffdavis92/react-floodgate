@@ -1,12 +1,18 @@
-const generateFilledArray = amount => {
-	const the_array = [];
+// @flow
+const generateFilledArray = (amount: number) => {
+	const the_array: Array<number> = [];
 	for (let i = 0; i < amount; i++) {
 		the_array.push(i);
 	}
 	return the_array;
 };
 
-const theOfficeData = [
+const theOfficeData: Array<{
+	name: string,
+	username: string,
+	email: string,
+	active: boolean
+}> = [
 	{
 		name: "Jim Halpert",
 		username: "jhalpert",
