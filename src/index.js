@@ -14,8 +14,12 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 	loadNext: Function;
 
 	// static props
+	static propTypes = {
+		data: PropTypes.array.isRequired,
+		stepCount: PropTypes.number,
+		initialLoad: PropTypes.number
+	};
 	static defaultProps = {
-		data: [],
 		stepCount: 10,
 		initialLoad: 10
 	};
