@@ -2,7 +2,6 @@ import React from "react";
 
 const generator = function* generator(data, stepCount) {
 	let currentIndex = 0;
-	// yield [...data].splice(0, stepCount);
 	while (currentIndex <= data.length - 1) {
 		yield [...data].splice(currentIndex, stepCount);
 		currentIndex = currentIndex + stepCount;

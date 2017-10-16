@@ -27,12 +27,8 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 			renderedData: [],
 			allDataRendered: false
 		};
-		// this.initQueue();
 		this.loadNext = this.loadNext.bind(this);
 	}
-	// initQueue(data = this.data) {
-	// return (this.queue = generator(data, 3));
-	// }
 	getNext(): Object {
 		return this.queue.next();
 	}
