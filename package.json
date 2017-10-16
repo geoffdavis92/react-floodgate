@@ -36,7 +36,7 @@
 		"demo": "./node_modules/.bin/httpster -p 8901 docs",
 		"flow": "./node_modules/.bin/flow",
 		"prettier":
-			"./node_modules/.bin/prettier {.,src,__tests__}/*.{js,json} --write",
+			"./node_modules/.bin/prettier {.,src,stories,__tests__}/*.{js,json} --write",
 		"start": "NODE_ENV=dev ./node_modules/.bin/webpack --watch",
 		"storybook": "start-storybook -p 6006",
 		"test": "jest"
