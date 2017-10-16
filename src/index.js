@@ -15,13 +15,14 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 
 	// static props
 	static defaultProps = {
-		data: []
+		data: [],
+		stepCount: 10
 	};
 
 	// methods
 	constructor(props: FloodgateProps) {
 		super();
-		this.queue = generator(props.data, 3);
+		this.queue = generator(props.data, props.stepCount);
 		this.data = props.data;
 		this.state = {
 			renderedData: [],
@@ -39,15 +40,17 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 		!this.state.allDataRendered &&
 			this.setState(prevState => {
 				const { value, done } = this.getNext();
-				const valueIsAvailable =
-					value !== null && value !== undefined && value.length > 0;
+				const valueIsAvailable = value !== null && value !== undefined && value.length > 0;
 				const newRenderedData = [
 					...prevState.renderedData,
 					...(valueIsAvailable ? value : [])
 				];
+				const dataLengthMatches = newRenderedData.length === this.data.length
+				const nextYieldIsPartial = value && value.length < this.props.stepCount
+
 				return {
 					renderedData: newRenderedData,
-					allDataRendered: !valueIsAvailable && done ? true : false
+					allDataRendered: (!valueIsAvailable && done) || (valueIsAvailable && (nextYieldIsPartial || dataLengthMatches)) ? true : false
 				};
 			});
 	}
