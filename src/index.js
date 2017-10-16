@@ -50,7 +50,7 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 
 				return {
 					renderedData: newRenderedData,
-					allDataRendered: (!valueIsAvailable && done) || (valueIsAvailable && (nextYieldIsPartial || dataLengthMatches)) ? true : false
+					allDataRendered: !valueIsAvailable || (valueIsAvailable && (nextYieldIsPartial || dataLengthMatches)) ? true : false
 				};
 			});
 	}
