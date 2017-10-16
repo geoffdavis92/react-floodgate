@@ -46,8 +46,8 @@ storiesOf("Floodgate", module)
 			)}
 		</Floodgate>
 	))
-	.add("Displays numbers up to 9, loads every 3", () => (
-		<Floodgate data={generateFilledArray(9)} loadCount={3} initialLoadCount={3}>
+	.add("Displays numbers up to 9, loads every 3, with initial load of 4", () => (
+		<Floodgate data={generateFilledArray(9)} loadCount={3} initialLoadCount={4}>
 			{({ data, loadNext, allLoaded }) => (
 				<article>
 					{data.map(n => <p key={n}>{n}</p>)}
