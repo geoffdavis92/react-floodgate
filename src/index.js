@@ -11,24 +11,35 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 	static propTypes = {
 		children: PropTypes.func.isRequired,
 		datasource: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
-			.isRequired
+			.isRequired,
+		initialCount: PropTypes.number,
+		step: PropTypes.number
 	};
 	static defaultProps = {
-		errorDisplay: props => <p>{props.errorMessage}</p>
-	};
-
-	// fields
-	state = {
-		floodgateDidCatch: false,
-		floodgateErrorMessage: "",
-		isFetching: false,
-		data: [],
-		fetchDidCatch: false
+		errorDisplay: props => <p>{props.errorMessage}</p>,
+		initialCount: 10,
+		step: 10
 	};
 
 	// methods
 	constructor(props: any) {
 		super(props);
+		this.state = {
+			floodgateDidCatch: false,
+			floodgateErrorMessage: "",
+			isFetching: false,
+			data: [],
+			fetchDidCatch: false
+		}
+		this.dataGenerator = function* (data, iterationLength = 2, startIndex = 0) {
+			let currentIndex = startIndex;
+			yield [...data].splice(startIndex, iterationLength);
+			while (currentIndex <= data.length - 1) {
+				currentIndex = currentIndex + iterationLength;
+				yield [...data].splice(currentIndex, iterationLength);
+			}
+		}
+		this.dataQueue;
 	}
 	componentWillMount() {
 		if (this.props.datasource) {
@@ -71,7 +82,7 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 									this.setState(prevState => ({
 										data,
 										isFetching: false
-									}));
+									}), () => this.dataQueue = this.dataGenerator(data,this.props.initialCount));
 								}
 							})
 							.catch(err => {
@@ -83,7 +94,7 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 					} else {
 						this.setState(prevState => ({
 							data: this.props.datasource
-						}));
+						}), () => this.dataQueue = this.dataGenerator(data,this.props.initialCount));
 					}
 				}
 			);
@@ -102,17 +113,14 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 		}));
 	}
 
-	dataStepper = function*(data, startIndex = 0, iterationLength = 2) {
-		let currentIndex = startIndex;
-		yield [...data].splice(startIndex, iterationLength);
-		while (currentIndex <= data.length - 1) {
-			currentIndex = currentIndex + iterationLength;
-			yield [...data].splice(currentIndex, iterationLength);
-		}
-	};
+	next() {
+		const { value, done } = this.dataQueue.next()
+		return { value, done }
+	}
+
 	render() {
 		if (!this.state.floodgateDidCatch) {
-			return this.props.children(this.state);
+			return this.props.children({ loadNext: this.next, ...this.state});
 		} else {
 			return this.props.errorDisplay({
 				errorMessage: this.state.floodgateErrorMessage
