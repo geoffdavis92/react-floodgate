@@ -8,7 +8,10 @@ const generator = function* generator(data, yieldLength, initialYieldLength) {
 			currentIndex,
 			firstYield && initialYieldLength >= 0 ? initialYieldLength : yieldLength
 		);
-		currentIndex = firstYield && initialYieldLength >= 0 ? (currentIndex + initialYieldLength) : (currentIndex + yieldLength);
+		currentIndex =
+			firstYield && initialYieldLength >= 0
+				? currentIndex + initialYieldLength
+				: currentIndex + yieldLength;
 	}
 };
 

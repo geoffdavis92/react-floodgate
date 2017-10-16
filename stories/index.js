@@ -30,7 +30,6 @@ storiesOf("Button", module)
 	.add("with some emoji", () => (
 		<Button onClick={action("clicked")}>😀 😎 👍 💯</Button>
 	));
-
 storiesOf("Floodgate", module)
 	.add("Displays numbers up to 9, loads every 2", () => (
 		<Floodgate data={generateFilledArray(9)} loadCount={2}>
@@ -46,20 +45,27 @@ storiesOf("Floodgate", module)
 			)}
 		</Floodgate>
 	))
-	.add("Displays numbers up to 9, loads every 3, with initial load of 4", () => (
-		<Floodgate data={generateFilledArray(9)} loadCount={3} initialLoadCount={4}>
-			{({ data, loadNext, allLoaded }) => (
-				<article>
-					{data.map(n => <p key={n}>{n}</p>)}
-					{(!allLoaded && (
-						<p>
-							<button onClick={loadNext}>Load More</button>
-						</p>
-					)) || <p>All loaded.</p>}
-				</article>
-			)}
-		</Floodgate>
-	))
+	.add(
+		"Displays numbers up to 9, loads every 3, with initial load of 4",
+		() => (
+			<Floodgate
+				data={generateFilledArray(9)}
+				loadCount={3}
+				initialLoadCount={4}
+			>
+				{({ data, loadNext, allLoaded }) => (
+					<article>
+						{data.map(n => <p key={n}>{n}</p>)}
+						{(!allLoaded && (
+							<p>
+								<button onClick={loadNext}>Load More</button>
+							</p>
+						)) || <p>All loaded.</p>}
+					</article>
+				)}
+			</Floodgate>
+		)
+	)
 	.add("Displays numbers up to 9, loads every 9", () => (
 		<Floodgate data={generateFilledArray(9)} loadCount={9}>
 			{({ data, loadNext, allLoaded }) => (
@@ -74,7 +80,6 @@ storiesOf("Floodgate", module)
 			)}
 		</Floodgate>
 	));
-
 storiesOf("Utilities/functions/ErrorMessage", module)
 	.add("Generic message", () => (
 		<ErrorMessage

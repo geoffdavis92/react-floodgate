@@ -1,14 +1,16 @@
 {
 	"name": "react-floodgate",
 	"version": "0.0.0",
-	"description":
-		"Configurable and flexible React component for incrementally displaying data.",
+	"description": "Configurable and flexible React component for incrementally displaying data.",
 	"main": "index.js",
 	"repository": "https://github.com/geoffdavis92/react-floodgate.git",
 	"author": "Geoff Davis <geoffdavis92@gmail.com>",
 	"license": "MIT",
 	"private": false,
 	"devDependencies": {
+		"@storybook/addon-actions": "^3.2.12",
+		"@storybook/addon-links": "^3.2.12",
+		"@storybook/react": "^3.2.12",
 		"babel-core": "^6.26.0",
 		"babel-jest": "^21.2.0",
 		"babel-loader": "^7.1.2",
@@ -20,10 +22,7 @@
 		"httpster": "^1.0.3",
 		"jest": "^21.2.1",
 		"prettier": "^1.7.4",
-		"webpack": "^3.6.0",
-		"@storybook/react": "^3.2.12",
-		"@storybook/addon-actions": "^3.2.12",
-		"@storybook/addon-links": "^3.2.12"
+		"webpack": "^3.6.0"
 	},
 	"dependencies": {
 		"prop-types": "^15.6.0",
@@ -35,8 +34,7 @@
 		"build-storybook": "build-storybook",
 		"demo": "./node_modules/.bin/httpster -p 8901 docs",
 		"flow": "./node_modules/.bin/flow",
-		"prettier":
-			"./node_modules/.bin/prettier {.,src,stories,__tests__}/*.{js,json} --write",
+		"prettier": "./node_modules/.bin/prettier {.,src,stories,__tests__}/*.{js,json} --write",
 		"start": "NODE_ENV=dev ./node_modules/.bin/webpack --watch",
 		"storybook": "start-storybook -p 6006",
 		"test": "jest"
@@ -47,16 +45,23 @@
 				"env",
 				{
 					"targets": {
-						"browsers": ["last 10 versions"]
+						"browsers": [
+							"last 10 versions"
+						]
 					}
 				}
 			],
 			"react"
 		],
-		"plugins": ["transform-class-properties", "transform-object-rest-spread"]
+		"plugins": [
+			"transform-class-properties",
+			"transform-object-rest-spread"
+		]
 	},
 	"jest": {
-		"testPathIgnorePatterns": ["node_modules"],
+		"testPathIgnorePatterns": [
+			"node_modules"
+		],
 		"transform": {
 			"^.+\\.js$": "babel-jest"
 		}
