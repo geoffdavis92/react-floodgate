@@ -2,7 +2,7 @@
 	"name": "react-floodgate",
 	"version": "0.0.0",
 	"description":
-		"Configurable React component for incrementally displaying data.",
+		"Configurable and flexible React component for incrementally displaying data.",
 	"main": "index.js",
 	"repository": "https://github.com/geoffdavis92/react-floodgate.git",
 	"author": "Geoff Davis <geoffdavis92@gmail.com>",
