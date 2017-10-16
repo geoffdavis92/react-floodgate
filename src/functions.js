@@ -1,10 +1,14 @@
 import React from "react";
 
-const generator = function* generator(data, stepCount) {
+const generator = function* generator(data, yieldLength, initialYieldLength) {
 	let currentIndex = 0;
 	while (currentIndex <= data.length - 1) {
-		yield [...data].splice(currentIndex, stepCount)
-		currentIndex = currentIndex + stepCount;
+		let firstYield = currentIndex === 0;
+		yield [...data].splice(
+			currentIndex,
+			firstYield && initialYieldLength ? initialYieldLength : yieldLength
+		);
+		currentIndex = currentIndex + yieldLength;
 	}
 };
 

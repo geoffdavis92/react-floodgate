@@ -14,15 +14,20 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 	loadNext: Function;
 
 	// static props
+	static propTypes = {
+		data: PropTypes.array.isRequired,
+		stepCount: PropTypes.number,
+		initialLoad: PropTypes.number
+	};
 	static defaultProps = {
-		data: [],
-		stepCount: 10
+		stepCount: 10,
+		initialLoad: 10
 	};
 
 	// methods
 	constructor(props: FloodgateProps) {
 		super();
-		this.queue = generator(props.data, props.stepCount);
+		this.queue = generator(props.data, props.stepCount, props.initialLoad);
 		this.data = props.data;
 		this.state = {
 			renderedData: [],
@@ -40,17 +45,22 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 		!this.state.allDataRendered &&
 			this.setState(prevState => {
 				const { value, done } = this.getNext();
-				const valueIsAvailable = value !== null && value !== undefined && value.length > 0;
+				const valueIsAvailable =
+					value !== null && value !== undefined && value.length > 0;
 				const newRenderedData = [
 					...prevState.renderedData,
 					...(valueIsAvailable ? value : [])
 				];
-				const dataLengthMatches = newRenderedData.length === this.data.length
-				const nextYieldIsPartial = value && value.length < this.props.stepCount
+				const dataLengthMatches = newRenderedData.length === this.data.length;
+				const nextYieldIsPartial = value && value.length < this.props.stepCount;
 
 				return {
 					renderedData: newRenderedData,
-					allDataRendered: !valueIsAvailable || (valueIsAvailable && (nextYieldIsPartial || dataLengthMatches)) ? true : false
+					allDataRendered:
+						!valueIsAvailable ||
+						(valueIsAvailable && (nextYieldIsPartial || dataLengthMatches))
+							? true
+							: false
 				};
 			});
 	}
