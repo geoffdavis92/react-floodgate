@@ -1,10 +1,10 @@
 {
-	"name": "floodgate",
+	"name": "react-floodgate",
 	"version": "0.0.0",
 	"description":
-		"Configurable React component for loading and displaying data.",
+		"Configurable React component for incrementally displaying data.",
 	"main": "index.js",
-	"repository": "https://github.com/geoffdavis92/floodgate.git",
+	"repository": "https://github.com/geoffdavis92/react-floodgate.git",
 	"author": "Geoff Davis <geoffdavis92@gmail.com>",
 	"license": "MIT",
 	"private": false,
