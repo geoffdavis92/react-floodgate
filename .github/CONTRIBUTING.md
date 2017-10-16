@@ -10,20 +10,20 @@
 
 When creating a branch, please adhere to the following branch name specification:
 
-`{username}/{classification}/{issue}/{short_description}`
+`{username}/{branch_name}`
 
 Where:
 
 - `{username}`: your Github username
-- `{classification}`: One of the following:
-	- `bug`: fixing a bug
-	- `feature`: adding a new feature
-	- `meta`: adding/updating any files pertaining to Github, the package.json, or the README
-- `{issue}` (optional): if applicable, the related issue # that this PR solves 
-- `{short_description}`: camelCase descriptive PR title; e.g. a PR that fixes a typo in the README may have a description like `fixReadmeTypo`
+- `{branch_name}`: desdcriptive branch name in camelCase
 
+This makes it clear 1. who is making the PR and 2. what problem is being solved/feature being added/etc when reviewing PRs on Github.
 
-### Yarn scripts
+## Creating a Pull Request
+
+After you have forked the repo and created a feature branch, you can submit a [pull request](https://github.com/geoffdavis92/react-floodgate/pulls) directly to this repo.
+
+## Yarn scripts
 
 Any `yarn`/`npm` scripts run locally-installed CLI binaries, so there is no worry about making sure your global binaries of the tools used are up to date. Note, this project primarily uses `yarn`, which is recommended, so ensuring Yarn is properly installed and up-to-date is important in the development process.
 
