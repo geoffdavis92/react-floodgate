@@ -11,11 +11,8 @@ type ErrorBoundaryState = {
 };
 type FloodgateProps = Object;
 type FloodgateState = {
-	floodgateDidCatch: boolean,
-	floodgateErrorMessage: string,
-	isFetching: boolean,
-	data: Array<any>,
-	fetchDidCatch: boolean
+	renderedData: Array<any>,
+	allDataRendered: boolean
 };
 
 export {

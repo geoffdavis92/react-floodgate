@@ -1,5 +1,5 @@
 import Floodgate from "floodgate";
-import * as FloodgateTypes from 'src/types'
+import * as FloodgateTypes from "src/types";
 
 export default Floodgate;
-export { FloodgateTypes }
+export { FloodgateTypes };

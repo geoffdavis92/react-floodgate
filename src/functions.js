@@ -1,17 +1,13 @@
 import React from "react";
 
-// const displayIf = (itemToCheck, replaceHolder = "<=itemToCheck=>") => {
-// 	//itemToCheck ? replaceHolder.replace(/\<\=\s*[a-zA-Z0-9\-\_]+\s*\=\>/g, itemToCheck) : "";
-// 	switch (typeof replaceHolder) {
-// 		case 'function': {
-// 			return itemToCheck && replaceHolder({ replaceVal }) || null
-// 			break;
-// 		}
-// 		case 'string': {
-// 			return itemToCheck && replaceHolder.replace(/\<\=\s*[a-zA-Z0-9\-\_]+\s*\=\>/g, replaceVal) || "";
-// 		}
-// 	}
-// };
+const generator = function* generator(data, stepCount) {
+	let currentIndex = 0;
+	// yield [...data].splice(0, stepCount);
+	while (currentIndex <= data.length - 1) {
+		yield [...data].splice(currentIndex, stepCount);
+		currentIndex = currentIndex + stepCount;
+	}
+};
 
 const ErrorMessage = (
 	{ children, callerDisplayName, text, ...rest } = { text: false }
@@ -26,4 +22,4 @@ const ErrorMessage = (
 	</span>
 );
 
-export { ErrorMessage };
+export { ErrorMessage, generator };
