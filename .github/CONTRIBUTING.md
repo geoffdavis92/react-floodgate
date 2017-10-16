@@ -28,4 +28,4 @@ Where:
 Any `yarn`/`npm` scripts run locally-installed CLI binaries, so there is no worry about making sure your global binaries of the tools used are up to date. Note, this project primarily uses `yarn`, which is recommended, so ensuring Yarn is properly installed and up-to-date is important in the development process.
 
 
-Note: this file is based off of the [Downshift CONTRIBUTING file](https://github.com/paypal/downshift/blob/master/CONTRIBUTING.md).
+<!-- Note: this file is based off of the [Downshift CONTRIBUTING file](https://github.com/paypal/downshift/blob/master/CONTRIBUTING.md). -->

@@ -25,4 +25,4 @@ This README file modeled after the [Downshift README](https://github.com/paypal/
 
 ## LICENSE
 
-[MIT](blob/master/LICENSE)
+[MIT](blob/master/.github/LICENSE)
