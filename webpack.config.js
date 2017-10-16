@@ -5,8 +5,7 @@ const webpack = require("webpack");
 
 module.exports = {
 	entry: {
-		demo: "./demo.js",
-		floodgate: "./"
+		'react-floodgate': "./"
 	},
 	devtool: "inline-source-map",
 	output: {
