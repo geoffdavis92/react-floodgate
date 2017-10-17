@@ -2,6 +2,8 @@
 
 ## Setup
 
+This project uses [Yarn](https://yarnpkg.com) as its package manager; it is highly recommended that contributors use Yarn if possible.
+
 1. Fork and clone the repo
 2. Run `yarn` to install dependencies
 3. Create a branch for your PR
