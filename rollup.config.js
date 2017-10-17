@@ -22,8 +22,7 @@ const plugins = [
 		types: path.resolve(".", "src/types")
 	}),
 	babel({
-		exclude: "node_modules/**",
-		externalHelpers: false
+		exclude: "node_modules/**"	
 	}),
 	commonjs({
 		include: ["node_modules/**"],

@@ -45,36 +45,55 @@
 		"react-dom": "^16.0.0"
 	},
 	"scripts": {
-		"build": "NODE_ENV=production ./node_modules/.bin/rollup -c --bundle",
-		"build-webpack": "NODE_ENV=production ./node_modules/.bin/webpack",
+		"build": "NODE_ENV=rollup ./node_modules/.bin/rollup -c --bundle && yarn test",
 		"build-storybook": "build-storybook",
 		"demo": "./node_modules/.bin/httpster -p 8901 docs",
 		"flow": "./node_modules/.bin/flow",
 		"prettier":
 			"./node_modules/.bin/prettier {.,src,stories,__tests__}/*.{js,json} --write",
-		"start": "NODE_ENV=dev ./node_modules/.bin/rollup -c --watch",
-		"start-webpack": "NODE_ENV=dev ./node_modules/.bin/webpack --watch",
+		"start": "NODE_ENV=rollup ./node_modules/.bin/rollup -c --watch",
 		"storybook": "start-storybook -p 6006",
 		"test": "jest"
 	},
 	"babel": {
-		"presets": [
-			[
-				"env",
-				{
-					"modules": false,
-					"targets": {
-						"browsers": ["last 10 versions"]
-					}
-				}
-			],
-			"react"
-		],
-		"plugins": [
-			"external-helpers",
-			"transform-class-properties",
-			"transform-object-rest-spread"
-		]
+		"env": {
+			"rollup": {
+				"presets": [
+					[
+						"env",
+						{
+							"modules": false,
+							"targets": {
+								"browsers": ["last 10 versions"]
+							}
+						}
+					],
+					"react"
+				],
+				"plugins": [
+					"external-helpers",
+					"transform-class-properties",
+					"transform-object-rest-spread"
+				]
+			},
+			"test": {
+				"presets": [
+					[
+						"env",
+						{
+							"targets": {
+								"browsers": ["last 10 versions"]
+							}
+						}
+					],
+					"react"
+				],
+				"plugins": [
+					"transform-class-properties",
+					"transform-object-rest-spread"
+				]
+			}
+		}
 	},
 	"jest": {
 		"moduleDirectories": ["node_modules", "src", "dist"],
