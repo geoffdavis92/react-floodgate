@@ -1,6 +1,7 @@
 # react-floodgate ignores... 
-node_modules/ 
 .DS_Store 
+__tests__/__snapshots__/ 
+node_modules/ 
 *log
-demo.js 
-__tests__/__snapshots__/
+package-lock.json
+demo.js
