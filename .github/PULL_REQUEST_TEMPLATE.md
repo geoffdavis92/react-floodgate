@@ -6,3 +6,6 @@
 
 ### How:
 <!-- how are these changes implemented? -->
+
+<!-- ### Closes: -->
+<!-- use this only if this PR closes an issue; link the issue using the `#{issue_id}` syntax -->
