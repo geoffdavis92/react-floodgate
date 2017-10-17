@@ -1,5 +1,4 @@
 // @flow
-// @flow-ignore
 import type { FloodgateProps, FloodgateState } from "./types";
 import React, { Component } from "react";
 // @flow-ignore

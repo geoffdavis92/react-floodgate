@@ -1,6 +1,5 @@
 // @flow
-
-const loopSimulation = (amount: number, simulation) => {
+const loopSimulation = (amount: number, simulation: Function) => {
 	for (let i = 0; i < amount; i++) {
 		simulation();
 	}
