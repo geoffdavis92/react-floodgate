@@ -1,8 +1,7 @@
 {
 	"name": "react-floodgate",
 	"version": "0.0.3",
-	"description":
-		"Configurable and flexible React component for incrementally displaying data.",
+	"description": "Configurable and flexible React component for incrementally displaying data.",
 	"main": "dist/react-floodgate.cjs.js",
 	"jsnext:main": "dist/react-floodgate.esm.js",
 	"module": "dist/react-floodgate.esm.js",
@@ -14,9 +13,7 @@
 		"@storybook/addon-actions": "^3.2.12",
 		"@storybook/addon-links": "^3.2.12",
 		"@storybook/react": "^3.2.12",
-		"babel-core": "^6.26.0",
 		"babel-jest": "^21.2.0",
-		"babel-loader": "^7.1.2",
 		"babel-plugin-external-helpers": "^6.22.0",
 		"babel-plugin-transform-class-properties": "^6.24.1",
 		"babel-plugin-transform-object-rest-spread": "^6.26.0",
@@ -26,7 +23,6 @@
 		"enzyme-adapter-react-16": "^1.0.1",
 		"enzyme-to-json": "^3.1.4",
 		"flow-bin": "^0.57.2",
-		"httpster": "^1.0.3",
 		"jest": "^21.2.1",
 		"prettier": "^1.7.4",
 		"react-test-renderer": "^16.0.0",
@@ -36,8 +32,7 @@
 		"rollup-plugin-commonjs": "^8.2.1",
 		"rollup-plugin-node-resolve": "^3.0.0",
 		"rollup-plugin-uglify": "^2.0.1",
-		"uglify-es": "^3.1.3",
-		"webpack": "^3.6.0"
+		"uglify-es": "^3.1.3"
 	},
 	"dependencies": {
 		"prop-types": "^15.6.0",
@@ -49,8 +44,7 @@
 		"build:storybook": "build-storybook",
 		"demo": "./node_modules/.bin/httpster -p 8901 docs",
 		"flow": "./node_modules/.bin/flow",
-		"prettier":
-			"./node_modules/.bin/prettier {.,src,stories,__tests__}/*.{js,json} --write",
+		"prettier": "./node_modules/.bin/prettier {.,src,stories,__tests__}/*.{js,json} --write",
 		"rollup": "NODE_ENV=rollup ./node_modules/.bin/rollup -c",
 		"start": "NODE_ENV=rollup ./node_modules/.bin/rollup -c --watch",
 		"storybook": "start-storybook -p 6006",
@@ -66,7 +60,9 @@
 						{
 							"modules": false,
 							"targets": {
-								"browsers": ["last 10 versions"]
+								"browsers": [
+									"last 10 versions"
+								]
 							}
 						}
 					],
@@ -84,7 +80,9 @@
 						"env",
 						{
 							"targets": {
-								"browsers": ["last 10 versions"]
+								"browsers": [
+									"last 10 versions"
+								]
 							}
 						}
 					],
@@ -98,8 +96,14 @@
 		}
 	},
 	"jest": {
-		"moduleDirectories": ["node_modules", "src", "dist"],
-		"testPathIgnorePatterns": ["node_modules"],
+		"moduleDirectories": [
+			"node_modules",
+			"src",
+			"dist"
+		],
+		"testPathIgnorePatterns": [
+			"node_modules"
+		],
 		"transform": {
 			"^.+\\.js$": "babel-jest"
 		}
