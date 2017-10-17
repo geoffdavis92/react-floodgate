@@ -20,7 +20,7 @@ module.exports = {
 			'classes': '../src/classes',
   		'functions': '../src/functions',
   		'helpers': '../src/helpers',
-  		'floodgate': '../src/'
+  		'floodgate': '../dist/react-floodgate.esm.js'
 		}
 	}
 };
