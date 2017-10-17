@@ -1,10 +1,10 @@
 // @flow
 
 const loopSimulation = (amount: number, simulation) => {
-	for (let i=0;i<amount;i++) {
-		simulation()
+	for (let i = 0; i < amount; i++) {
+		simulation();
 	}
-}
+};
 
 const generateFilledArray = (amount: number) => {
 	const the_array: Array<number> = [];
