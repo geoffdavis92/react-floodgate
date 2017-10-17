@@ -28,9 +28,13 @@ This project was inspired by [Kent Dodd's](https://twitter.com/kentcdodd) [Downs
 
 This README file modeled after the [Downshift README](https://github.com/paypal/downshift/blob/master/README.md).
 
+## Usage
+
 ## Examples
 
 - [Proof of Concept](https://codesandbox.io/embed/jlzxplj2z9)
+
+## Contributors
 
 ## LICENSE
 
