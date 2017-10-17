@@ -1,4 +1,11 @@
 // @flow
+
+const loopSimulation = (amount: number, simulation) => {
+	for (let i=0;i<amount;i++) {
+		simulation()
+	}
+}
+
 const generateFilledArray = (amount: number) => {
 	const the_array: Array<number> = [];
 	for (let i = 0; i < amount; i++) {
@@ -57,4 +64,4 @@ const theOfficeData: Array<{
 	}
 ];
 
-export { generateFilledArray, theOfficeData };
+export { generateFilledArray, loopSimulation, theOfficeData };
