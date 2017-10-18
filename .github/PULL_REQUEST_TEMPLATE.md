@@ -7,5 +7,4 @@
 ### How:
 <!-- how are these changes implemented? -->
 
-<!-- ### Closes: -->
-<!-- use this only if this PR closes an issue; link the issue using the `#{issue_id}` syntax -->
+<!-- ### Reference: Link any issues this PR may close or pertain to; eg #24, #33, etc -->

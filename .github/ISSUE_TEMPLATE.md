@@ -14,14 +14,11 @@ What you did:
 
 
 What happened:
-
 <!-- Please provide the full error message/screenshots/anything -->
 
 Reproduction repository:
-
 <!--
-If possible, please create a repository that reproduces the issue with the
-minimal amount of code possible.
+If possible, please create a repository or sandbox environment that reproduces the issue with the minimal amount of code possible.
 -->
 
 Problem description:

@@ -1,5 +1,7 @@
 # Contributing to react-floodgate
 
+Welcome! As a contributor to this project, it is expected that you abide by the [Code of Conduct](./CODE_OF_CONDUCT.md).
+
 ## Setup
 
 This project uses [Yarn](https://yarnpkg.com) as its package manager; it is highly recommended that contributors use Yarn if possible.
