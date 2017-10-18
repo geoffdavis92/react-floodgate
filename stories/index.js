@@ -5,7 +5,7 @@ import { action } from "@storybook/addon-actions";
 import { linkTo } from "@storybook/addon-links";
 
 import { Button, Welcome } from "@storybook/react/demo";
-import Floodgate from "floodgate";
+import Floodgate from "../dist/floodgate.esm";
 import { ErrorMessage } from "functions";
 import { generateFilledArray } from "helpers";
 
