@@ -25,6 +25,7 @@
 		"flow-bin": "^0.57.2",
 		"jest": "^21.2.1",
 		"prettier": "^1.7.4",
+		"react": "^16.0.0",
 		"react-dom": "16",
 		"react-test-renderer": "^16.0.0",
 		"rollup": "^0.50.0",
@@ -115,8 +116,5 @@
 		"semi": true,
 		"singleQuote": false,
 		"useTabs": true
-	},
-	"peerDependencies": {
-		"react": "16"
 	}
 }
