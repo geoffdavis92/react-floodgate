@@ -1,9 +1,7 @@
 // @flow
 import type { ErrorBoundaryProps, ErrorBoundaryState } from "./types";
 import React, { Component } from "react";
-// @flow-ignore
 import PropTypes from "prop-types";
-// @flow-ignore
 import { ErrorMessage } from "functions";
 
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
