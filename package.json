@@ -1,12 +1,13 @@
 {
 	"name": "react-floodgate",
-	"version": "0.0.4",
-	"description":
-		"Configurable and flexible React component for incrementally displaying data.",
+	"version": "0.0.5",
+	"description": "Configurable and flexible React component for incrementally displaying data.",
 	"main": "dist/react-floodgate.cjs.js",
 	"jsnext:main": "dist/react-floodgate.esm.js",
 	"module": "dist/react-floodgate.esm.js",
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"repository": "https://github.com/geoffdavis92/react-floodgate.git",
 	"author": "Geoff Davis <geoffdavis92@gmail.com>",
 	"license": "MIT",
@@ -42,13 +43,11 @@
 		"prop-types": "^15.6.0"
 	},
 	"scripts": {
-		"build":
-			"NODE_ENV=rollup ./node_modules/.bin/rollup -c --bundle && yarn test",
+		"build": "NODE_ENV=rollup ./node_modules/.bin/rollup -c --bundle && yarn test",
 		"build:storybook": "build-storybook",
 		"demo": "./node_modules/.bin/httpster -p 8901 docs",
 		"flow": "./node_modules/.bin/flow",
-		"prettier":
-			"./node_modules/.bin/prettier {.,src,stories,__tests__}/*.{js,json} --write",
+		"prettier": "./node_modules/.bin/prettier {.,src,stories,__tests__}/*.{js,json} --write",
 		"rollup": "NODE_ENV=rollup ./node_modules/.bin/rollup -c",
 		"start": "NODE_ENV=rollup ./node_modules/.bin/rollup -c --watch",
 		"storybook": "start-storybook -p 6006",
@@ -64,7 +63,9 @@
 						{
 							"modules": false,
 							"targets": {
-								"browsers": ["last 10 versions"]
+								"browsers": [
+									"last 10 versions"
+								]
 							}
 						}
 					],
@@ -82,7 +83,9 @@
 						"env",
 						{
 							"targets": {
-								"browsers": ["last 10 versions"]
+								"browsers": [
+									"last 10 versions"
+								]
 							}
 						}
 					],
@@ -96,8 +99,14 @@
 		}
 	},
 	"jest": {
-		"moduleDirectories": ["node_modules", "src", "dist"],
-		"testPathIgnorePatterns": ["node_modules"],
+		"moduleDirectories": [
+			"node_modules",
+			"src",
+			"dist"
+		],
+		"testPathIgnorePatterns": [
+			"node_modules"
+		],
 		"transform": {
 			"^.+\\.js$": "babel-jest"
 		}
