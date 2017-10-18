@@ -93,24 +93,3 @@ storiesOf("Utilities/functions/ErrorMessage", module)
 		</ErrorMessage>
 	))
 	.add("No `text` provided, no children", () => <ErrorMessage />);
-
-storiesOf('Test', module).add('make it work', () => (
-	<Floodgate
-				data={[0,1,2,3,4,5,6,7,8,9]}
-				loadCount={3}
-				initialLoadCount={4}
-			>
-				{({ data, loadNext, allLoaded }) => { 
-					console.log({allLoaded,data})
-					return (
-									<article>
-										{data.map(n => <p key={n}>{n}</p>)}
-										{(!allLoaded && (
-											<p>
-												<button onClick={loadNext}>Load More</button>
-											</p>
-										)) || <p>All loaded.</p>}
-									</article>
-								)}}
-			</Floodgate>
-))
