@@ -4,7 +4,7 @@ import Enzyme, { render, shallow, mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import toJSON from "enzyme-to-json";
 
-import Floodgate from "floodgate.esm";
+import Floodgate from "floodgate";
 import { loopSimulation, theOfficeData } from "helpers";
 
 // configure Enzyme
