@@ -1,5 +1,6 @@
 // @flow
 import type { FloodgateProps, FloodgateState } from "./types";
+import * as _Polyfill from 'babel-polyfill'
 import React, { Component } from "react";
 // @flow-ignore
 import PropTypes from "prop-types";
