@@ -38,17 +38,17 @@ const plugins = [
 ];
 
 const config = {
-	input: "./index.js",
+	input: "./src/index.js",
 	output: [
 		{
-			file: "dist/floodgate.js",
+			file: "dist/floodgate.cjs.js",
 			format: "cjs",
 			name: "Floodgate",
 			banner: `/** floodgate v${version} : commonjs module **/`,
 			exports: "named"
 		},
 		{
-			file: "dist/floodgate.esm.js",
+			file: "dist/floodgate.js",
 			format: "es",
 			name: "Floodgate",
 			banner: `/** floodgate v${version} : es module **/`
