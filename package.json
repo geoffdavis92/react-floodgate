@@ -6,6 +6,7 @@
 	"main": "dist/react-floodgate.cjs.js",
 	"jsnext:main": "dist/react-floodgate.esm.js",
 	"module": "dist/react-floodgate.esm.js",
+	"files": ["dist"],
 	"repository": "https://github.com/geoffdavis92/react-floodgate.git",
 	"author": "Geoff Davis <geoffdavis92@gmail.com>",
 	"license": "MIT",
