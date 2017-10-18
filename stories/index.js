@@ -5,7 +5,7 @@ import { action } from "@storybook/addon-actions";
 import { linkTo } from "@storybook/addon-links";
 
 import { Button, Welcome } from "@storybook/react/demo";
-import Floodgate from "../dist/floodgate.esm";
+import Floodgate from "floodgate";
 import { ErrorMessage } from "functions";
 import { generateFilledArray } from "helpers";
 
@@ -93,3 +93,24 @@ storiesOf("Utilities/functions/ErrorMessage", module)
 		</ErrorMessage>
 	))
 	.add("No `text` provided, no children", () => <ErrorMessage />);
+
+storiesOf('Test', module).add('make it work', () => (
+	<Floodgate
+				data={[0,1,2,3,4,5,6,7,8,9]}
+				loadCount={3}
+				initialLoadCount={4}
+			>
+				{({ data, loadNext, allLoaded }) => { 
+					console.log({allLoaded,data})
+					return (
+									<article>
+										{data.map(n => <p key={n}>{n}</p>)}
+										{(!allLoaded && (
+											<p>
+												<button onClick={loadNext}>Load More</button>
+											</p>
+										)) || <p>All loaded.</p>}
+									</article>
+								)}}
+			</Floodgate>
+))
