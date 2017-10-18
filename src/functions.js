@@ -1,13 +1,11 @@
 // @flow
 import React from "react";
 
-// @flow-ignore
 const generator = function* generator(
 	data: Array<any>,
 	yieldLength: number,
 	initialYieldLength: number
-	// @flow-ignore
-) {
+): Generator<Array<any>,void,Object> {
 	let currentIndex: number = 0;
 	while (currentIndex <= data.length - 1) {
 		let firstYield = currentIndex === 0;
