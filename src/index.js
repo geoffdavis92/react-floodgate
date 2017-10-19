@@ -43,14 +43,14 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 	componentDidMount(): void {
 		this.loadNext();
 	}
-	resetQueue(): void {
+	resetQueue(/*{ callback }: { callback: Function }*/): void {
 		this.queue = generator(this.data, this.props.increment, this.props.initial);
 		this.setState(prevState => ({
 			renderedItems: [],
 			allItemsRendered: false
 		}), this.loadNext)
 	}
-	loadNext(): void {
+	loadNext(/*{ callback }: { callback: Function }*/): void {
 		!this.state.allItemsRendered &&
 			this.setState(prevState => {
 				const { value, done } = this.getNext();
@@ -71,7 +71,7 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 							? true
 							: false
 				};
-			});
+			}/*, () => callback && callback()/*.bind(this)*\/ */);
 	}
 	render(): Function {
 		const { loadNext, resetQueue } = this;
