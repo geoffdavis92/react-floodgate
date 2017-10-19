@@ -45,33 +45,39 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 	}
 	resetQueue(/*{ callback }: { callback: Function }*/): void {
 		this.queue = generator(this.data, this.props.increment, this.props.initial);
-		this.setState(prevState => ({
-			renderedItems: [],
-			allItemsRendered: false
-		}), () => this.loadNext(/*{ callback }*/))
+		this.setState(
+			prevState => ({
+				renderedItems: [],
+				allItemsRendered: false
+			}),
+			() => this.loadNext(/*{ callback }*/)
+		);
 	}
 	loadNext(/*{ callback }: { callback: Function }*/): void {
 		!this.state.allItemsRendered &&
-			this.setState(prevState => {
-				const { value, done } = this.getNext();
-				const valueIsAvailable =
-					value !== null && value !== undefined && value.length > 0;
-				const newRenderedData = [
-					...prevState.renderedItems,
-					...(valueIsAvailable ? value : [])
-				];
-				const dataLengthMatches = newRenderedData.length === this.data.length;
-				const nextYieldIsPartial = value && value.length < this.props.increment;
+			this.setState(
+				prevState => {
+					const { value, done } = this.getNext();
+					const valueIsAvailable =
+						value !== null && value !== undefined && value.length > 0;
+					const newRenderedData = [
+						...prevState.renderedItems,
+						...(valueIsAvailable ? value : [])
+					];
+					const dataLengthMatches = newRenderedData.length === this.data.length;
+					const nextYieldIsPartial =
+						value && value.length < this.props.increment;
 
-				return {
-					renderedItems: newRenderedData,
-					allItemsRendered:
-						!valueIsAvailable ||
-						(valueIsAvailable && (nextYieldIsPartial || dataLengthMatches))
-							? true
-							: false
-				};
-			}/*, () => callback && callback()/*.bind(this)*\/ */);
+					return {
+						renderedItems: newRenderedData,
+						allItemsRendered:
+							!valueIsAvailable ||
+							(valueIsAvailable && (nextYieldIsPartial || dataLengthMatches))
+								? true
+								: false
+					};
+				} /*, () => callback && callback()/*.bind(this)*\/ */
+			);
 	}
 	render(): Function {
 		const { loadNext, resetQueue } = this;

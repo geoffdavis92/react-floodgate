@@ -13,26 +13,26 @@ Enzyme.configure({ adapter: new Adapter() });
 
 // Floodgate isntance
 const FloodgateInstance = ({ increment = 3, initial = 3 }) => (
-	<Floodgate data={theOfficeData} {...{ increment, initial }}>
-		{({ items, loadNext, loadComplete }) => (
+	<Floodgate data={theOfficeData} {...{ initial, increment }}>
+		{({ items, loadNext, resetQueue, loadComplete }) => (
 			<main>
 				{items.map(({ name }) => <p key={name}>{name}</p>)}
-				{(!loadComplete && <button onClick={loadNext}>Load More</button>) || (
-					<p>All items loaded.</p>
-				)}
-			</main>
-		)}
-	</Floodgate>
-);
-
-// render Floodgate instances
-const enzymeShallowInstance = shallow(
-	<Floodgate data={theOfficeData} increment={3}>
-		{({ items, loadNext, loadComplete }) => (
-			<main>
-				{items.map(({ name }) => <p key={name}>{name}</p>)}
-				{(!loadComplete && <button onClick={loadNext}>Load More</button>) || (
-					<p>All items loaded.</p>
+				{(!loadComplete && (
+					<span>
+						<button id="load" onClick={loadNext}>
+							Load More
+						</button>
+						<button id="reset" onClick={resetQueue}>
+							Reset
+						</button>
+					</span>
+				)) || (
+					<p>
+						All items loaded.<br />
+						<button id="reset" onClick={resetQueue}>
+							Reset
+						</button>
+					</p>
 				)}
 			</main>
 		)}
@@ -47,10 +47,10 @@ describe("Floodgate", () => {
 	});
 
 	// test instance has correct children
-	it("Should render 3 `p` children and one `button` child", () => {
+	it("Should render 3 `p` children and 2 `button` child", () => {
 		const fgi = mount(<FloodgateInstance />);
 		expect(fgi.find("p").length).toBe(3);
-		expect(fgi.find("button").length).toBe(1);
+		expect(fgi.find("button").length).toBe(2);
 		expect(toJSON(fgi)).toMatchSnapshot();
 	});
 
@@ -79,36 +79,94 @@ describe("Floodgate", () => {
 		expect(toJSON(fgi)).toMatchSnapshot();
 
 		// simulate click
-		fgi.find("button").simulate("click");
+		fgi.find("button#load").simulate("click");
 		expect(fgi.find("p").length).toBe(6);
 		expect(toJSON(fgi)).toMatchSnapshot();
 	});
 	// test instance loads different lengths of increment
 	it("Should render with 2 `p` children and load 1 `p` children `onClick()`", () => {
 		const fgi = mount(<FloodgateInstance initial={2} increment={1} />);
-		const button = fgi.find("button");
+		const loadButton = fgi.find("button#load");
 		const p = (prop = false) => (prop ? fgi.find("p")[prop] : fgi.find("p"));
 		expect(p("length")).toBe(2);
 		expect(toJSON(fgi)).toMatchSnapshot();
 
 		// simulate click
-		button.simulate("click");
+		loadButton.simulate("click");
 		expect(p("length")).toBe(3);
 		expect(toJSON(fgi)).toMatchSnapshot();
 
-		loopSimulation(2, () => button.simulate("click"));
+		loopSimulation(2, () => loadButton.simulate("click"));
 		expect(p("length")).toBe(5);
-		expect(fgi.find("button").length).toBe(1);
+		expect(fgi.find("button").length).toBe(2);
 		expect(toJSON(fgi)).toMatchSnapshot();
 
-		loopSimulation(3, () => button.simulate("click"));
+		loopSimulation(3, () => loadButton.simulate("click"));
 		expect(p("length")).toBe(8);
 		expect(
 			p()
 				.last()
 				.text()
 		).toMatch("All items loaded.");
-		expect(fgi.find("button").length).toBe(0);
+		expect(fgi.find("button").length).toBe(1);
 		expect(toJSON(fgi)).toMatchSnapshot();
 	});
+	it("Should render with 2 `p` children, load 1 `p` child, and reset state to original load", () => {
+		const fgi = mount(<FloodgateInstance initial={2} increment={1} />);
+		const loadButton = fgi.find("button#load");
+		const resetButton = fgi.find("button#reset");
+		const p = (prop = false) => (prop ? fgi.find("p")[prop] : fgi.find("p"));
+		expect(p("length")).toBe(2);
+		expect(
+			p()
+				.first()
+				.text()
+		).toMatch("Jim Halpert");
+		expect(
+			p()
+				.last()
+				.text()
+		).toMatch("Pam Halpert");
+		expect(toJSON(fgi)).toMatchSnapshot();
+
+		loadButton.simulate("click");
+		expect(p("length")).toBe(3);
+		expect(toJSON(fgi)).toMatchSnapshot();
+
+		resetButton.simulate("click");
+		expect(p("length")).toBe(2);
+		expect(
+			p()
+				.first()
+				.text()
+		).toMatch("Jim Halpert");
+		expect(
+			p()
+				.last()
+				.text()
+		).toMatch("Pam Halpert");
+		expect(fgi.find("button").length).toBe(2);
+		expect(toJSON(fgi)).toMatchSnapshot();
+	});
+	it('Should render 1 `p` child, click to load  then reset', () => {
+		const fgi = mount(<FloodgateInstance initial={1} increment={theOfficeData.length-1} />);
+		const loadButton = fgi.find("button#load");
+		const resetButton = fgi.find("button#reset");
+		const p = (prop = false) => (prop ? fgi.find("p")[prop] : fgi.find("p"));
+		expect(p("length")).toBe(1);
+		
+		loadButton.simulate('click')
+		expect(p("length")).toBe(theOfficeData.length+1);
+		expect(
+			p()
+				.first()
+				.text()
+		).toMatch("Jim Halpert");
+		expect(
+			p()
+				.at(theOfficeData.length-1)
+				.text()
+		).toMatch("Angela Schrute");
+		expect(toJSON(fgi)).toMatchSnapshot();
+	})
 });

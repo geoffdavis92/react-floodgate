@@ -98,6 +98,26 @@ storiesOf("Floodgate", module)
 				</article>
 			)}
 		</Floodgate>
+	))
+	.add("Has reset button 2", () => (
+		<Floodgate data={generateFilledArray(25)} initial={1} increment={24}>
+			{({ items, loadNext, loadComplete, resetQueue }) => (
+				<article>
+					{items.map(n => <p key={n}>{n}</p>)}
+					{(!loadComplete && (
+						<p>
+							<button onClick={loadNext}>Load More</button>
+							<button onClick={resetQueue}>Reset</button>
+						</p>
+					)) || (
+						<p>
+							All loaded.<br />
+							<button onClick={resetQueue}>Reset</button>
+						</p>
+					)}
+				</article>
+			)}
+		</Floodgate>
 	));
 storiesOf("Utilities/functions/ErrorMessage", module)
 	.add("Generic message", () => (
