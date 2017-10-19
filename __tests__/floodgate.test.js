@@ -1,3 +1,4 @@
+import rAFPolyfill from './__test_utils__'
 import React from "react";
 import jest from "jest";
 import Enzyme, { render, shallow, mount } from "enzyme";
