@@ -28,6 +28,16 @@ This project was inspired by [Kent Dodd's](https://twitter.com/kentcdodd) [Downs
 
 This README file modeled after the [Downshift README](https://github.com/paypal/downshift/blob/master/README.md).
 
+## Installation
+
+You can install the package via [**`npm`**](https://npmjs.org/) or [**`yarn`**](https://yarnpkg.com/):
+
+`$ yarn add react-floodgate`
+
+or
+
+`$ npm i --save react-floodgate`
+
 ## Usage
 
 ## Examples
