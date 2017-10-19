@@ -48,7 +48,7 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 		this.setState(prevState => ({
 			renderedItems: [],
 			allItemsRendered: false
-		}), this.loadNext)
+		}), () => this.loadNext(/*{ callback }*/))
 	}
 	loadNext(/*{ callback }: { callback: Function }*/): void {
 		!this.state.allItemsRendered &&
