@@ -105,7 +105,8 @@
       "dist"
     ],
     "testPathIgnorePatterns": [
-      "node_modules"
+      "node_modules",
+      "__tests__/__*"
     ],
     "transform": {
       "^.+\\.js$": "babel-jest"
