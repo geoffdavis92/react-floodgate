@@ -1,124 +1,113 @@
 {
-  "name": "react-floodgate",
-  "version": "0.0.6",
-  "description": "Configurable and flexible React component for incrementally displaying data.",
-  "main": "index.js",
-  "files": [
-    "index.js",
-    "dist"
-  ],
-  "repository": "https://github.com/geoffdavis92/react-floodgate.git",
-  "author": "Geoff Davis <geoffdavis92@gmail.com>",
-  "license": "MIT",
-  "private": false,
-  "devDependencies": {
-    "@storybook/addon-actions": "^3.2.12",
-    "@storybook/addon-links": "^3.2.12",
-    "@storybook/react": "^3.2.12",
-    "babel-jest": "^21.2.0",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.0",
-    "babel-preset-react": "^6.24.1",
-    "enzyme": "^3.1.0",
-    "enzyme-adapter-react-16": "^1.0.1",
-    "enzyme-to-json": "^3.1.4",
-    "flow-bin": "^0.57.2",
-    "jest": "^21.2.1",
-    "prettier": "^1.7.4",
-    "react": "^16.0.0",
-    "react-dom": "16",
-    "react-test-renderer": "^16.0.0",
-    "rollup": "^0.50.0",
-    "rollup-plugin-alias": "^1.3.1",
-    "rollup-plugin-babel": "^3.0.2",
-    "rollup-plugin-commonjs": "^8.2.1",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-plugin-uglify": "^2.0.1",
-    "uglify-es": "^3.1.3"
-  },
-  "dependencies": {
-    "prop-types": "^15.6.0"
-  },
-  "scripts": {
-    "build": "NODE_ENV=rollup ./node_modules/.bin/rollup -c --bundle && yarn test",
-    "build:storybook": "build-storybook",
-    "demo": "./node_modules/.bin/httpster -p 8901 docs",
-    "flow": "./node_modules/.bin/flow",
-    "prettier": "./node_modules/.bin/prettier {.,src,stories,__tests__}/*.{js,json} --write",
-    "rollup": "NODE_ENV=rollup ./node_modules/.bin/rollup -c",
-    "start": "NODE_ENV=rollup ./node_modules/.bin/rollup -c --watch",
-    "storybook": "start-storybook -p 6006",
-    "test": "jest -u",
-    "test:watch": "jest -u --watch"
-  },
-  "babel": {
-    "env": {
-      "rollup": {
-        "presets": [
-          [
-            "env",
-            {
-              "modules": false,
-              "targets": {
-                "browsers": [
-                  "last 2 versions"
-                ]
-              }
-            }
-          ],
-          "react"
-        ],
-        "plugins": [
-          "external-helpers",
-          "transform-class-properties",
-          "transform-object-rest-spread"
-        ]
-      },
-      "test": {
-        "presets": [
-          [
-            "env",
-            {
-              "targets": {
-                "browsers": [
-                  "last 2 versions"
-                ]
-              }
-            }
-          ],
-          "react"
-        ],
-        "plugins": [
-          "transform-class-properties",
-          "transform-object-rest-spread"
-        ]
-      }
-    }
-  },
-  "jest": {
-    "moduleDirectories": [
-      "node_modules",
-      "src",
-      "dist"
-    ],
-    "testPathIgnorePatterns": [
-      "node_modules",
-      "__tests__/__*"
-    ],
-    "transform": {
-      "^.+\\.js$": "babel-jest"
-    }
-  },
-  "prettier": {
-    "bracketSpacing": true,
-    "jsxBracketSameLine": false,
-    "parser": "flow",
-    "printWidth": 80,
-    "semi": true,
-    "singleQuote": false,
-    "useTabs": true
-  }
+	"name": "react-floodgate",
+	"version": "0.0.6",
+	"description":
+		"Configurable and flexible React component for incrementally displaying data.",
+	"main": "index.js",
+	"files": ["index.js", "dist"],
+	"repository": "https://github.com/geoffdavis92/react-floodgate.git",
+	"author": "Geoff Davis <geoffdavis92@gmail.com>",
+	"license": "MIT",
+	"private": false,
+	"devDependencies": {
+		"@storybook/addon-actions": "^3.2.12",
+		"@storybook/addon-links": "^3.2.12",
+		"@storybook/react": "^3.2.12",
+		"babel-jest": "^21.2.0",
+		"babel-plugin-external-helpers": "^6.22.0",
+		"babel-plugin-transform-class-properties": "^6.24.1",
+		"babel-plugin-transform-object-rest-spread": "^6.26.0",
+		"babel-polyfill": "^6.26.0",
+		"babel-preset-env": "^1.6.0",
+		"babel-preset-react": "^6.24.1",
+		"enzyme": "^3.1.0",
+		"enzyme-adapter-react-16": "^1.0.1",
+		"enzyme-to-json": "^3.1.4",
+		"flow-bin": "^0.57.2",
+		"jest": "^21.2.1",
+		"prettier": "^1.7.4",
+		"react": "^16.0.0",
+		"react-dom": "16",
+		"react-test-renderer": "^16.0.0",
+		"rollup": "^0.50.0",
+		"rollup-plugin-alias": "^1.3.1",
+		"rollup-plugin-babel": "^3.0.2",
+		"rollup-plugin-commonjs": "^8.2.1",
+		"rollup-plugin-node-resolve": "^3.0.0",
+		"rollup-plugin-uglify": "^2.0.1",
+		"uglify-es": "^3.1.3"
+	},
+	"dependencies": {
+		"prop-types": "^15.6.0"
+	},
+	"scripts": {
+		"build":
+			"NODE_ENV=rollup ./node_modules/.bin/rollup -c --bundle && yarn test",
+		"build:storybook": "build-storybook",
+		"demo": "./node_modules/.bin/httpster -p 8901 docs",
+		"flow": "./node_modules/.bin/flow",
+		"prettier":
+			"./node_modules/.bin/prettier {.,src,stories,__tests__}/*.{js,json} --write",
+		"rollup": "NODE_ENV=rollup ./node_modules/.bin/rollup -c",
+		"start": "NODE_ENV=rollup ./node_modules/.bin/rollup -c --watch",
+		"storybook": "start-storybook -p 6006",
+		"test": "jest -u",
+		"test:watch": "jest -u --watch"
+	},
+	"babel": {
+		"env": {
+			"rollup": {
+				"presets": [
+					[
+						"env",
+						{
+							"modules": false,
+							"targets": {
+								"browsers": ["last 2 versions"]
+							}
+						}
+					],
+					"react"
+				],
+				"plugins": [
+					"external-helpers",
+					"transform-class-properties",
+					"transform-object-rest-spread"
+				]
+			},
+			"test": {
+				"presets": [
+					[
+						"env",
+						{
+							"targets": {
+								"browsers": ["last 2 versions"]
+							}
+						}
+					],
+					"react"
+				],
+				"plugins": [
+					"transform-class-properties",
+					"transform-object-rest-spread"
+				]
+			}
+		}
+	},
+	"jest": {
+		"moduleDirectories": ["node_modules", "src", "dist"],
+		"testPathIgnorePatterns": ["node_modules", "__tests__/__*"],
+		"transform": {
+			"^.+\\.js$": "babel-jest"
+		}
+	},
+	"prettier": {
+		"bracketSpacing": true,
+		"jsxBracketSameLine": false,
+		"parser": "flow",
+		"printWidth": 80,
+		"semi": true,
+		"singleQuote": false,
+		"useTabs": true
+	}
 }
