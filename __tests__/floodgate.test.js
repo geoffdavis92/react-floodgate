@@ -12,12 +12,12 @@ import { loopSimulation, theOfficeData } from "helpers";
 Enzyme.configure({ adapter: new Adapter() });
 
 // Floodgate isntance
-const FloodgateInstance = ({ loadCount = 3, initialLoadCount = 3 }) => (
-	<Floodgate data={theOfficeData} {...{ loadCount, initialLoadCount }}>
-		{({ data, loadNext, allLoaded }) => (
+const FloodgateInstance = ({ increment = 3, initial = 3 }) => (
+	<Floodgate data={theOfficeData} {...{ increment, initial }}>
+		{({ items, loadNext, loadComplete }) => (
 			<main>
-				{data.map(({ name }) => <p key={name}>{name}</p>)}
-				{(!allLoaded && <button onClick={loadNext}>Load More</button>) || (
+				{items.map(({ name }) => <p key={name}>{name}</p>)}
+				{(!loadComplete && <button onClick={loadNext}>Load More</button>) || (
 					<p>All items loaded.</p>
 				)}
 			</main>
@@ -27,11 +27,11 @@ const FloodgateInstance = ({ loadCount = 3, initialLoadCount = 3 }) => (
 
 // render Floodgate instances
 const enzymeShallowInstance = shallow(
-	<Floodgate data={theOfficeData} loadCount={3}>
-		{({ data, loadNext, allLoaded }) => (
+	<Floodgate data={theOfficeData} increment={3}>
+		{({ items, loadNext, loadComplete }) => (
 			<main>
-				{data.map(({ name }) => <p key={name}>{name}</p>)}
-				{(!allLoaded && <button onClick={loadNext}>Load More</button>) || (
+				{items.map(({ name }) => <p key={name}>{name}</p>)}
+				{(!loadComplete && <button onClick={loadNext}>Load More</button>) || (
 					<p>All items loaded.</p>
 				)}
 			</main>
@@ -65,9 +65,9 @@ describe("Floodgate", () => {
 		expect(renderedParagraphTextValues).toMatchObject(testTextValues);
 	});
 
-	// test instance renders non-default lengths of initialLoadCount
+	// test instance renders non-default lengths of initial
 	it("Should render with 4 `p` children", () => {
-		const fgi = mount(<FloodgateInstance initialLoadCount={4} />);
+		const fgi = mount(<FloodgateInstance initial={4} />);
 		expect(fgi.find("p").length).toBe(4);
 		expect(toJSON(fgi)).toMatchSnapshot();
 	});
@@ -83,9 +83,9 @@ describe("Floodgate", () => {
 		expect(fgi.find("p").length).toBe(6);
 		expect(toJSON(fgi)).toMatchSnapshot();
 	});
-	// test instance loads different lengths of loadCount
+	// test instance loads different lengths of increment
 	it("Should render with 2 `p` children and load 1 `p` children `onClick()`", () => {
-		const fgi = mount(<FloodgateInstance initialLoadCount={2} loadCount={1} />);
+		const fgi = mount(<FloodgateInstance initial={2} increment={1} />);
 		const button = fgi.find("button");
 		const p = (prop = false) => (prop ? fgi.find("p")[prop] : fgi.find("p"));
 		expect(p("length")).toBe(2);

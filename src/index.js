@@ -9,27 +9,30 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 	// flow types
 	data: Array<any>;
 	queue: Function;
+	getNext: Function;
 	loadNext: Function;
 
 	// static props
 	static propTypes = {
 		data: PropTypes.array.isRequired,
-		loadCount: PropTypes.number.isRequired,
-		initialLoadCount: PropTypes.number
+		initial: PropTypes.number,
+		increment: PropTypes.number
 	};
 	static defaultProps = {
-		initialLoadCount: undefined
+		initial: 5,
+		increment: 5
 	};
 
 	// methods
 	constructor(props: FloodgateProps) {
 		super();
-		this.queue = generator(props.data, props.loadCount, props.initialLoadCount);
+		this.queue = generator(props.data, props.increment, props.initial);
 		this.data = props.data;
 		this.state = {
-			renderedData: [],
-			allDataRendered: false
+			renderedItems: [],
+			allItemsRendered: false
 		};
+		this.getNext = this.getNext.bind(this);
 		this.loadNext = this.loadNext.bind(this);
 	}
 	getNext(): Object {
@@ -39,21 +42,21 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 		this.loadNext();
 	}
 	loadNext(): void {
-		!this.state.allDataRendered &&
+		!this.state.allItemsRendered &&
 			this.setState(prevState => {
 				const { value, done } = this.getNext();
 				const valueIsAvailable =
 					value !== null && value !== undefined && value.length > 0;
 				const newRenderedData = [
-					...prevState.renderedData,
+					...prevState.renderedItems,
 					...(valueIsAvailable ? value : [])
 				];
 				const dataLengthMatches = newRenderedData.length === this.data.length;
-				const nextYieldIsPartial = value && value.length < this.props.loadCount;
+				const nextYieldIsPartial = value && value.length < this.props.increment;
 
 				return {
-					renderedData: newRenderedData,
-					allDataRendered:
+					renderedItems: newRenderedData,
+					allItemsRendered:
 						!valueIsAvailable ||
 						(valueIsAvailable && (nextYieldIsPartial || dataLengthMatches))
 							? true
@@ -63,9 +66,9 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 	}
 	render(): Function {
 		return this.props.children({
-			data: this.state.renderedData,
+			items: this.state.renderedItems,
 			loadNext: this.loadNext,
-			allLoaded: this.state.allDataRendered
+			loadComplete: this.state.allItemsRendered
 		});
 	}
 }
