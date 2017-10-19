@@ -31,32 +31,31 @@ storiesOf("Button", module)
 		<Button onClick={action("clicked")}>😀 😎 👍 💯</Button>
 	));
 storiesOf("Floodgate", module)
-	.add("Displays numbers up to 9, loads every 2", () => (
-		<Floodgate data={generateFilledArray(9)} loadCount={2}>
-			{({ data, loadNext, allLoaded }) => (
-				<article>
-					{data.map(n => <p key={n}>{n}</p>)}
-					{(!allLoaded && (
-						<p>
-							<button onClick={loadNext}>Load More</button>
-						</p>
-					)) || <p>All loaded.</p>}
-				</article>
-			)}
-		</Floodgate>
-	))
+	.add(
+		"Displays numbers up to 9, loads every 2, with initial load of 2",
+		() => (
+			<Floodgate data={generateFilledArray(9)} initial={2} increment={2}>
+				{({ items, loadNext, loadComplete }) => (
+					<article>
+						{items.map(n => <p key={n}>{n}</p>)}
+						{(!loadComplete && (
+							<p>
+								<button onClick={loadNext}>Load More</button>
+							</p>
+						)) || <p>All loaded.</p>}
+					</article>
+				)}
+			</Floodgate>
+		)
+	)
 	.add(
 		"Displays numbers up to 9, loads every 3, with initial load of 4",
 		() => (
-			<Floodgate
-				data={generateFilledArray(9)}
-				loadCount={3}
-				initialLoadCount={4}
-			>
-				{({ data, loadNext, allLoaded }) => (
+			<Floodgate data={generateFilledArray(9)} increment={3} initial={4}>
+				{({ items, loadNext, loadComplete }) => (
 					<article>
-						{data.map(n => <p key={n}>{n}</p>)}
-						{(!allLoaded && (
+						{items.map(n => <p key={n}>{n}</p>)}
+						{(!loadComplete && (
 							<p>
 								<button onClick={loadNext}>Load More</button>
 							</p>
@@ -67,15 +66,35 @@ storiesOf("Floodgate", module)
 		)
 	)
 	.add("Displays numbers up to 9, loads every 9", () => (
-		<Floodgate data={generateFilledArray(9)} loadCount={9}>
-			{({ data, loadNext, allLoaded }) => (
+		<Floodgate data={generateFilledArray(9)} increment={9}>
+			{({ items, loadNext, loadComplete }) => (
 				<article>
-					{data.map(n => <p key={n}>{n}</p>)}
-					{(!allLoaded && (
+					{items.map(n => <p key={n}>{n}</p>)}
+					{(!loadComplete && (
 						<p>
 							<button onClick={loadNext}>Load More</button>
 						</p>
 					)) || <p>All loaded.</p>}
+				</article>
+			)}
+		</Floodgate>
+	))
+	.add("Has reset button", () => (
+		<Floodgate data={generateFilledArray(25)}>
+			{({ items, loadNext, loadComplete, resetQueue }) => (
+				<article>
+					{items.map(n => <p key={n}>{n}</p>)}
+					{(!loadComplete && (
+						<p>
+							<button onClick={loadNext}>Load More</button>
+							<button onClick={resetQueue}>Reset</button>
+						</p>
+					)) || (
+						<p>
+							All loaded.<br />
+							<button onClick={resetQueue}>Reset</button>
+						</p>
+					)}
 				</article>
 			)}
 		</Floodgate>

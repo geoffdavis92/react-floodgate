@@ -1,6 +1,6 @@
 // @flow
 import type { FloodgateProps, FloodgateState } from "./types";
-import * as _Polyfill from 'babel-polyfill'
+import * as _Polyfill from "babel-polyfill";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { generator } from "functions";
@@ -11,6 +11,7 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 	queue: Function;
 	getNext: Function;
 	loadNext: Function;
+	resetQueue: Function;
 
 	// static props
 	static propTypes = {
@@ -34,12 +35,20 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 		};
 		this.getNext = this.getNext.bind(this);
 		this.loadNext = this.loadNext.bind(this);
+		this.resetQueue = this.resetQueue.bind(this);
 	}
 	getNext(): Object {
 		return this.queue.next();
 	}
 	componentDidMount(): void {
 		this.loadNext();
+	}
+	resetQueue(): void {
+		this.queue = generator(this.data, this.props.increment, this.props.initial);
+		this.setState(prevState => ({
+			renderedItems: [],
+			allItemsRendered: false
+		}), this.loadNext)
 	}
 	loadNext(): void {
 		!this.state.allItemsRendered &&
@@ -65,10 +74,13 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 			});
 	}
 	render(): Function {
+		const { loadNext, resetQueue } = this;
+		const { renderedItems, allItemsRendered } = this.state;
 		return this.props.children({
-			items: this.state.renderedItems,
-			loadNext: this.loadNext,
-			loadComplete: this.state.allItemsRendered
+			items: renderedItems,
+			loadComplete: allItemsRendered,
+			loadNext,
+			resetQueue
 		});
 	}
 }
