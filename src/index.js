@@ -65,12 +65,11 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 						...(valueIsAvailable ? value : [])
 					];
 					const dataLengthMatches = newRenderedData.length === this.data.length;
-					
+
 					return {
 						renderedItems: newRenderedData,
 						allItemsRendered:
-							!valueIsAvailable ||
-							(valueIsAvailable && dataLengthMatches)
+							!valueIsAvailable || (valueIsAvailable && dataLengthMatches)
 								? true
 								: false
 					};

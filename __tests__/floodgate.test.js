@@ -148,15 +148,17 @@ describe("Floodgate", () => {
 		expect(fgi.find("button").length).toBe(2);
 		expect(toJSON(fgi)).toMatchSnapshot();
 	});
-	it('Should render 1 `p` child, click to load  then reset', () => {
-		const fgi = mount(<FloodgateInstance initial={1} increment={theOfficeData.length-1} />);
+	it("Should render 1 `p` child, click to load  then reset", () => {
+		const fgi = mount(
+			<FloodgateInstance initial={1} increment={theOfficeData.length - 1} />
+		);
 		const loadButton = fgi.find("button#load");
 		const resetButton = fgi.find("button#reset");
 		const p = (prop = false) => (prop ? fgi.find("p")[prop] : fgi.find("p"));
 		expect(p("length")).toBe(1);
-		
-		loadButton.simulate('click')
-		expect(p("length")).toBe(theOfficeData.length+1);
+
+		loadButton.simulate("click");
+		expect(p("length")).toBe(theOfficeData.length + 1);
 		expect(
 			p()
 				.first()
@@ -164,9 +166,13 @@ describe("Floodgate", () => {
 		).toMatch("Jim Halpert");
 		expect(
 			p()
-				.at(theOfficeData.length-1)
+				.at(theOfficeData.length - 1)
 				.text()
 		).toMatch("Angela Schrute");
 		expect(toJSON(fgi)).toMatchSnapshot();
-	})
+
+		resetButton.simulate("click");
+		expect(p("length")).toBe(1);
+		expect(toJSON(fgi)).toMatchSnapshot();
+	});
 });
