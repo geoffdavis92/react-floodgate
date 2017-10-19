@@ -49,6 +49,23 @@ storiesOf("Floodgate", module)
 		)
 	)
 	.add(
+		"Displays numbers up to 9, loads every 3, with initial load of 3",
+		() => (
+			<Floodgate data={generateFilledArray(9)} increment={3} initial={3}>
+				{({ items, loadNext, loadComplete }) => (
+					<article>
+						{items.map(n => <p key={n}>{n}</p>)}
+						{(!loadComplete && (
+							<p>
+								<button onClick={loadNext}>Load More</button>
+							</p>
+						)) || <p>All loaded.</p>}
+					</article>
+				)}
+			</Floodgate>
+		)
+	)
+	.add(
 		"Displays numbers up to 9, loads every 3, with initial load of 4",
 		() => (
 			<Floodgate data={generateFilledArray(9)} increment={3} initial={4}>
@@ -66,7 +83,7 @@ storiesOf("Floodgate", module)
 		)
 	)
 	.add("Displays numbers up to 9, loads every 9", () => (
-		<Floodgate data={generateFilledArray(9)} increment={9}>
+		<Floodgate data={generateFilledArray(9)} initial={9}>
 			{({ items, loadNext, loadComplete }) => (
 				<article>
 					{items.map(n => <p key={n}>{n}</p>)}
