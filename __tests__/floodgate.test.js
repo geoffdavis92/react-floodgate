@@ -5,7 +5,7 @@ import Enzyme, { render, shallow, mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import toJSON from "enzyme-to-json";
 
-import Floodgate from "floodgate";
+import Floodgate from "../src/index.js"; //floodgate";
 import { loopSimulation, theOfficeData } from "helpers";
 
 // configure Enzyme
@@ -14,7 +14,7 @@ Enzyme.configure({ adapter: new Adapter() });
 // Floodgate isntance
 const FloodgateInstance = ({ increment = 3, initial = 3 }) => (
 	<Floodgate data={theOfficeData} {...{ initial, increment }}>
-		{({ items, loadNext, resetQueue, loadComplete }) => (
+		{({ items, loadNext, reset, loadComplete }) => (
 			<main>
 				{items.map(({ name }) => <p key={name}>{name}</p>)}
 				{(!loadComplete && (
@@ -22,14 +22,14 @@ const FloodgateInstance = ({ increment = 3, initial = 3 }) => (
 						<button id="load" onClick={loadNext}>
 							Load More
 						</button>
-						<button id="reset" onClick={resetQueue}>
+						<button id="reset" onClick={reset}>
 							Reset
 						</button>
 					</span>
 				)) || (
 					<p>
 						All items loaded.<br />
-						<button id="reset" onClick={resetQueue}>
+						<button id="reset" onClick={reset}>
 							Reset
 						</button>
 					</p>

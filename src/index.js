@@ -9,9 +9,8 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 	// flow types
 	data: Array<any>;
 	queue: Function;
-	getNext: Function;
 	loadNext: Function;
-	resetQueue: Function;
+	reset: Function;
 
 	// static props
 	static propTypes = {
@@ -33,57 +32,51 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 			renderedItems: [],
 			allItemsRendered: false
 		};
-		this.getNext = this.getNext.bind(this);
 		this.loadNext = this.loadNext.bind(this);
-		this.resetQueue = this.resetQueue.bind(this);
-	}
-	getNext(): Object {
-		return this.queue.next();
+		this.reset = this.reset.bind(this);
 	}
 	componentDidMount(): void {
 		this.loadNext();
 	}
-	resetQueue(/*{ callback }: { callback: Function }*/): void {
+	reset({ callback }: { callback: Function } = {}): void {
 		this.queue = generator(this.data, this.props.increment, this.props.initial);
 		this.setState(
 			prevState => ({
 				renderedItems: [],
 				allItemsRendered: false
 			}),
-			() => this.loadNext(/*{ callback }*/)
+			() => this.loadNext({ callback })
 		);
 	}
-	loadNext(/*{ callback }: { callback: Function }*/): void {
+	loadNext({ callback }: { callback: Function } = {}): void {
 		!this.state.allItemsRendered &&
-			this.setState(
-				prevState => {
-					const { value, done } = this.getNext();
-					const valueIsAvailable =
-						value !== null && value !== undefined && value.length > 0;
-					const newRenderedData = [
-						...prevState.renderedItems,
-						...(valueIsAvailable ? value : [])
-					];
-					const dataLengthMatches = newRenderedData.length === this.data.length;
+			this.setState(prevState => {
+				const { value, done } = this.queue.next();
+				const valueIsAvailable =
+					value !== null && value !== undefined && value.length > 0;
+				const newRenderedData = [
+					...prevState.renderedItems,
+					...(valueIsAvailable ? value : [])
+				];
+				const dataLengthMatches = newRenderedData.length === this.data.length;
 
-					return {
-						renderedItems: newRenderedData,
-						allItemsRendered:
-							!valueIsAvailable || (valueIsAvailable && dataLengthMatches)
-								? true
-								: false
-					};
-				} /*, () => callback && callback()/*.bind(this)*\/ */
-			);
+				return {
+					renderedItems: newRenderedData,
+					allItemsRendered:
+						!valueIsAvailable || (valueIsAvailable && dataLengthMatches)
+							? true
+							: false
+				};
+			}, () => callback && callback(this.state));
 	}
 	render(): Function {
-		const { loadNext, resetQueue } = this;
+		const { loadNext, reset } = this;
 		const { renderedItems, allItemsRendered } = this.state;
 		return this.props.children({
 			items: renderedItems,
 			loadComplete: allItemsRendered,
 			loadNext,
-			resetQueue
+			reset
 		});
 	}
 }
