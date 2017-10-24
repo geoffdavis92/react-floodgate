@@ -9,6 +9,7 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 	// flow types
 	data: Array<any>;
 	queue: Function;
+	loadAll: Function;
 	loadNext: Function;
 	reset: Function;
 
@@ -32,6 +33,7 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 			renderedItems: [],
 			allItemsRendered: false
 		};
+		this.loadAll = this.loadAll.bind(this);
 		this.loadNext = this.loadNext.bind(this);
 		this.reset = this.reset.bind(this);
 	}
@@ -47,6 +49,21 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 			}),
 			() => this.loadNext({ callback })
 		);
+	}
+	loadAll(
+		{
+			callback,
+			suppressWarning
+		}: { callback: Function, suppressWarning: boolean } = {
+			suppressWarning: false
+		}
+	): void {
+		(!this.state.allItemsRendered &&
+			this.setState(prevState => ({
+				renderedItems: this.data,
+				allItemsRendered: true
+			}))) ||
+			(!suppressWarning && console.warn("Floodgate: All items are rendered"));
 	}
 	loadNext({ callback }: { callback: Function } = {}): void {
 		!this.state.allItemsRendered &&
@@ -70,11 +87,12 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 			}, () => callback && callback(this.state));
 	}
 	render(): Function {
-		const { loadNext, reset } = this;
+		const { loadAll, loadNext, reset } = this;
 		const { renderedItems, allItemsRendered } = this.state;
 		return this.props.children({
 			items: renderedItems,
 			loadComplete: allItemsRendered,
+			loadAll,
 			loadNext,
 			reset
 		});

@@ -154,8 +154,10 @@ storiesOf("Floodgate", module)
 								onClick={e =>
 									loadNext({
 										callback: ({ renderedItems }) => {
-											console.log('LOAD MORE', { currentIndex: renderedItems.length-1})
-											window.location = "#last"
+											console.log("LOAD MORE", {
+												currentIndex: renderedItems.length - 1
+											});
+											window.location = "#last";
 										}
 									})}
 							>
@@ -171,6 +173,70 @@ storiesOf("Floodgate", module)
 					)) || (
 						<p>
 							All loaded.<br />
+							<button
+								onClick={e =>
+									reset({
+										callback: state =>
+											console.log("RESET AFTER ALL LOADED", { state })
+									})}
+							>
+								Reset
+							</button>
+						</p>
+					)}
+				</article>
+			)}
+		</Floodgate>
+	))
+	.add("With loadAll callback", () => (
+		<Floodgate data={generateFilledArray(25)} initial={1} increment={3}>
+			{({ items, loadAll, loadNext, loadComplete, reset }) => (
+				<article>
+					{items.map((item, i, allItems) => (
+						<p
+							key={item}
+							id={i !== 0 && i === allItems.length - 1 ? "last" : null}
+						>
+							{item}
+						</p>
+					))}
+					{
+						<p>
+							<button
+								onClick={e =>
+									loadNext({
+										callback: ({ renderedItems }) => {
+											console.log("LOAD MORE", {
+												currentIndex: renderedItems.length - 1
+											});
+											window.location = "#last";
+										}
+									})}
+							>
+								Load More
+							</button>
+							<button
+								onClick={e =>
+									loadAll({ callback: state => console.log("LOAD ALL", { state }) })}
+							>
+								Load All
+							</button>
+							<button
+								onClick={e =>
+									reset({ callback: state => console.log("RESET", { state }) })}
+							>
+								Reset
+							</button>
+						</p>
+					 || (
+						<p>
+							All loaded.<br />
+							<button
+								onClick={e =>
+									loadAll({ callback: state => console.log("LOAD ALL", { state }) })}
+							>
+								Load All
+							</button>
 							<button
 								onClick={e =>
 									reset({
