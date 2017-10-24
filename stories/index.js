@@ -153,7 +153,10 @@ storiesOf("Floodgate", module)
 							<button
 								onClick={e =>
 									loadNext({
-										callback: ({ renderedItems }) => (window.location = "#last")
+										callback: ({ renderedItems }) => {
+											console.log('LOAD MORE', { currentIndex: renderedItems.length-1})
+											window.location = "#last"
+										}
 									})}
 							>
 								Load More
