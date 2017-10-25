@@ -5,7 +5,9 @@ import { action } from "@storybook/addon-actions";
 import { linkTo } from "@storybook/addon-links";
 
 import { Button, Welcome } from "@storybook/react/demo";
-import Floodgate from "../src/index.js"; //floodgate";
+import { LoadsArticles, LoadsCards } from "./demos";
+
+import Floodgate from "floodgate";
 import { ErrorMessage } from "functions";
 import { generateFilledArray } from "helpers";
 
@@ -23,14 +25,11 @@ storiesOf("Welcome", module).add("to Storybook", () => (
 	<Welcome showApp={linkTo("Button")} />
 ));
 
-storiesOf("Button", module)
-	.add("with text", () => (
-		<Button onClick={action("clicked")}>Hello Button</Button>
-	))
-	.add("with some emoji", () => (
-		<Button onClick={action("clicked")}>😀 😎 👍 💯</Button>
-	));
-storiesOf("Floodgate", module)
+storiesOf("Floodgate/styled", module)
+	.add("loads articles", LoadsArticles)
+	.add("loads cards", LoadsCards);
+
+storiesOf("Floodgate/simple", module)
 	.add(
 		"Displays numbers up to 9, loads every 2, with initial load of 2",
 		() => (
@@ -116,26 +115,6 @@ storiesOf("Floodgate", module)
 			)}
 		</Floodgate>
 	))
-	.add("Has reset button and loads all items", () => (
-		<Floodgate data={generateFilledArray(25)} initial={1} increment={24}>
-			{({ items, loadNext, loadComplete, reset }) => (
-				<article>
-					{items.map(n => <p key={n}>{n}</p>)}
-					{(!loadComplete && (
-						<p>
-							<button onClick={loadNext}>Load More</button>
-							<button onClick={reset}>Reset</button>
-						</p>
-					)) || (
-						<p>
-							All loaded.<br />
-							<button onClick={reset}>Reset</button>
-						</p>
-					)}
-				</article>
-			)}
-		</Floodgate>
-	))
 	.add("With render prop callback callbacks", () => (
 		<Floodgate data={generateFilledArray(25)} initial={1} increment={3}>
 			{({ items, loadNext, loadComplete, reset }) => (
@@ -190,66 +169,68 @@ storiesOf("Floodgate", module)
 	))
 	.add("With loadAll callback", () => (
 		<Floodgate data={generateFilledArray(25)} initial={1} increment={3}>
-			{({ items, loadAll, loadNext, loadComplete, reset }) => (
-				<article>
-					{items.map((item, i, allItems) => (
-						<p
-							key={item}
-							id={i !== 0 && i === allItems.length - 1 ? "last" : null}
-						>
-							{item}
-						</p>
-					))}
-					{
-						<p>
-							<button
-								onClick={e =>
-									loadNext({
-										callback: ({ renderedItems }) => {
-											console.log("LOAD MORE", {
-												currentIndex: renderedItems.length - 1
-											});
-											window.location = "#last";
-										}
-									})}
+			{({ items, loadAll, loadNext, loadComplete, reset }) => {
+				console.log({ loadComplete });
+				return (
+					<article>
+						{items.map((item, i, allItems) => (
+							<p
+								key={item}
+								id={i !== 0 && i === allItems.length - 1 ? "last" : null}
 							>
-								Load More
-							</button>
-							<button
-								onClick={e =>
-									loadAll({ callback: state => console.log("LOAD ALL", { state }) })}
-							>
-								Load All
-							</button>
-							<button
-								onClick={e =>
-									reset({ callback: state => console.log("RESET", { state }) })}
-							>
-								Reset
-							</button>
-						</p>
-					 || (
-						<p>
-							All loaded.<br />
-							<button
-								onClick={e =>
-									loadAll({ callback: state => console.log("LOAD ALL", { state }) })}
-							>
-								Load All
-							</button>
-							<button
-								onClick={e =>
-									reset({
-										callback: state =>
-											console.log("RESET AFTER ALL LOADED", { state })
-									})}
-							>
-								Reset
-							</button>
-						</p>
-					)}
-				</article>
-			)}
+								{item}
+							</p>
+						))}
+						{(!loadComplete && (
+							<p>
+								<button
+									onClick={e =>
+										loadNext({
+											callback: ({ renderedItems }) => {
+												console.log("LOAD MORE", {
+													currentIndex: renderedItems.length - 1
+												});
+												window.location = "#last";
+											}
+										})}
+								>
+									Load More
+								</button>
+								<button
+									onClick={e =>
+										loadAll({
+											callback: state => console.log("LOAD ALL", { state }),
+											suppressWarning: false
+										})}
+								>
+									Load All
+								</button>
+								<button
+									onClick={e =>
+										reset({
+											callback: state => console.log("RESET", { state })
+										})}
+								>
+									Reset
+								</button>
+							</p>
+						)) || (
+							<p>
+								All loaded.<br />
+								<button
+									onClick={e =>
+										reset({
+											callback: state =>
+												console.log("RESET AFTER ALL LOADED", { state })
+										})}
+								>
+									Reset
+								</button>
+							</p>
+						)}
+					</article>
+				);
+			}}
 		</Floodgate>
 	));
 storiesOf("Utilities/functions/ErrorMessage", module)
