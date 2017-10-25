@@ -1,5 +1,5 @@
-global.requestAnimationFrame = function (callback) {
-  setTimeout(callback, 0)
-}
+global.requestAnimationFrame = function(callback) {
+	setTimeout(callback, 0);
+};
 
-export default global
+export default global;
