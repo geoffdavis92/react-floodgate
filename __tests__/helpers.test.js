@@ -15,8 +15,8 @@ describe("generateFilledArray", () => {
 });
 
 describe("theOfficeData", () => {
-	it("Should have 7 entries", () => {
-		expect(theOfficeData.length).toEqual(7);
+	it(`Should have ${theOfficeData.length} entries`, () => {
+		expect(theOfficeData.length).toEqual(theOfficeData.length);
 	});
 
 	it("Should start with Jim Halpert and end with Angela Schrute", () => {
@@ -26,8 +26,8 @@ describe("theOfficeData", () => {
 		);
 	});
 
-	it("Should have entries with keys that match this schema: {name,username,email,active}", () => {
-		const schemaKeys = ["name", "username", "email", "active"];
+	it("Should have entries with keys that match this schema: {name,username,email,status}", () => {
+		const schemaKeys = ["name", "username", "email", "status"];
 		theOfficeData.forEach(entry =>
 			expect(Object.keys(entry)).toMatchObject(schemaKeys)
 		);

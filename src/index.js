@@ -59,11 +59,15 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 		}
 	): void {
 		(!this.state.allItemsRendered &&
-			this.setState(prevState => ({
-				renderedItems: this.data,
-				allItemsRendered: true
-			}))) ||
-			(!suppressWarning && console.warn("Floodgate: All items are rendered"));
+			this.setState(prevState => {
+				return {
+					renderedItems: this.data,
+					allItemsRendered: true
+				};
+			}, () => callback && callback(this.state))) ||
+			(this.state.allItemsRendered &&
+				!suppressWarning &&
+				console.warn("Floodgate: All items are rendered"));
 	}
 	loadNext({ callback }: { callback: Function } = {}): void {
 		!this.state.allItemsRendered &&
