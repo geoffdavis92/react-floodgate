@@ -135,7 +135,7 @@ All items loaded!
 |name|type|default|description|
 |-|-|-|-|
 |`items`|Array\<any>|`null`|State: the subset of items determined by the `intitial` and `increment` props|
-|`loadComplete`|Boolean|5|State: describes if all items have been processed by the `Floodgate` instance|
+|`loadComplete`|Boolean|`false`|State: describes if all items have been processed by the `Floodgate` instance|
 |`loadAll`|Function|n/a|Action: loads all `items`|
 |`loadNext`|Function|n/a|Action: loads the next set of items|
 |`reset`|Function|n/a|Action: resets the state of the `Floodgate` instance to the initial state|
