@@ -4,10 +4,10 @@
 ---
 
 <p align="center">
-	<a href="https://www.npmjs.com/package/react-floodgate"><img src="https://img.shields.io/npm/v/react-floodgate.svg?style=flat-square" alt="npm version"> </a>
-	<a><img src="https://img.shields.io/github/release/geoffdavis92/react-floodgate.svg?style=flat-square" alt="GitHub release"></a>
-	<a href="https://www.npmjs.com/package/react-floodgate"><img src="https://img.shields.io/npm/dt/react-floodgate.svg?style=flat-square" alt="npm downloads"> </a>
-	<a href="https://github.com/geoffdavis92/react-floodgate/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/react-floodgate.svg?style=flat-square" alt="npm license"></a>
+  <a href="https://www.npmjs.com/package/react-floodgate"><img src="https://img.shields.io/npm/v/react-floodgate.svg?style=flat-square" alt="npm version"> </a>
+  <a><img src="https://img.shields.io/github/release/geoffdavis92/react-floodgate.svg?style=flat-square" alt="GitHub release"></a>
+  <a href="https://www.npmjs.com/package/react-floodgate"><img src="https://img.shields.io/npm/dt/react-floodgate.svg?style=flat-square" alt="npm downloads"> </a>
+  <a href="https://github.com/geoffdavis92/react-floodgate/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/react-floodgate.svg?style=flat-square" alt="npm license"></a>
 </p>
 
 ## The motivation
@@ -39,6 +39,106 @@ or
 `$ npm i --save react-floodgate`
 
 ## Usage
+
+```javascript
+const BasicExample = props => (
+  <Floodgate items={["hello","world","!"]} initial={3} increment={1}>
+    {
+      ({ items }) => (
+        <ul>
+          {items.map(text => <li key={text}>{text}</li>)}
+        </ul>
+      )
+    }
+  </Floodgate>
+);
+
+/* Renders:
+
+• hello
+• world
+• !
+
+*/
+
+const LoadMoreExample = props => (
+  <Floodgate items={['foo','bar','baz','buzz','daz','doz']} initial={3} increment={1}>
+    {
+      ({ items, loadNext, loadComplete }) => (
+        <React.Fragment>
+          <ul>
+            {items.map(text => <li key={text}>{text}</li>)}
+          </ul>
+          {!loadMore ? <button onClick={loadNext}>Load More</button> : <p>All items loaded!</p>}
+        </React.Fragment>
+      )
+    }
+  </Floodgate>
+)
+
+/* Renders:
+
+• foo
+• bar
+• baz
+
+[ Load More ]
+
+*load more button click*
+
+• foo
+• bar
+• baz
+• buzz
+
+[ Load More ]
+
+*load more button click*
+
+• foo
+• bar
+• baz
+• buzz
+• daz
+
+[ Load More ]
+
+*load more button click*
+
+• foo
+• bar
+• baz
+• buzz
+• daz
+• doz
+
+All items loaded!
+
+*/
+
+```
+
+### API
+
+#### `Floodgate` props
+
+|name|type|default|description|
+|-|-|-|-|
+|`items`|Array\<any>|`null`|The array of items to be processed by Floodgate|
+|`initial`|Integer|5|How many items are initially available in the render function|
+|`increment`|Integer|5|How many items are added when calling `loadNext`|
+
+#### `render` function
+
+**Note:** the `render` function uses a single object argument to expose the following values/functions. Use the ES2015 destructuring syntax to get the most of this pattern. (see the Examples section on how to do this)
+
+|name|type|default|description|
+|-|-|-|-|
+|`items`|Array\<any>|`null`|State: the subset of items determined by the `intitial` and `increment` props|
+|`loadComplete`|Boolean|5|State: describes if all items have been processed by the `Floodgate` instance|
+|`loadAll`|Function|n/a|Action: loads all `items`|
+|`loadNext`|Function|n/a|Action: loads the next set of items|
+|`reset`|Function|n/a|Action: resets the state of the `Floodgate` instance to the initial state|
 
 ## Examples
 
