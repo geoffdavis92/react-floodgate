@@ -125,8 +125,8 @@ All items loaded!
 |name|type|default|description|
 |-|-|-|-|
 |`items`|Array\<any>|`null`|The array of items to be processed by `Floodgate`|
-|`initial`|Integer|5|How many items are initially available in the render function|
-|`increment`|Integer|5|How many items are added when calling `loadNext`|
+|`initial`|Integer|`5`|How many items are initially available in the render function|
+|`increment`|Integer|`5`|How many items are added when calling `loadNext`|
 
 #### `render` function
 
