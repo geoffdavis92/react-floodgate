@@ -1,11 +1,12 @@
 // @flow
 import React from "react";
+import { FloodgateProps } from "types";
 
 const generator = function* generator(
-	data: Array<any>,
-	yieldLength: number,
-	initialYieldLength: number
-): Generator<Array<any>, void, Object> {
+	data: FloodgateProps['data'],
+	yieldLength: FloodgateProps['increment'],
+	initialYieldLength: FloodgateProps['initial']
+): Generator {
 	let currentIndex: number = 0;
 	while (currentIndex <= data.length - 1) {
 		let firstYield = currentIndex === 0;

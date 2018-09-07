@@ -1,10 +1,12 @@
 {
 	"name": "react-floodgate",
 	"version": "0.0.6",
-	"description":
-		"Configurable and flexible React component for incrementally displaying data.",
+	"description": "Configurable and flexible React component for incrementally displaying data.",
 	"main": "index.js",
-	"files": ["index.js", "dist"],
+	"files": [
+		"index.js",
+		"dist"
+	],
 	"repository": "https://github.com/geoffdavis92/react-floodgate.git",
 	"author": "Geoff Davis <geoffdavis92@gmail.com>",
 	"license": "MIT",
@@ -35,21 +37,21 @@
 		"rollup-plugin-babel": "^3.0.2",
 		"rollup-plugin-commonjs": "^8.2.1",
 		"rollup-plugin-node-resolve": "^3.0.0",
+		"rollup-plugin-typescript2": "^0.17.0",
 		"rollup-plugin-uglify": "^2.0.1",
 		"styled-components": "^2.2.2",
+		"typescript": "^3.0.3",
 		"uglify-es": "^3.1.3"
 	},
 	"dependencies": {
 		"prop-types": "^15.6.0"
 	},
 	"scripts": {
-		"build":
-			"NODE_ENV=rollup ./node_modules/.bin/rollup -c --bundle && yarn test",
+		"build": "NODE_ENV=rollup ./node_modules/.bin/rollup -c --bundle && yarn test",
 		"build:storybook": "build-storybook",
 		"demo": "./node_modules/.bin/httpster -p 8901 docs",
 		"flow": "./node_modules/.bin/flow",
-		"prettier":
-			"./node_modules/.bin/prettier {.,src,stories,__tests__}/*.{js,json} --write",
+		"prettier": "./node_modules/.bin/prettier {.,src,stories,__tests__}/*.{js,json} --write",
 		"rollup": "NODE_ENV=rollup ./node_modules/.bin/rollup -c",
 		"start": "NODE_ENV=rollup ./node_modules/.bin/rollup -c --watch",
 		"storybook": "start-storybook -p 6006",
@@ -65,7 +67,9 @@
 						{
 							"modules": false,
 							"targets": {
-								"browsers": ["last 2 versions"]
+								"browsers": [
+									"last 2 versions"
+								]
 							}
 						}
 					],
@@ -83,7 +87,9 @@
 						"env",
 						{
 							"targets": {
-								"browsers": ["last 2 versions"]
+								"browsers": [
+									"last 2 versions"
+								]
 							}
 						}
 					],
@@ -97,8 +103,15 @@
 		}
 	},
 	"jest": {
-		"moduleDirectories": ["node_modules", "src", "dist"],
-		"testPathIgnorePatterns": ["node_modules", "__tests__/__*"],
+		"moduleDirectories": [
+			"node_modules",
+			"src",
+			"dist"
+		],
+		"testPathIgnorePatterns": [
+			"node_modules",
+			"__tests__/__*"
+		],
 		"transform": {
 			"^.+\\.js$": "babel-jest"
 		}

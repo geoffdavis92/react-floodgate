@@ -1,5 +1,5 @@
 // @flow
-import type { ErrorBoundaryProps, ErrorBoundaryState } from "./types";
+import { ErrorBoundaryProps, ErrorBoundaryState } from "./types";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { ErrorMessage } from "functions";

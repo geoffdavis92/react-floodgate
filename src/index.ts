@@ -1,5 +1,5 @@
 // @flow
-import type { FloodgateProps, FloodgateState } from "./types";
+import { FloodgateProps, FloodgateState } from "./types";
 import * as _Polyfill from "babel-polyfill";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
@@ -8,10 +8,6 @@ import { generator } from "functions";
 class Floodgate extends Component<FloodgateProps, FloodgateState> {
 	// flow types
 	data: Array<any>;
-	queue: Function;
-	loadAll: Function;
-	loadNext: Function;
-	reset: Function;
 
 	// static props
 	static propTypes = {
@@ -25,10 +21,10 @@ class Floodgate extends Component<FloodgateProps, FloodgateState> {
 	};
 
 	// methods
-	constructor(props: FloodgateProps) {
+	constructor({ data, increment, initial }: FloodgateProps) {
 		super();
-		this.queue = generator(props.data, props.increment, props.initial);
-		this.data = props.data;
+		this.queue = generator(data, increment, initial);
+		this.data = data;
 		this.state = {
 			renderedItems: [],
 			allItemsRendered: false

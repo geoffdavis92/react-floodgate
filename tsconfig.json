@@ -1,0 +1,17 @@
+{
+	"compileOnSave": true,
+	"compilerOptions": {
+		"module": "es2015",
+		"target": "es6",
+		"noImplicitAny": false,
+		"sourceMap": true,
+		"inlineSourceMap": false,
+		"declarationMap": true
+	},
+	"include": [
+		"src/*"
+	],
+	"exclude": [
+		"node_modules"
+	]
+}

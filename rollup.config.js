@@ -4,6 +4,7 @@ import alias from "rollup-plugin-alias";
 import babel from "rollup-plugin-babel";
 import commonjs from "rollup-plugin-commonjs";
 import resolve from "rollup-plugin-node-resolve";
+import ts from "rollup-plugin-typescript2";
 import uglify from "rollup-plugin-uglify";
 import { minify as minify_es } from "uglify-es";
 
@@ -21,6 +22,7 @@ const plugins = [
 		helpers: path.resolve(".", "src/helpers"),
 		types: path.resolve(".", "src/types")
 	}),
+	ts(),
 	babel({
 		exclude: "node_modules/**"
 	}),
@@ -38,7 +40,7 @@ const plugins = [
 ];
 
 const config = {
-	input: "./src/index.js",
+	input: "./src/index.ts",
 	output: [
 		{
 			file: "dist/floodgate.cjs.js",

@@ -2,6 +2,7 @@ type ErrorBoundaryProps = {
 	errorMessage?: Function,
 	fallbackUI?: Function
 };
+
 type ErrorBoundaryState = {
 	treeHasError: boolean,
 	treeError: {
@@ -9,7 +10,13 @@ type ErrorBoundaryState = {
 		info: string
 	}
 };
-type FloodgateProps = Object;
+
+type FloodgateProps = {
+	data: Array<any>,
+	increment: number,
+	initial: number
+};
+
 type FloodgateState = {
 	renderedData: Array<any>,
 	allDataRendered: boolean
