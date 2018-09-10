@@ -5,4 +5,5 @@ node_modules/
 *log
 package-lock.json
 demo.js 
-.rpt2_cache/
+.rpt2_cache/ 
+dist
