@@ -2,8 +2,13 @@
 	"name": "react-floodgate",
 	"version": "0.0.6",
 	"description": "Configurable and flexible React component for incrementally displaying data.",
-	"main": "index.js",
+	"browser": "dist/floodgate.js",
+	"main": "dist/floodgate.cjs.js",
+	"jsnext:main": "dist/floodgate.esm.js",
+	"module": "dist/floodgate.esm.js",
 	"files": [
+		"LICENSE",
+		"README.md",
 		"index.js",
 		"dist"
 	],
@@ -54,8 +59,9 @@
 		"prop-types": "^15.6.2"
 	},
 	"scripts": {
-		"build": "NODE_ENV=rollup ./node_modules/.bin/rollup -c --bundle && NODE_ENV=rollup ./node_modules/.bin/rollup -c rollup-dev.config.js && yarn test",
+		"build": "NODE_ENV=rollup ./node_modules/.bin/rollup -c --bundle && yarn test",
 		"build:storybook": "build-storybook",
+		"clean": "rm -r dist/* .rpt2_cache/*",
 		"demo": "./node_modules/.bin/httpster -p 8901 docs",
 		"flow": "./node_modules/.bin/flow",
 		"prettier": "./node_modules/.bin/prettier {.,src,stories,__tests__}/*.{js,json} --write",

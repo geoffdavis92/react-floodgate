@@ -14,7 +14,7 @@ const { version } = r("package.json");
 const dev = process.env.NODE_ENV === "dev";
 const bundle = process.argv.includes("--bundle");
 
-const plugins = [
+const commonPlugins = [
   alias({
     floodgate: path.resolve(".", "src/index"),
     classes: path.resolve(".", "src/classes"),
@@ -35,8 +35,7 @@ const plugins = [
       "node_modules/react-dom/index.js": ["render"]
     }
   }),
-  resolve(),
-  bundle && uglify({}, minify_es)
+  resolve()
 ];
 
 const config = {
@@ -46,32 +45,23 @@ const config = {
       file: "dist/floodgate.cjs.js",
       format: "cjs",
       name: "Floodgate",
-      banner: `/** floodgate v${version} : commonjs module **/`,
+      banner: `/** floodgate v${version} : commonjs bundle **/`,
       exports: "named"
     },
     {
-      file: "dist/floodgate.js",
+      file: "dist/floodgate.esm.js",
       format: "es",
       name: "Floodgate",
-      banner: `/** floodgate v${version} : es module **/`
+      banner: `/** floodgate v${version} : es bundle **/`
+    },
+    {
+      file: "dist/floodgate.js",
+      format: "iife",
+      name: "Floodgate",
+      banner: `/** floodgate v${version} : iife bundle **/`
     }
-    // {
-    //   file: "dist/floodgate.dev.cjs.js",
-    //   format: "cjs",
-    //   name: "Floodgate",
-    //   banner: `/** floodgate v${version} : commonjs module **/\n/** DEVELOPMENT FILE **/`,
-    //   exports: "named",
-    //   sourcemap: "./dist/"
-    // },
-    // {
-    //   file: "dist/floodgate.dev.js",
-    //   format: "es",
-    //   name: "Floodgate",
-    //   banner: `/** floodgate v${version} : es module **/\n/** DEVELOPMENT FILE **/`,
-    //   sourcemap: "./dist/"
-    // }
   ],
-  plugins,
+  plugins: [...commonPlugins, bundle && uglify({}, minify_es)],
   external: [
     "react",
     "react-dom",
@@ -81,4 +71,39 @@ const config = {
   sourcemap: bundle ? false : "inline"
 };
 
-export default config;
+const devConfig = {
+  input: "./src/index.tsx",
+  output: [
+    {
+      file: "dist/floodgate.dev.cjs.js",
+      format: "cjs",
+      name: "Floodgate",
+      banner: `/** floodgate v${version} : commonjs bundle **/\n/** DEVELOPMENT FILE **/`,
+      exports: "named",
+      sourcemap: "./dist/"
+    },
+    {
+      file: "dist/floodgate.dev.esm.js",
+      format: "es",
+      name: "Floodgate",
+      banner: `/** floodgate v${version} : es bundle **/\n/** DEVELOPMENT FILE **/`,
+      sourcemap: "./dist/"
+    },
+    {
+      file: "dist/floodgate.dev.js",
+      format: "iife",
+      name: "Floodgate",
+      banner: `/** floodgate v${version} : iife bundle **/\n/** DEVELOPMENT FILE **/`,
+      sourcemap: "./dist/"
+    }
+  ],
+  plugins: [...commonPlugins],
+  external: [
+    "react",
+    "react-dom",
+    "prop-types",
+    path.resolve("./src/types.d.ts")
+  ]
+};
+
+export default [config, devConfig];
