@@ -1,6 +1,5 @@
-// @flow
-import React from "react";
-import { FloodgateProps } from "types";
+import * as React from "react";
+import { FloodgateProps } from "./types";
 
 const generator = function* generator(
 	data: FloodgateProps['data'],
@@ -27,14 +26,12 @@ const ErrorMessage = ({
 	text,
 	...rest
 }: {
-	children: ?Array<any>,
-	callerDisplayName: ?string,
+	children?: Array<any>,
+	callerDisplayName?: string,
 	text: string
-}) => (
+}): any => (
 	<span
-		className={`error_message${callerDisplayName
-			? `--${callerDisplayName}`
-			: ""}`}
+		className={`error_message${callerDisplayName ? `--${callerDisplayName}` : ''} : ""}`}
 		{...rest}
 	>
 		{text ? text : children}

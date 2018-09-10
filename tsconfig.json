@@ -6,12 +6,22 @@
 		"noImplicitAny": false,
 		"sourceMap": true,
 		"inlineSourceMap": false,
-		"declarationMap": true
+		"jsx": "react",
+		"moduleResolution": "node",
+		"baseUrl": "./src",
+		"paths": {
+			"classes/*": ["./src/classes"],
+			"functions/*": ["./src/functions"],
+			"helpers/*": ["./src/helpers"],
+			"types/*": ["./src/types"]
+		}
 	},
 	"include": [
-		"src/*"
+		"./src/*"
 	],
 	"exclude": [
-		"node_modules"
+		"__tests__",
+		"node_modules",
+		"rollup.config.js"
 	]
 }

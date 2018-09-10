@@ -1,30 +1,37 @@
 type ErrorBoundaryProps = {
-	errorMessage?: Function,
-	fallbackUI?: Function
+  errorMessage?: Function,
+  fallbackUI?: Function
 };
 
 type ErrorBoundaryState = {
-	treeHasError: boolean,
-	treeError: {
-		error: boolean | string,
-		info: string
-	}
+  treeHasError: boolean,
+  treeError: {
+    error: boolean | string,
+    info: string
+  }
 };
 
 type FloodgateProps = {
-	data: Array<any>,
-	increment: number,
-	initial: number
+  children: (args: {
+    items: Array<any>,
+    loadComplete: boolean,
+    loadAll: Function,
+    loadNext: Function,
+    reset: Function
+  }) => JSX.Element,
+  data: Array<any>,
+  increment: number,
+  initial: number
 };
 
 type FloodgateState = {
-	renderedData: Array<any>,
-	allDataRendered: boolean
+  renderedItems: Array<any>,
+  allItemsRendered: boolean
 };
 
 export {
-	ErrorBoundaryProps,
-	ErrorBoundaryState,
-	FloodgateProps,
-	FloodgateState
+  ErrorBoundaryProps,
+  ErrorBoundaryState,
+  FloodgateProps,
+  FloodgateState
 };
