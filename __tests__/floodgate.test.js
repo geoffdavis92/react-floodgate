@@ -6,7 +6,7 @@ import Adapter from "enzyme-adapter-react-16";
 import toJSON from "enzyme-to-json";
 
 import Floodgate from "floodgate";
-import { loopSimulation, theOfficeData } from "helpers";
+import { loopSimulation, theOfficeData } from "../src/helpers";
 
 // configure Enzyme
 Enzyme.configure({ adapter: new Adapter() });
