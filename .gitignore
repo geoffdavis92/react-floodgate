@@ -4,4 +4,5 @@ __tests__/__snapshots__/
 node_modules/ 
 *log
 package-lock.json
-demo.js
+demo.js 
+.rpt2_cache/
