@@ -2,7 +2,6 @@
 	"name": "react-floodgate",
 	"version": "0.1.1",
 	"description": "Configurable and flexible React component for incrementally displaying data.",
-	"browser": "dist/floodgate.js",
 	"main": "dist/floodgate.cjs.js",
 	"jsnext:main": "dist/floodgate.esm.js",
 	"module": "dist/floodgate.esm.js",
