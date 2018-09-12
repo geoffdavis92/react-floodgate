@@ -67,8 +67,7 @@ const config = {
     "react-dom",
     "prop-types",
     path.resolve("./src/types.d.ts")
-  ],
-  sourcemap: bundle ? false : "inline"
+  ]
 };
 
 const devConfig = {
