@@ -1,6 +1,6 @@
 {
 	"name": "react-floodgate",
-	"version": "0.1.0-beta",
+	"version": "0.1.0",
 	"description": "Configurable and flexible React component for incrementally displaying data.",
 	"browser": "dist/floodgate.js",
 	"main": "dist/floodgate.cjs.js",
