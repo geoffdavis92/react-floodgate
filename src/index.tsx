@@ -1,6 +1,7 @@
 // @flow
 import { FloodgateProps, FloodgateState } from "./types";
-import * as _Polyfill from "babel-polyfill";
+// import  "babel-polyfill";
+import "regenerator-runtime/runtime";
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import { generator } from "./functions";
