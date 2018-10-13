@@ -1,3 +1,4 @@
+import * as React from "react";
 import * as loremIpsum from "lorem-ipsum";
 
 const loopSimulation = (amount: number, simulation: Function) => {
@@ -107,9 +108,47 @@ const theOfficeData: Array<{
   }
 ];
 
+class StatefulToggle extends React.Component<
+  {
+    children: (args: {
+      STState: object,
+      toggle: Function,
+      stashState: Function
+    }) => JSX.Element,
+    stateObj?: object
+  },
+  { toggleChildren?: boolean, savedFloodgateState?: object | boolean }
+> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      toggleChildren: true,
+      savedFloodgateState: props.stateObj || false
+    };
+    this.stashState = this.stashState.bind(this);
+    this.toggle = this.toggle.bind(this);
+  }
+  stashState(stateKey: string, stateVal: object) {
+    this.setState(prevState => ({
+      ...prevState,
+      [stateKey]: { ...prevState[stateKey], ...stateVal }
+    }));
+  }
+  toggle() {
+    return this.setState(prevState => ({
+      toggleChildren: !prevState.toggleChildren
+    }));
+  }
+  render() {
+    const { state: STState, stashState, toggle } = this;
+    return this.props.children({ STState, toggle, stashState });
+  }
+}
+
 export {
   generateFilledArray,
   generateLoremIpsum,
   loopSimulation,
-  theOfficeData
+  theOfficeData,
+  StatefulToggle
 };
