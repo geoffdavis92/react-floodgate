@@ -11,7 +11,7 @@ import { loopSimulation, theOfficeData } from "../src/helpers";
 // configure Enzyme
 Enzyme.configure({ adapter: new Adapter() });
 
-// Floodgate isntance
+// Floodgate instance
 const FloodgateInstance = ({ increment = 3, initial = 3 }) => (
   <Floodgate data={theOfficeData} {...{ initial, increment }}>
     {({ items, loadNext, loadAll, reset, loadComplete }) => (
