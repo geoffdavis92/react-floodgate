@@ -1,6 +1,4 @@
-// @flow
 import { FloodgateProps, FloodgateState } from "./types";
-// import  "babel-polyfill";
 import "regenerator-runtime/runtime";
 import * as React from "react";
 import * as PropTypes from "prop-types";
@@ -17,11 +15,14 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
     children: PropTypes.func,
     data: PropTypes.array.isRequired,
     initial: PropTypes.number,
-    increment: PropTypes.number
+    increment: PropTypes.number,
+    saveStateOnUnmount: PropTypes.bool,
+    exportState: PropTypes.func
   };
   static defaultProps = {
     initial: 5,
-    increment: 5
+    increment: 5,
+    saveStateOnUnmount: true
   };
 
   // methods
@@ -32,14 +33,20 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
     this.data = data;
     this.state = {
       renderedItems: [],
+      currentIndex: 0,
       allItemsRendered: false
     };
     this.loadAll = this.loadAll.bind(this);
     this.loadNext = this.loadNext.bind(this);
     this.reset = this.reset.bind(this);
+    this.saveState = this.saveState.bind(this);
   }
   componentDidMount(): void {
     this.loadNext();
+  }
+  componentWillUnmount(): void {
+    // Prevent unwanted cacheing by setting saveStateOnUnmount to false
+    this.props.saveStateOnUnmount && this.saveState();
   }
   reset({ callback }: { callback?: Function } = {}): void {
     this.queue = generator(this.data, this.props.increment, this.props.initial);
@@ -89,6 +96,7 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
 
         return {
           renderedItems: newRenderedData,
+          currentIndex: newRenderedData.length,
           allItemsRendered:
             !valueIsAvailable || (valueIsAvailable && dataLengthMatches)
               ? true
@@ -96,15 +104,25 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
         };
       }, () => callback && callback(this.state));
   }
+  saveState() {
+    const { renderedItems, currentIndex, allItemsRendered } = this.state;
+    this.props.exportState &&
+      this.props.exportState({
+        initial: currentIndex,
+        renderedItems,
+        allItemsRendered
+      });
+  }
   render() {
-    const { loadAll, loadNext, reset } = this;
+    const { loadAll, loadNext, reset, saveState } = this;
     const { renderedItems, allItemsRendered } = this.state;
     return this.props.children({
       items: renderedItems,
       loadComplete: allItemsRendered,
       loadAll,
       loadNext,
-      reset
+      reset,
+      saveState
     });
   }
 }

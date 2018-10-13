@@ -17,16 +17,20 @@ type FloodgateProps = {
     loadComplete: boolean,
     loadAll: Function,
     loadNext: Function,
-    reset: Function
+    reset: Function,
+    saveState: Function
   }) => JSX.Element,
   data: Array<any>,
   increment: number,
-  initial: number
+  initial: number,
+  saveStateOnUnmount?: boolean,
+  exportState?: Function
 };
 
 type FloodgateState = {
   renderedItems: Array<any>,
-  allItemsRendered: boolean
+  allItemsRendered: boolean,
+  currentIndex?: number
 };
 
 export {
