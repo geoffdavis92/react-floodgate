@@ -6,6 +6,8 @@
 // When you add this file, we won't add the default configurations which is similar
 // to "React Create App". This only has babel loader to load JavaScript.
 
+const webpack = require("@storybook/react/node_modules/webpack");
+
 module.exports = {
   plugins: [
     // your custom plugins
@@ -13,14 +15,15 @@ module.exports = {
   module: {
     rules: [
       // add your custom rules.
-    ],
+      { test: /\.tsx?$/, use: "ts-loader", exclude: /node_modules/ }
+    ]
   },
   resolve: {
-		alias: {
-			'classes': '../src/classes',
-  		'functions': '../src/functions',
-  		'helpers': '../src/helpers',
-  		'floodgate': '../dist/floodgate.js'
-		}
-	}
+    alias: {
+      classes: "../src/classes.ts",
+      functions: "../src/functions.tsx",
+      helpers: "../src/helpers.tsx",
+      floodgate: "../dist/floodgate.esm.js"
+    }
+  }
 };
