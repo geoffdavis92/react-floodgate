@@ -11,6 +11,73 @@ import { loopSimulation, theOfficeData } from "../src/helpers";
 // configure Enzyme
 Enzyme.configure({ adapter: new Adapter() });
 
+// Wrapper instance
+class WrappedFloodgateInstance extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      showFloodgate: true,
+      savedState: {
+        data: theOfficeData,
+        initial: 3,
+        increment: 3
+      }
+    };
+    this.cacheFloodgateState = this.cacheFloodgateState.bind(this);
+  }
+  cacheFloodgateState({ currentIndex: initial, ...restNewSavedState }) {
+    this.setState(prevState => ({
+      ...prevState,
+      savedState: {
+        ...prevState.savedState,
+        ...restNewSavedState,
+        initial
+      }
+    }));
+  }
+  render() {
+    return (
+      <div>
+        <button id="toggleFloodgate">Toggle Floodgate</button>
+        {this.state.showFloodgate && (
+          <Floodgate
+            data={this.state.savedState.data}
+            initial={this.state.savedState.initial}
+            increment={this.state.savedState.increment}
+            exportState={this.cacheFloodgateState}
+          >
+            {({ items, loadNext, loadAll, reset, loadComplete }) => (
+              <main>
+                {items.map(({ name }) => <p key={name}>{name}</p>)}
+                {(!loadComplete && (
+                  <span>
+                    <button id="load" onClick={loadNext}>
+                      Load More
+                    </button>
+                    <button id="loadall" onClick={loadAll}>
+                      Load All
+                    </button>
+                    <button id="reset" onClick={reset}>
+                      Reset
+                    </button>
+                  </span>
+                )) || (
+                  <p>
+                    All items loaded.<br />
+                    <button id="reset" onClick={reset}>
+                      Reset
+                    </button>
+                  </p>
+                )}
+              </main>
+            )}
+          </Floodgate>
+        )}
+      </div>
+    );
+  }
+}
+
 // Floodgate instance
 const FloodgateInstance = ({ increment = 3, initial = 3 }) => (
   <Floodgate data={theOfficeData} {...{ initial, increment }}>
@@ -177,5 +244,10 @@ describe("Floodgate", () => {
     resetButton.simulate("click");
     expect(p("length")).toBe(1);
     expect(toJSON(fgi)).toMatchSnapshot();
+  });
+
+  it("Should render a wrapped Floodgate instance", () => {
+    const wfgi = mount(<WrappedFloodgateInstance />);
+    expect(toJSON(wfgi)).toMatchSnapshot();
   });
 });
