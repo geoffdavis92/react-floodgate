@@ -108,7 +108,7 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
     const { renderedItems, currentIndex, allItemsRendered } = this.state;
     this.props.exportState &&
       this.props.exportState({
-        initial: currentIndex,
+        currentIndex,
         renderedItems,
         allItemsRendered
       });
