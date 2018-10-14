@@ -117,13 +117,13 @@ const FloodgateInstance = ({ increment = 3, initial = 3 }) => (
 
 describe("Floodgate", () => {
   // simple check to make sure Floodgate renders
-  it("Should render the Floodgate component", () => {
+  it("1. Should render the Floodgate component", () => {
     const fgi = render(<FloodgateInstance />);
     expect(toJSON(fgi)).toMatchSnapshot();
   });
 
   // test instance has correct children
-  it("Should render 3 `p` children and 2 `button` child", () => {
+  it("2. Should render 3 `p` children and 2 `button` child", () => {
     const fgi = mount(<FloodgateInstance />);
     expect(fgi.find("p").length).toBe(3);
     expect(fgi.find("button").length).toBe(3);
@@ -131,7 +131,7 @@ describe("Floodgate", () => {
   });
 
   // test instance's children's text values
-  it("Should render `p` children that have text matching [Jim Halpert,Pam Halpert,Ed Truck]", () => {
+  it("3. Should render `p` children that have text matching [Jim Halpert,Pam Halpert,Ed Truck]", () => {
     const testTextValues = ["Jim Halpert", "Pam Halpert", "Ed Truck"];
     const renderedParagraphTextValues = [];
     const fgi = mount(<FloodgateInstance />);
@@ -142,14 +142,14 @@ describe("Floodgate", () => {
   });
 
   // test instance renders non-default lengths of initial
-  it("Should render with 4 `p` children", () => {
+  it("4. Should render with 4 `p` children", () => {
     const fgi = mount(<FloodgateInstance initial={4} />);
     expect(fgi.find("p").length).toBe(4);
     expect(toJSON(fgi)).toMatchSnapshot();
   });
 
   // test instance loads new items
-  it("Should render with 3 `p` children and load 3 `p` children `onClick()`", () => {
+  it("5. Should render with 3 `p` children and load 3 `p` children `onClick()`", () => {
     const fgi = mount(<FloodgateInstance />);
     expect(fgi.find("p").length).toBe(3);
     expect(toJSON(fgi)).toMatchSnapshot();
@@ -160,7 +160,7 @@ describe("Floodgate", () => {
     expect(toJSON(fgi)).toMatchSnapshot();
   });
   // test instance loads different lengths of increment
-  it("Should render with 2 `p` children and load 1 `p` children `onClick()`", () => {
+  it("6. Should render with 2 `p` children and load 1 `p` children `onClick()`", () => {
     const fgi = mount(<FloodgateInstance initial={2} increment={1} />);
     const loadButton = fgi.find("button#load");
     const p = (prop = false) => (prop ? fgi.find("p")[prop] : fgi.find("p"));
@@ -187,7 +187,7 @@ describe("Floodgate", () => {
     expect(fgi.find("button").length).toBe(3);
     expect(toJSON(fgi)).toMatchSnapshot();
   });
-  it("Should render with 2 `p` children, load 1 `p` child, and reset state to original load", () => {
+  it("7. Should render with 2 `p` children, load 1 `p` child, and reset state to original load", () => {
     const fgi = mount(<FloodgateInstance initial={2} increment={1} />);
     const loadButton = fgi.find("button#load");
     const resetButton = fgi.find("button#reset");
@@ -225,7 +225,7 @@ describe("Floodgate", () => {
     expect(toJSON(fgi)).toMatchSnapshot();
   });
 
-  it("Should render 1 `p` child, click to load all then reset", () => {
+  it("8. Should render 1 `p` child, click to load all then reset", () => {
     const fgi = mount(<FloodgateInstance initial={1} increment={2} />);
     const loadButton = fgi.find("button#load");
     const loadAllButton = fgi.find("button#loadall");
@@ -251,8 +251,10 @@ describe("Floodgate", () => {
     expect(p("length")).toBe(1);
     expect(toJSON(fgi)).toMatchSnapshot();
   });
+});
 
-  it("Should render a wrapped Floodgate instance", () => {
+describe("Wrapped Floodgate for saveState testing", () => {
+  it("1. Should render a wrapped Floodgate instance", () => {
     const wfgi = mount(
       <WrappedFloodgateInstance floodgateSaveStateOnUnmount={true} />
     );
