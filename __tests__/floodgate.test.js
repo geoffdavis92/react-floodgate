@@ -12,7 +12,12 @@ import { loopSimulation, theOfficeData } from "../src/helpers";
 Enzyme.configure({ adapter: new Adapter() });
 
 // Wrapper instance
-class WrappedFloodgateInstance extends React.Component {
+const WrappedFloodgateInstance = fgProps => <WrappedFloodgate {...fgProps} />;
+
+class WrappedFloodgate extends React.Component {
+  static defaultProps = {
+    floodgateSaveStateOnUnmount: true
+  };
   constructor() {
     super();
     this.state = {
@@ -44,6 +49,7 @@ class WrappedFloodgateInstance extends React.Component {
             data={this.state.savedState.data}
             initial={this.state.savedState.initial}
             increment={this.state.savedState.increment}
+            saveStateOnUnmount={this.props.floodgateSaveStateOnUnmount}
             exportState={this.cacheFloodgateState}
           >
             {({ items, loadNext, loadAll, reset, loadComplete }) => (
@@ -247,7 +253,9 @@ describe("Floodgate", () => {
   });
 
   it("Should render a wrapped Floodgate instance", () => {
-    const wfgi = mount(<WrappedFloodgateInstance />);
+    const wfgi = mount(
+      <WrappedFloodgateInstance floodgateSaveStateOnUnmount={true} />
+    );
     expect(toJSON(wfgi)).toMatchSnapshot();
   });
 });
