@@ -247,7 +247,11 @@ storiesOf("Floodgate/simple", module)
                 data={STState.savedFloodgateState.data}
                 initial={STState.savedFloodgateState.initial}
                 increment={STState.savedFloodgateState.increment}
-                exportState={state => stashState("savedFloodgateState", state)}
+                exportState={state =>
+                  stashState("savedFloodgateState", {
+                    ...state,
+                    initial: state.currentIndex
+                  })}
               >
                 {({ items, loadNext, loadComplete, reset }) => (
                   <article>
