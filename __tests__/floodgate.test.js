@@ -271,8 +271,8 @@ describe('Wrapped Floodgate for saveState testing', () => {
     expect(wfgi.find('p')).toHaveLength(6)
     expect(fgi.state.currentIndex).toEqual(6)
 
-    // toggleBtn.simulate('click')
-    wfgi.setState({ showFloodgate: false })
+    toggleBtn.simulate('click')
+    // wfgi.setState({ showFloodgate: false })
 
     expect(wfgi.find('p')).toHaveLength(0)
     expect(wfgi.state().showFloodgate).toBe(false)
@@ -283,13 +283,10 @@ describe('Wrapped Floodgate for saveState testing', () => {
     })
 
     toggleBtn.simulate('click')
-    // wfgi.setState({ showFloodgate: true })
-    console.log(wfgi.find('p'))
-    // expect(wfgi.find('p')).toHaveLength(6)
     expect(wfgi.state().showFloodgate).toBe(true)
-    // expect(fgi.state.currentIndex).toEqual(6)
-    // expect(toJson(wfgi)).toMatchSnapshot()
-
-    // loadBtn.simulate('click')
+    console.log(wfgi.find('main').html())
+    wfgi.find('button#load').simulate('click')
+    console.log(wfgi.find('main').html())
+    console.log(wfgi.find(Floodgate).instance().state.currentIndex)
   })
 })
