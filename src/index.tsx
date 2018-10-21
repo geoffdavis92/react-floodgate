@@ -63,8 +63,8 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
       callback,
       suppressWarning
     }: { callback?: Function, suppressWarning: boolean } = {
-      suppressWarning: false
-    }
+        suppressWarning: false
+      }
   ): void {
     (!this.state.allItemsRendered &&
       this.setState(prevState => {
