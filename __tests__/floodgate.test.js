@@ -259,17 +259,17 @@ describe('Wrapped Floodgate for saveState testing', () => {
   })
   it('2. Should load 3 items, toggle Floodgate, load 3 more items, and persist Floodgate state through mounting/re-mounting', () => {
     const wfgi = mount(<WrappedFloodgate floodgateSaveStateOnUnmount />)
-    const fgi = wfgi.find(Floodgate).instance()
+    const getFgi = () => wfgi.find(Floodgate).instance()
     const loadBtn = wfgi.find('button#load')
     const toggleBtn = wfgi.find('button#toggleFloodgate')
 
-    expect(fgi.state.currentIndex).toEqual(3)
+    expect(getFgi().state.currentIndex).toEqual(3)
     expect(wfgi.find('p')).toHaveLength(3)
 
     loadBtn.simulate('click')
 
     expect(wfgi.find('p')).toHaveLength(6)
-    expect(fgi.state.currentIndex).toEqual(6)
+    expect(getFgi().state.currentIndex).toEqual(6)
 
     toggleBtn.simulate('click')
     // wfgi.setState({ showFloodgate: false })
@@ -284,9 +284,7 @@ describe('Wrapped Floodgate for saveState testing', () => {
 
     toggleBtn.simulate('click')
     expect(wfgi.state().showFloodgate).toBe(true)
-    console.log(wfgi.find('main').html())
     wfgi.find('button#load').simulate('click')
-    console.log(wfgi.find('main').html())
-    console.log(wfgi.find(Floodgate).instance().state.currentIndex)
+    expect(getFgi().state.currentIndex).toBe(9)
   })
 })
