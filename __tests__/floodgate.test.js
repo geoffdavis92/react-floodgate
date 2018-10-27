@@ -29,8 +29,25 @@ class WrappedFloodgate extends React.Component {
         increment: 3
       }
     }
+    this.spliceRandomEntries = this.spliceRandomEntries.bind(this)
     this.toggleFloodgate = this.toggleFloodgate.bind(this)
     this.cacheFloodgateState = this.cacheFloodgateState.bind(this)
+  }
+  spliceRandomEntries () {
+    const data = [...this.state.savedState.data]
+    const randomNumToSplice = Math.ceil(Math.random() * data.length - 1)
+    const randomIndexToSplice = () => Math.floor(Math.random() * data.length)
+    for (let i = 0; i < randomNumToSplice; i++) {
+      data.splice(randomIndexToSplice(), 1)
+    }
+    this.setState(prevState => ({
+      ...prevState,
+      savedState: {
+        ...prevState.savedState,
+        data
+      }
+    }))
+    return data.length
   }
   toggleFloodgate () {
     this.setState(prevState => ({
@@ -257,7 +274,7 @@ describe('Wrapped Floodgate for saveState testing', () => {
       increment: 3
     })
   })
-  it('2. Should load 3 items, toggle Floodgate, load 3 more items, and persist Floodgate state through mounting/re-mounting', () => {
+  it('2. Should load 3 items, click to load 3 more items, toggle Floodgate, and persist Floodgate state through mounting/re-mounting', () => {
     const wfgi = mount(<WrappedFloodgate floodgateSaveStateOnUnmount />)
     const getFgi = () => wfgi.find(Floodgate).instance()
     const loadBtn = wfgi.find('button#load')
@@ -284,7 +301,32 @@ describe('Wrapped Floodgate for saveState testing', () => {
 
     toggleBtn.simulate('click')
     expect(wfgi.state().showFloodgate).toBe(true)
-    wfgi.find('button#load').simulate('click')
-    expect(getFgi().state.currentIndex).toBe(9)
+    expect(getFgi().state.currentIndex).toBe(6)
+  })
+  it('3. Should load 3 items, toggle Floodgate, randomly splice data entries, then persist Floodgate index state through mounting/re-mounting', () => {
+    const wfgi = mount(<WrappedFloodgate floodgateSaveStateOnUnmount />)
+    const getFgi = () => wfgi.find(Floodgate).instance()
+    const toggleBtn = wfgi.find('button#toggleFloodgate')
+
+    expect(getFgi().state.currentIndex).toEqual(3)
+    expect(wfgi.find('p')).toHaveLength(3)
+
+    toggleBtn.simulate('click')
+
+    expect(wfgi.find('p')).toHaveLength(0)
+    expect(wfgi.state().showFloodgate).toBe(false)
+    expect(wfgi.state('savedState')).toMatchObject({
+      data: theOfficeData,
+      initial: 3,
+      increment: 3
+    })
+
+    wfgi.instance().spliceRandomEntries()
+
+    toggleBtn.simulate('click')
+    expect(wfgi.state().showFloodgate).toBe(true)
+    expect(getFgi().state.renderedItems).toMatchObject(
+      wfgi.state().savedState.data.slice(0, 3)
+    )
   })
 })
