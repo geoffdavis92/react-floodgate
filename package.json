@@ -38,7 +38,6 @@
 		"jest": "^21.2.1",
 		"lorem-ipsum": "^1.0.4",
 		"prettier": "^1.7.4",
-		"react": "^16.0.0",
 		"react-dom": "16",
 		"react-test-renderer": "^16.0.0",
 		"regenerator-runtime": "^0.12.1",
@@ -58,7 +57,8 @@
 	},
 	"dependencies": {
 		"@types/prop-types": "^15.5.5",
-		"prop-types": "^15.6.2"
+		"prop-types": "^15.6.2",
+		"react": "^16.0.0"
 	},
 	"scripts": {
 		"build": "NODE_ENV=rollup ./node_modules/.bin/rollup -c --bundle && yarn test",
