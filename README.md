@@ -146,7 +146,7 @@ All items loaded!
 
 ## Contributors
 
-**[Request a feature](https://github.com/geoffdavis92/react-floodgate/issues/new?template=feature-request.md&projects=geoffdavis92/react-floodgate/1)**
+**[Request a feature](https://github.com/geoffdavis92/react-floodgate/issues/new?template=feature-request.md&projects=geoffdavis92/react-floodgate/1&labels=feature)**
 
 ## LICENSE
 
