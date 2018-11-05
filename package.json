@@ -28,7 +28,6 @@
 		"babel-plugin-external-helpers": "^6.22.0",
 		"babel-plugin-transform-class-properties": "^6.24.1",
 		"babel-plugin-transform-object-rest-spread": "^6.26.0",
-		"babel-polyfill": "^6.26.0",
 		"babel-preset-env": "^1.6.0",
 		"babel-preset-react": "^6.24.1",
 		"enzyme": "^3.1.0",
@@ -38,8 +37,7 @@
 		"jest": "^21.2.1",
 		"lorem-ipsum": "^1.0.4",
 		"prettier": "^1.7.4",
-		"react": "^16.0.0",
-		"react-dom": "16",
+		"react-dom": "^16.3.0",
 		"react-test-renderer": "^16.0.0",
 		"regenerator-runtime": "^0.12.1",
 		"rollup": "^0.50.0",
@@ -58,7 +56,8 @@
 	},
 	"dependencies": {
 		"@types/prop-types": "^15.5.5",
-		"prop-types": "^15.6.2"
+		"prop-types": "^15.6.2",
+		"react": "^16.3.0"
 	},
 	"scripts": {
 		"build": "NODE_ENV=rollup ./node_modules/.bin/rollup -c --bundle && yarn test",
