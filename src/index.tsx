@@ -63,46 +63,52 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
       callback,
       suppressWarning
     }: { callback?: Function, suppressWarning: boolean } = {
-        suppressWarning: false
-      }
+      suppressWarning: false
+    }
   ): void {
-    (!this.state.allItemsRendered &&
-      this.setState(prevState => {
-        return {
-          renderedItems: this.data,
-          allItemsRendered: true
-        };
-      }, () => callback && callback(this.state))) ||
-      (this.state.allItemsRendered &&
+    !this.state.allItemsRendered
+      ? this.setState(
+          prevState => {
+            return {
+              renderedItems: this.data,
+              allItemsRendered: true
+            };
+          },
+          () => callback && callback(this.state)
+        )
+      : this.state.allItemsRendered &&
         !suppressWarning &&
-        console.warn("Floodgate: All items are rendered"));
+        console.warn("Floodgate: All items are rendered");
   }
   loadNext({ callback }: { callback?: Function } = {}): void {
     !this.state.allItemsRendered &&
-      this.setState(prevState => {
-        // Get next iteratable
-        const { value, done } = this.queue.next();
-        // Check if array value exists and has at least one element
-        const valueIsAvailable: boolean =
-          value !== null && value !== undefined && value.length > 0;
-        // Combine new items with rendered items from state
-        const newRenderedData = [
-          ...prevState.renderedItems,
-          ...(valueIsAvailable ? value : [])
-        ];
-        // Check if all data items have been rendered
-        const dataLengthMatches: boolean =
-          newRenderedData.length === this.data.length;
+      this.setState(
+        prevState => {
+          // Get next iteratable
+          const { value, done } = this.queue.next();
+          // Check if array value exists and has at least one element
+          const valueIsAvailable: boolean =
+            value !== null && value !== undefined && value.length > 0;
+          // Combine new items with rendered items from state
+          const newRenderedData = [
+            ...prevState.renderedItems,
+            ...(valueIsAvailable ? value : [])
+          ];
+          // Check if all data items have been rendered
+          const dataLengthMatches: boolean =
+            newRenderedData.length === this.data.length;
 
-        return {
-          renderedItems: newRenderedData,
-          currentIndex: newRenderedData.length,
-          allItemsRendered:
-            !valueIsAvailable || (valueIsAvailable && dataLengthMatches)
-              ? true
-              : false
-        };
-      }, () => callback && callback(this.state));
+          return {
+            renderedItems: newRenderedData,
+            currentIndex: newRenderedData.length,
+            allItemsRendered:
+              !valueIsAvailable || (valueIsAvailable && dataLengthMatches)
+                ? true
+                : false
+          };
+        },
+        () => callback && callback(this.state)
+      );
   }
   saveState() {
     const { renderedItems, currentIndex, allItemsRendered } = this.state;
@@ -116,14 +122,23 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
   render() {
     const { loadAll, loadNext, reset, saveState } = this;
     const { renderedItems, allItemsRendered } = this.state;
-    return this.props.children({
+    const floodgateInternals = {
       items: renderedItems,
       loadComplete: allItemsRendered,
       loadAll,
       loadNext,
       reset,
       saveState
-    });
+    };
+    const FloodgateContext = React.createContext(floodgateInternals);
+    return (
+      <FloodgateContext.Provider value={floodgateInternals}>
+        {this.props.children({
+          ...floodgateInternals,
+          FloodgateContext
+        })}
+      </FloodgateContext.Provider>
+    );
   }
 }
 
