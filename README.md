@@ -124,9 +124,11 @@ All items loaded!
 
 |name|type|default|description|
 |-|-|-|-|
-|`items`|Array\<any>|`null`|The array of items to be processed by `Floodgate`|
+|`data`|Array\<any>|`null`|The array of items to be processed by `Floodgate`|
 |`initial`|Integer|`5`|How many items are initially available in the render function|
 |`increment`|Integer|`5`|How many items are added when calling `loadNext`|
+|`saveStateOnUnmount`|Boolean|*(optional)*|Toggle if `exportState` will be called during `componentWillUnmount`|
+|`exportState`|Function|*(optional)*|Function to pass up Floodgate's internal state when `componentWillUnmount` fires|
 
 #### `render` function
 
