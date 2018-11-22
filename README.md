@@ -150,6 +150,10 @@ All items loaded!
 
 **[Request a feature](https://github.com/geoffdavis92/react-floodgate/issues/new?template=feature-request.md&projects=geoffdavis92/react-floodgate/1&labels=feature)**
 
+**[Request maintenance](https://github.com/geoffdavis92/react-floodgate/issues/new?template=maintenance.md&projects=geoffdavis92/react-floodgate/1&labels=dx)**
+
+**[Request a documentation update](https://github.com/geoffdavis92/react-floodgate/issues/new?template=documentation.md&projects=geoffdavis92/react-floodgate/3&labels=github,dx)**
+
 ## LICENSE
 
 [MIT](blob/master/.github/LICENSE)
