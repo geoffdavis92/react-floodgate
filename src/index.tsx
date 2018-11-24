@@ -63,19 +63,19 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
       callback,
       suppressWarning
     }: { callback?: Function, suppressWarning: boolean } = {
-        suppressWarning: false
-      }
+      suppressWarning: false
+    }
   ): void {
-    (!this.state.allItemsRendered &&
-      this.setState(prevState => {
-        return {
-          renderedItems: this.data,
-          allItemsRendered: true
-        };
-      }, () => callback && callback(this.state))) ||
-      (this.state.allItemsRendered &&
+    !this.state.allItemsRendered
+      ? this.setState(prevState => {
+          return {
+            renderedItems: this.data,
+            allItemsRendered: true
+          };
+        }, () => callback && callback(this.state))
+      : this.state.allItemsRendered &&
         !suppressWarning &&
-        console.warn("Floodgate: All items are rendered"));
+        console.warn("Floodgate: All items are rendered");
   }
   loadNext({ callback }: { callback?: Function } = {}): void {
     !this.state.allItemsRendered &&
