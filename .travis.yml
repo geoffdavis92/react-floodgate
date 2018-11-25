@@ -7,3 +7,5 @@ branches:
     - /documentation\/.+/
 install:
   - yarn
+script:
+  - yarn run build
