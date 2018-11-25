@@ -6,4 +6,5 @@ node_modules/
 package-lock.json
 demo.js 
 .rpt2_cache/ 
-dist
+dist 
+.travis.yml.swp
