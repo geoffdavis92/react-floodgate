@@ -42,7 +42,7 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
     this.saveState = this.saveState.bind(this);
   }
   componentDidMount(): void {
-    this.loadNext();
+    this.loadNext({ silent: true });
   }
   componentWillUnmount(): void {
     // Prevent unwanted cacheing by setting saveStateOnUnmount to false
@@ -56,7 +56,7 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
         allItemsRendered: false
       }),
       () => {
-        this.loadNext({ callback });
+        this.loadNext({ silent: true, callback });
         this.props.onReset && this.props.onReset(this.state);
       }
     );
@@ -86,7 +86,11 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
         !suppressWarning &&
         console.warn("Floodgate: All items are rendered");
   }
-  loadNext({ callback }: { callback?: Function } = {}): void {
+  loadNext(
+    { silent, callback }: { silent?: boolean, callback?: Function } = {
+      silent: false
+    }
+  ): void {
     if (!this.state.allItemsRendered) {
       // Get next iteratable
       const { value } = this.queue.next();
@@ -117,7 +121,9 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
           if (this.state.allItemsRendered) {
             this.props.onLoadComplete && this.props.onLoadComplete(this.state);
           } else {
-            this.props.onLoadNext && this.props.onLoadNext(this.state);
+            this.props.onLoadNext &&
+              !silent &&
+              this.props.onLoadNext(this.state);
           }
         }
       );
