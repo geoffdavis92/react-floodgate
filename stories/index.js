@@ -270,6 +270,47 @@ storiesOf("Floodgate/simple", module)
         )}
       </StatefulToggle>
     );
+  })
+  .add("With event callbacks", () => {
+    return (
+      <StatefulToggle
+        stateObj={{ data: generateFilledArray(25), initial: 3, increment: 3 }}
+      >
+        {({ STState, toggle, stashState }) => (
+          <div>
+            <button onClick={toggle}>Toggle Children</button>
+            <br />
+            {STState.toggleChildren && (
+              <Floodgate
+                data={STState.savedFloodgateState.data}
+                initial={STState.savedFloodgateState.initial}
+                increment={STState.savedFloodgateState.increment}
+                onLoadNext={s => console.log({ stateOnLoadNext: s })}
+                onLoadComplete={s => console.log({ stateOnLoadComplete: s })}
+                onReset={s => console.log({ stateOnReset: s })}
+                exportState={state =>
+                  stashState("savedFloodgateState", {
+                    ...state,
+                    initial: state.currentIndex
+                  })}
+              >
+                {({ items, loadNext, loadComplete, reset }) => (
+                  <article>
+                    {items.map(n => <p key={n.toString()}>{n}</p>)}
+                    <br />
+                    {!loadComplete ? (
+                      <button onClick={loadNext}>load next</button>
+                    ) : (
+                      <button onClick={reset}>reset</button>
+                    )}
+                  </article>
+                )}
+              </Floodgate>
+            )}
+          </div>
+        )}
+      </StatefulToggle>
+    );
   });
 storiesOf("Utilities/functions/ErrorMessage", module)
   .add("Generic message", () => (
