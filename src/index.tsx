@@ -55,7 +55,10 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
         renderedItems: [],
         allItemsRendered: false
       }),
-      () => this.loadNext({ callback })
+      () => {
+        this.loadNext({ callback });
+        this.props.onReset && this.props.onReset(this.state);
+      }
     );
   }
   loadAll(
@@ -67,12 +70,18 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
     }
   ): void {
     !this.state.allItemsRendered
-      ? this.setState(prevState => {
-          return {
-            renderedItems: this.data,
-            allItemsRendered: true
-          };
-        }, () => callback && callback(this.state))
+      ? this.setState(
+          prevState => {
+            return {
+              renderedItems: this.data,
+              allItemsRendered: true
+            };
+          },
+          () => {
+            callback && callback(this.state);
+            this.props.onLoadComplete && this.props.onLoadComplete(this.state);
+          }
+        )
       : this.state.allItemsRendered &&
         !suppressWarning &&
         console.warn("Floodgate: All items are rendered");
@@ -84,24 +93,34 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
       // Check if array value exists and has at least one element
       const valueIsAvailable: boolean = value && value.length;
 
-      this.setState(prevState => {
-        // Apply new data if available
-        const newRenderedData = [
-          ...prevState.renderedItems,
-          ...(valueIsAvailable ? value : [])
-        ];
-        // Check if all data items have been rendered
-        const dataLengthMatches: boolean =
-          newRenderedData.length === this.data.length;
-        return {
-          renderedItems: newRenderedData,
-          currentIndex: newRenderedData.length,
-          allItemsRendered:
-            !valueIsAvailable || (valueIsAvailable && dataLengthMatches)
-              ? true
-              : false
-        };
-      }, () => callback && callback(this.state));
+      this.setState(
+        prevState => {
+          // Apply new data if available
+          const newRenderedData = [
+            ...prevState.renderedItems,
+            ...(valueIsAvailable ? value : [])
+          ];
+          // Check if all data items have been rendered
+          const dataLengthMatches: boolean =
+            newRenderedData.length === this.data.length;
+          return {
+            renderedItems: newRenderedData,
+            currentIndex: newRenderedData.length,
+            allItemsRendered:
+              !valueIsAvailable || (valueIsAvailable && dataLengthMatches)
+                ? true
+                : false
+          };
+        },
+        () => {
+          callback && callback(this.state);
+          if (this.state.allItemsRendered) {
+            this.props.onLoadComplete && this.props.onLoadComplete(this.state);
+          } else {
+            this.props.onLoadNext && this.props.onLoadNext(this.state);
+          }
+        }
+      );
     }
   }
   saveState() {
