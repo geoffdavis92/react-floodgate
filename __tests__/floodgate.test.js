@@ -1,20 +1,19 @@
 import rAFPolyfill from "./__test_utils__";
 import React from "react";
 import jest from "jest";
+import jest_mock from "jest-mock";
 import Enzyme, { render, shallow, mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import toJSON from "enzyme-to-json";
 
 import Floodgate from "../dist/floodgate.esm";
-import { loopSimulation, theOfficeData } from "../src/helpers";
+import { logMsg, loopSimulation, theOfficeData } from "../src/helpers";
 import toJson from "enzyme-to-json";
 
 // configure Enzyme
 Enzyme.configure({ adapter: new Adapter() });
 
-// Wrapper instance
-const WrappedFloodgateInstance = fgProps => <WrappedFloodgate {...fgProps} />;
-
+// Wrapped instance
 class WrappedFloodgate extends React.Component {
   static defaultProps = {
     floodgateSaveStateOnUnmount: true
@@ -111,14 +110,26 @@ class WrappedFloodgate extends React.Component {
 }
 
 // Floodgate instance
-const FloodgateInstance = ({ increment = 3, initial = 3 }) => (
-  <Floodgate data={theOfficeData} {...{ initial, increment }}>
+const FloodgateInstance = ({
+  increment = 3,
+  initial = 3,
+  silentLoadNext = false,
+  ...restProps
+}) => (
+  <Floodgate data={theOfficeData} {...{ initial, increment }} {...restProps}>
     {({ items, loadNext, loadAll, reset, loadComplete }) => (
       <main>
-        {items.map(({ name }) => <p key={name}>{name}</p>)}
+        {items.map(({ name }) => (
+          <p key={name} className="officeMember">
+            {name}
+          </p>
+        ))}
         {(!loadComplete && (
           <span>
-            <button id="load" onClick={loadNext}>
+            <button
+              id="load"
+              onClick={() => loadNext({ silent: silentLoadNext })}
+            >
               Load More
             </button>
             <button id="loadall" onClick={loadAll}>
@@ -281,6 +292,107 @@ describe("Floodgate", () => {
     resetButton().simulate("click");
     expect(p("length")).toBe(1);
     expect(toJSON(fgi)).toMatchSnapshot();
+  });
+
+  it("9. Should fire props.onLoadNext during loadNext", () => {
+    const mockedLoadNextCallback = jest_mock.fn(state => {
+      expect(state).toMatchObject(fgi.find(Floodgate).instance().state);
+    });
+    const fgi = mount(
+      <FloodgateInstance
+        initial={1}
+        increment={2}
+        onLoadNext={mockedLoadNextCallback}
+      />
+    );
+    const loadButton = () => fgi.find("button#load");
+
+    loadButton().simulate("click");
+    expect(mockedLoadNextCallback.mock.calls.length).toEqual(1);
+  });
+  it("10. Should fire props.onLoadComplete during loadAll", () => {
+    const mockedLoadCompleteCallback = jest_mock.fn(state => {
+      expect(state).toMatchObject(fgi.find(Floodgate).instance().state);
+    });
+    const fgi = mount(
+      <FloodgateInstance
+        initial={3}
+        increment={3}
+        onLoadComplete={mockedLoadCompleteCallback}
+      />
+    );
+    const loadAllButton = () => fgi.find("button#loadall");
+
+    loadAllButton().simulate("click");
+    expect(fgi.find("p.officeMember").length).toEqual(theOfficeData.length);
+    expect(mockedLoadCompleteCallback.mock.calls.length).toEqual(1);
+  });
+
+  it("11. Should fire only props.onLoadComplete after loadNext to completion", () => {
+    const mockedLoadNextCallback = jest_mock.fn(state => {
+      expect(state).toMatchObject(fgi.find(Floodgate).instance().state);
+    });
+    const mockedLoadCompleteCallback = jest_mock.fn(state => {
+      expect(state).toMatchObject(fgi.find(Floodgate).instance().state);
+    });
+    const fgi = mount(
+      <FloodgateInstance
+        initial={theOfficeData.length - 4}
+        increment={3}
+        onLoadNext={mockedLoadNextCallback}
+        onLoadComplete={mockedLoadCompleteCallback}
+      />
+    );
+    const loadButton = () => fgi.find("button#load");
+
+    loadButton().simulate("click");
+    expect(mockedLoadNextCallback.mock.calls.length).toEqual(1);
+    loadButton().simulate("click");
+    expect(mockedLoadNextCallback.mock.calls.length).toEqual(1);
+    expect(mockedLoadCompleteCallback.mock.calls.length).toEqual(1);
+  });
+
+  it("12. Should fire props.onReset after reset", () => {
+    const mockedLoadNextCallback = jest_mock.fn(state => {
+      expect(state).toMatchObject(fgi.find(Floodgate).instance().state);
+    });
+    const mockedResetCallback = jest_mock.fn(state => {
+      expect(state).toMatchObject(fgi.find(Floodgate).instance().state);
+    });
+    const fgi = mount(
+      <FloodgateInstance
+        initial={1}
+        increment={3}
+        onLoadNext={mockedLoadNextCallback}
+        onReset={mockedResetCallback}
+      />
+    );
+    const loadButton = () => fgi.find("button#load");
+    const resetButton = () => fgi.find("button#reset");
+
+    loadButton().simulate("click");
+    expect(fgi.find("p.officeMember").length).toEqual(4);
+    expect(mockedLoadNextCallback.mock.calls.length).toEqual(1);
+    resetButton().simulate("click");
+    expect(fgi.find("p.officeMember").length).toEqual(1);
+    expect(mockedResetCallback.mock.calls.length).toEqual(1);
+  });
+  it("13. Should fire loadNext in silent mode", () => {
+    const mockedLoadNextCallback = jest_mock.fn(state => {
+      expect(state).toMatchObject(fgi.find(Floodgate).instance().state);
+    });
+    const fgi = mount(
+      <FloodgateInstance
+        initial={1}
+        increment={3}
+        silentLoadNext={true}
+        onLoadNext={mockedLoadNextCallback}
+      />
+    );
+    const loadButton = () => fgi.find("button#load");
+
+    loadButton().simulate("click");
+    expect(mockedLoadNextCallback.mock.calls.length).toEqual(0);
   });
 });
 
