@@ -129,18 +129,22 @@ All items loaded!
 |`increment`|Integer|`5`|How many items are added when calling `loadNext`|
 |`saveStateOnUnmount`|Boolean|*(optional)*|Toggle if `exportState` will be called during `componentWillUnmount`|
 |`exportState`|Function|*(optional)*|Function to pass up Floodgate's internal state when `componentWillUnmount` fires|
+|`onLoadNext`|Function|*(optional)*|Callback function to run after `loadNext`; runs after inline `callback` argument prop|
+|`onLoadComplete`|Function|*(optional)*|Callback function to run after `loadComplete`; runs after inline `callback` argument prop|
+|`onReset`|Function|*(optional)*|Callback function to run after `reset`; runs after inline `callback` argument prop|
 
 #### `render` function
 
 **Note:** the `render` function uses a single object argument to expose the following values/functions. Use the ES2015 destructuring syntax to get the most of this pattern. (see the Examples section on how to do this)
 
-|name|type|default|description|
-|-|-|-|-|
-|`items`|Array\<any>|`null`|State: the subset of items determined by the `intitial` and `increment` props|
-|`loadComplete`|Boolean|`false`|State: describes if all items have been processed by the `Floodgate` instance|
-|`loadAll`|Function|n/a|Action: loads all `items`|
-|`loadNext`|Function|n/a|Action: loads the next set of items|
-|`reset`|Function|n/a|Action: resets the state of the `Floodgate` instance to the initial state|
+|name|type|default|parameters|description|
+|-|-|-|-|-|
+|`items`|Array\<any>|`null`|n/a|State: the subset of items determined by the `intitial` and `increment` props|
+|`loadComplete`|Boolean|`false`|n/a|State: describes if all items have been processed by the `Floodgate` instance|
+|`loadAll`|Function|n/a|`{callback?: Function}`|Action: loads all `items`; `callback` prop in argument fires immediately after invocation|
+|`loadNext`|Function|n/a|`{silent?: boolean, callback?: Function}`|Action: loads the next set of items; `callback` prop in argument fires immediately after invocation, `silent` determinse if `onLoadNext` callback is fired after calling `loadNext`|
+|`reset`|Function|n/a|`{callback?: Function}`|Action: resets the state of the `Floodgate` instance to the initial state; `callback` prop in argument fires immediately after invocation|
+|`saveState`|Function|n/a|`null`|Action: calls the `exportState` prop callback |
 
 ## Examples
 
