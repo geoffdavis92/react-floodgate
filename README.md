@@ -129,6 +129,9 @@ All items loaded!
 |`increment`|Integer|`5`|How many items are added when calling `loadNext`|
 |`saveStateOnUnmount`|Boolean|*(optional)*|Toggle if `exportState` will be called during `componentWillUnmount`|
 |`exportState`|Function|*(optional)*|Function to pass up Floodgate's internal state when `componentWillUnmount` fires|
+|`onLoadNext`|Function|*(optional)*|Callback function to run after `loadNext`; runs after inline `callback` argument prop|
+|`onLoadComplete`|Function|*(optional)*|Callback function to run after `loadComplete`; runs after inline `callback` argument prop|
+|`onReset`|Function|*(optional)*|Callback function to run after `reset`; runs after inline `callback` argument prop|
 
 #### `render` function
 
