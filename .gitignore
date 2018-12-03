@@ -1,10 +1,11 @@
 # react-floodgate ignores... 
-.DS_Store 
+.rpt2_cache/ 
 __tests__/__snapshots__/ 
+archive/
+dist/
 node_modules/ 
 *log
+.DS_Store 
+.travis.yml.swp 
 package-lock.json
 demo.js 
-.rpt2_cache/ 
-dist 
-.travis.yml.swp
