@@ -26,6 +26,9 @@ type FloodgateProps = {
   initial: number,
   saveStateOnUnmount?: boolean,
   exportState?: Function
+  onLoadNext?: Function,
+  onLoadComplete?: Function,
+  onReset?: Function
 };
 
 type FloodgateState = {

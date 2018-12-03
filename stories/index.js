@@ -36,9 +36,7 @@ storiesOf("Floodgate/simple", module)
       <Floodgate data={generateFilledArray(9)} initial={2} increment={2}>
         {({ items, loadNext, loadComplete }) => (
           <article>
-            {items.map(n => (
-              <p key={n}>{n}</p>
-            ))}
+            {items.map(n => <p key={n}>{n}</p>)}
             {(!loadComplete && (
               <p>
                 <button onClick={loadNext}>Load More</button>
@@ -55,9 +53,7 @@ storiesOf("Floodgate/simple", module)
       <Floodgate data={generateFilledArray(9)} increment={3} initial={3}>
         {({ items, loadNext, loadComplete }) => (
           <article>
-            {items.map(n => (
-              <p key={n}>{n}</p>
-            ))}
+            {items.map(n => <p key={n}>{n}</p>)}
             {(!loadComplete && (
               <p>
                 <button onClick={loadNext}>Load More</button>
@@ -74,9 +70,7 @@ storiesOf("Floodgate/simple", module)
       <Floodgate data={generateFilledArray(9)} increment={3} initial={4}>
         {({ items, loadNext, loadComplete }) => (
           <article>
-            {items.map(n => (
-              <p key={n}>{n}</p>
-            ))}
+            {items.map(n => <p key={n}>{n}</p>)}
             {(!loadComplete && (
               <p>
                 <button onClick={loadNext}>Load More</button>
@@ -91,9 +85,7 @@ storiesOf("Floodgate/simple", module)
     <Floodgate data={generateFilledArray(9)} initial={9}>
       {({ items, loadNext, loadComplete }) => (
         <article>
-          {items.map(n => (
-            <p key={n}>{n}</p>
-          ))}
+          {items.map(n => <p key={n}>{n}</p>)}
           {(!loadComplete && (
             <p>
               <button onClick={loadNext}>Load More</button>
@@ -107,9 +99,7 @@ storiesOf("Floodgate/simple", module)
     <Floodgate data={generateFilledArray(25)}>
       {({ items, loadNext, loadComplete, reset }) => (
         <article>
-          {items.map(n => (
-            <p key={n}>{n}</p>
-          ))}
+          {items.map(n => <p key={n}>{n}</p>)}
           {(!loadComplete && (
             <p>
               <button onClick={loadNext}>Load More</button>
@@ -149,15 +139,13 @@ storiesOf("Floodgate/simple", module)
                       });
                       window.location = "#last";
                     }
-                  })
-                }
+                  })}
               >
                 Load More
               </button>
               <button
                 onClick={e =>
-                  reset({ callback: state => console.log("RESET", { state }) })
-                }
+                  reset({ callback: state => console.log("RESET", { state }) })}
               >
                 Reset
               </button>
@@ -171,8 +159,7 @@ storiesOf("Floodgate/simple", module)
                   reset({
                     callback: state =>
                       console.log("RESET AFTER ALL LOADED", { state })
-                  })
-                }
+                  })}
               >
                 Reset
               </button>
@@ -207,8 +194,7 @@ storiesOf("Floodgate/simple", module)
                         });
                         window.location = "#last";
                       }
-                    })
-                  }
+                    })}
                 >
                   Load More
                 </button>
@@ -217,8 +203,7 @@ storiesOf("Floodgate/simple", module)
                     loadAll({
                       callback: state => console.log("LOAD ALL", { state }),
                       suppressWarning: false
-                    })
-                  }
+                    })}
                 >
                   Load All
                 </button>
@@ -226,8 +211,7 @@ storiesOf("Floodgate/simple", module)
                   onClick={e =>
                     reset({
                       callback: state => console.log("RESET", { state })
-                    })
-                  }
+                    })}
                 >
                   Reset
                 </button>
@@ -241,8 +225,7 @@ storiesOf("Floodgate/simple", module)
                     reset({
                       callback: state =>
                         console.log("RESET AFTER ALL LOADED", { state })
-                    })
-                  }
+                    })}
                 >
                   Reset
                 </button>
@@ -271,14 +254,52 @@ storiesOf("Floodgate/simple", module)
                   stashState("savedFloodgateState", {
                     ...state,
                     initial: state.currentIndex
-                  })
-                }
+                  })}
               >
                 {({ items, loadNext, loadComplete, reset }) => (
                   <article>
-                    {items.map(n => (
-                      <p key={n.toString()}>{n}</p>
-                    ))}
+                    {items.map(n => <p key={n.toString()}>{n}</p>)}
+                    <br />
+                    {!loadComplete ? (
+                      <button onClick={loadNext}>load next</button>
+                    ) : (
+                      <button onClick={reset}>reset</button>
+                    )}
+                  </article>
+                )}
+              </Floodgate>
+            )}
+          </div>
+        )}
+      </StatefulToggle>
+    );
+  })
+  .add("With event callbacks", () => {
+    return (
+      <StatefulToggle
+        stateObj={{ data: generateFilledArray(25), initial: 3, increment: 3 }}
+      >
+        {({ STState, toggle, stashState }) => (
+          <div>
+            <button onClick={toggle}>Toggle Children</button>
+            <br />
+            {STState.toggleChildren && (
+              <Floodgate
+                data={STState.savedFloodgateState.data}
+                initial={STState.savedFloodgateState.initial}
+                increment={STState.savedFloodgateState.increment}
+                onLoadNext={s => console.log({ stateOnLoadNext: s })}
+                onLoadComplete={s => console.log({ stateOnLoadComplete: s })}
+                onReset={s => console.log({ stateOnReset: s })}
+                exportState={state =>
+                  stashState("savedFloodgateState", {
+                    ...state,
+                    initial: state.currentIndex
+                  })}
+              >
+                {({ items, loadNext, loadComplete, reset }) => (
+                  <article>
+                    {items.map(n => <p key={n.toString()}>{n}</p>)}
                     <br />
                     {!loadComplete ? (
                       <button onClick={loadNext}>load next</button>
@@ -296,11 +317,7 @@ storiesOf("Floodgate/simple", module)
   })
   .add("Floodgate children wrapped in Context.Provider", () => {
     const Display = props => (
-      <ul>
-        {props.items.map(n => (
-          <li key={n}>{n}</li>
-        ))}
-      </ul>
+      <ul>{props.items.map(n => <li key={n}>{n}</li>)}</ul>
     );
     const Controls = ({ ContextConsumer }) => (
       <React.Fragment>

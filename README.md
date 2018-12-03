@@ -124,9 +124,11 @@ All items loaded!
 
 |name|type|default|description|
 |-|-|-|-|
-|`items`|Array\<any>|`null`|The array of items to be processed by `Floodgate`|
+|`data`|Array\<any>|`null`|The array of items to be processed by `Floodgate`|
 |`initial`|Integer|`5`|How many items are initially available in the render function|
 |`increment`|Integer|`5`|How many items are added when calling `loadNext`|
+|`saveStateOnUnmount`|Boolean|*(optional)*|Toggle if `exportState` will be called during `componentWillUnmount`|
+|`exportState`|Function|*(optional)*|Function to pass up Floodgate's internal state when `componentWillUnmount` fires|
 
 #### `render` function
 
@@ -145,6 +147,12 @@ All items loaded!
 - [Proof of Concept](https://codesandbox.io/embed/jlzxplj2z9)
 
 ## Contributors
+
+**[Request a feature](https://github.com/geoffdavis92/react-floodgate/issues/new?template=feature-request.md&projects=geoffdavis92/react-floodgate/1&labels=feature)**
+
+**[Request maintenance](https://github.com/geoffdavis92/react-floodgate/issues/new?template=maintenance.md&projects=geoffdavis92/react-floodgate/1&labels=dx)**
+
+**[Request a documentation update](https://github.com/geoffdavis92/react-floodgate/issues/new?template=documentation.md&projects=geoffdavis92/react-floodgate/3&labels=github,dx)**
 
 ## LICENSE
 
