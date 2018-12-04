@@ -394,6 +394,22 @@ describe("Floodgate", () => {
     loadButton().simulate("click");
     expect(mockedLoadNextCallback.mock.calls.length).toEqual(0);
   });
+  it("14. Should give propType error when non-function value passed to event callback props", () => {
+    const fgi = mount(
+      <FloodgateInstance
+        onLoadNext={{ shouldError: true }}
+        onLoadComplete={{ shouldError: true }}
+        onReset={{ shouldError: true }}
+      />
+    );
+    const loadButton = fgi.find("button#load");
+    const loadAllButton = () => fgi.find("button#loadall");
+    const resetButton = () => fgi.find("button#reset");
+
+    expect(() => loadButton.simulate("click")).toThrowError();
+    expect(() => loadAllButton.simulate("click")).toThrowError();
+    expect(() => resetButton.simulate("click")).toThrowError();
+  });
 });
 
 describe("Wrapped Floodgate for saveState testing", () => {
