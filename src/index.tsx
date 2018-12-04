@@ -17,7 +17,10 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
     initial: PropTypes.number,
     increment: PropTypes.number,
     saveStateOnUnmount: PropTypes.bool,
-    exportState: PropTypes.func
+    exportState: PropTypes.func,
+    onLoadNext: PropTypes.func,
+    onLoadComplete: PropTypes.func,
+    onReset: PropTypes.func
   };
   static defaultProps = {
     initial: 5,
