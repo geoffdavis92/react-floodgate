@@ -1,6 +1,6 @@
 {
 	"name": "react-floodgate",
-	"version": "0.5.1",
+	"version": "0.5.2",
 	"description": "Configurable and flexible React component for incrementally displaying data.",
 	"keywords": [
 		"react",
