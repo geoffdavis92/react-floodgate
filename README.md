@@ -1,5 +1,5 @@
 <h1 align="center">react-floodgate 🌊</h1>
-<p align="center">Configurable and flexible React component for incrementally displaying data.</p>
+<p align="center">Configurable and flexible "load more" component for React</p>
 
 ---
 
