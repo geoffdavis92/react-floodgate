@@ -1,11 +1,13 @@
 {
 	"name": "react-floodgate",
 	"version": "0.5.2",
-	"description": "Configurable and flexible React component for incrementally displaying data.",
+	"description": "Configurable and flexible \"load more\" component for React",
 	"keywords": [
 		"react",
+		"javascript",
 		"load more",
-		"render props"
+		"render props",
+		"es2015"
 	],
 	"main": "dist/floodgate.cjs.js",
 	"jsnext:main": "dist/floodgate.esm.js",
