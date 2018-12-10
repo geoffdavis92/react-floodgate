@@ -4,10 +4,12 @@ import * as React from "react";
 import * as PropTypes from "prop-types";
 import { generator } from "./functions";
 
+const initGeneratorSymbol = Symbol.for("initGenerator");
+
 class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
   // types
   data: Array<any>;
-  queue: Generator;
+  queue: Generator | null;
   state: FloodgateState;
 
   // static props
@@ -32,20 +34,83 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
   constructor(props: FloodgateProps) {
     super(props);
     const { data, increment, initial } = props;
-    this.queue = generator(data, increment, initial);
+    this.queue = null;
     this.data = data;
     this.state = {
+      items: this.data,
       renderedItems: [],
       currentIndex: 0,
-      allItemsRendered: false
+      allItemsRendered: false,
+      prevProps: { data, increment, initial }
     };
+    this[initGeneratorSymbol] = this[initGeneratorSymbol].bind(this);
     this.loadAll = this.loadAll.bind(this);
     this.loadNext = this.loadNext.bind(this);
     this.reset = this.reset.bind(this);
     this.saveState = this.saveState.bind(this);
+    this[initGeneratorSymbol]();
+  }
+  static getDerivedStateFromProps(props, state): object | null {
+    const { data, increment, initial } = props;
+    const {
+      data: prevData,
+      increment: prevIncrement,
+      initial: prevInitial
+    } = state.prevProps;
+    if (
+      JSON.stringify({ data, increment, initial }) !==
+      JSON.stringify({
+        data: prevData,
+        increment: prevIncrement,
+        initial: prevInitial
+      })
+    ) {
+      return {
+        items: props.data,
+        allItemsRendered: false,
+        // JSON.stringify(data) !== JSON.stringify(state.renderedItems),
+        prevProps: props
+      };
+    }
+    return null;
+  }
+  [initGeneratorSymbol]() {
+    this.queue = generator(
+      this.state.items,
+      this.props.increment,
+      this.props.initial
+    );
   }
   componentDidMount(): void {
     this.loadNext({ silent: true });
+  }
+  componentDidUpdate(prevProps, prevState) {
+    const { data, increment, initial } = this.props;
+    const {
+      data: prevData,
+      increment: prevIncrement,
+      initial: prevInitial
+    } = prevProps;
+    if (
+      JSON.stringify({
+        data,
+        increment,
+        initial
+      }) !==
+      JSON.stringify({
+        data: prevData,
+        increment: prevIncrement,
+        initial: prevInitial
+      })
+    ) {
+      this.queue = generator(data, increment, prevState.currentIndex);
+      this.setState(
+        () => ({
+          renderedItems: []
+        }),
+        () => this.loadNext({ silent: true })
+      );
+    }
   }
   componentWillUnmount(): void {
     // Prevent unwanted cacheing by setting saveStateOnUnmount to false
@@ -109,7 +174,8 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
           ];
           // Check if all data items have been rendered
           const dataLengthMatches: boolean =
-            newRenderedData.length === this.data.length;
+            newRenderedData.length === prevState.items.length;
+
           return {
             renderedItems: newRenderedData,
             currentIndex: newRenderedData.length,
