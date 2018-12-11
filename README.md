@@ -42,7 +42,7 @@ or
 
 ```javascript
 const BasicExample = props => (
-  <Floodgate items={["hello","world","!"]} initial={3} increment={1}>
+  <Floodgate data={["hello","world","!"]} initial={3} increment={1}>
     {
       ({ items }) => (
         <ul>
