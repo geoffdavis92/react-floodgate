@@ -62,7 +62,7 @@ const BasicExample = props => (
 */
 
 const LoadMoreExample = props => (
-  <Floodgate items={['foo','bar','baz','buzz','daz','doz']} initial={3} increment={1}>
+  <Floodgate data={['foo','bar','baz','buzz','daz','doz']} initial={3} increment={1}>
     {
       ({ items, loadNext, loadComplete }) => (
         <React.Fragment>
