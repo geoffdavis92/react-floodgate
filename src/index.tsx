@@ -54,16 +54,6 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
     this.saveState = this.saveState.bind(this);
     this[initGeneratorSymbol]();
   }
-  // static getDerivedStateFromProps(props, state): object | null {
-  //   if (props !== state.prevProps) {
-  //     return {
-  //       items: props.data,
-  //       allItemsRendered: false,
-  //       prevProps: props
-  //     };
-  //   }
-  //   return null;
-  // }
   private [initGeneratorSymbol]() {
     this.queue = generator(
       this.state.items,
