@@ -287,9 +287,7 @@ storiesOf("Floodgate/simple", module)
                   </button>
                   <button
                     onClick={this.handleClick}
-                    disabled={
-                      this.state.fetchActive || this.state.fetchComplete
-                    }
+                    disabled={this.state.fetchActive}
                   >
                     fetch more
                   </button>
