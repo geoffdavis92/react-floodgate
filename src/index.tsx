@@ -75,7 +75,7 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
       const items = data;
       this.setState(() => ({
         items,
-        allItemsRendered: items.length === prevState.renderedItems
+        allItemsRendered: items.length === prevState.renderedItems.length
       }));
     }
   }
