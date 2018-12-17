@@ -52,14 +52,14 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
     this.loadNext = this.loadNext.bind(this);
     this.reset = this.reset.bind(this);
     this.saveState = this.saveState.bind(this);
-    this[initGeneratorSymbol]();
-  }
-  private [initGeneratorSymbol]() {
-    this.queue = generator(
+    this[initGeneratorSymbol](
       this.state.items,
       this.props.increment,
       this.props.initial
     );
+  }
+  [initGeneratorSymbol](items, increment, initial) {
+    this.queue = generator(items, increment, initial);
   }
   componentDidMount(): void {
     this.loadNext({ silent: true });
@@ -67,7 +67,7 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
   componentDidUpdate(prevProps, prevState): void {
     const { data, increment, initial } = this.props;
     if (this.props !== prevProps) {
-      this.queue = generator(
+      this[initGeneratorSymbol](
         data.slice(prevState.currentIndex, data.length),
         increment,
         increment
