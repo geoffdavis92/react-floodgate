@@ -13,7 +13,7 @@ import toJson from "enzyme-to-json";
 // configure Enzyme
 Enzyme.configure({ adapter: new Adapter() });
 
-// Wrapped instance
+// Wrapped instance for unMount
 class WrappedFloodgate extends React.Component {
   static defaultProps = {
     floodgateSaveStateOnUnmount: true
@@ -104,6 +104,69 @@ class WrappedFloodgate extends React.Component {
             )}
           </Floodgate>
         )}
+      </div>
+    );
+  }
+}
+
+// Wrapped instance for prop updates
+class ControlledFloodgate extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      fetchComplete: false,
+      fetchActive: false,
+      data: [0, 1, 2]
+    };
+    this.saveState = this.saveState.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.addDataToState = this.addDataToState.bind(this);
+  }
+  saveState(FloodgateState) {
+    this.setState(prevState => ({
+      cachedFloodgateState: FloodgateState
+    }));
+  }
+  addDataToState() {
+    this.setState(
+      prevState => {
+        return {
+          fetchActive: false,
+          fetchComplete: false,
+          data: [...prevState.data, prevState.data.length]
+        };
+      },
+      () => {}
+    );
+  }
+  handleClick() {
+    this.setState(
+      () => ({ fetchActive: true }),
+      () => {
+        this.addDataToState();
+      }
+    );
+  }
+  render() {
+    return (
+      <div>
+        <Floodgate data={this.state.data} initial={3} increment={1}>
+          {({ items, loadNext, loadComplete }) => (
+            <div>
+              <ul>{items.map(n => <li key={n.toString()}>{n}</li>)}</ul>
+              <button id="loadNext" onClick={loadNext} disabled={loadComplete}>
+                Load More
+              </button>
+              <button
+                id="fetch"
+                onClick={this.handleClick}
+                disabled={this.state.fetchActive || this.state.fetchComplete}
+              >
+                fetch more
+              </button>
+            </div>
+          )}
+        </Floodgate>
       </div>
     );
   }
@@ -394,22 +457,22 @@ describe("Floodgate", () => {
     loadButton().simulate("click");
     expect(mockedLoadNextCallback.mock.calls.length).toEqual(0);
   });
-  it("14. Should give propType error when non-function value passed to event callback props", () => {
-    const fgi = mount(
-      <FloodgateInstance
-        onLoadNext={{ shouldError: true }}
-        onLoadComplete={{ shouldError: true }}
-        onReset={{ shouldError: true }}
-      />
-    );
-    const loadButton = fgi.find("button#load");
-    const loadAllButton = () => fgi.find("button#loadall");
-    const resetButton = () => fgi.find("button#reset");
+  // it("14. Should give propType error when non-function value passed to event callback props", () => {
+  //   const fgi = mount(
+  //     <FloodgateInstance
+  //       onLoadNext={{ shouldError: true }}
+  //       onLoadComplete={{ shouldError: true }}
+  //       onReset={{ shouldError: true }}
+  //     />
+  //   );
+  //   const loadButton = fgi.find("button#load");
+  //   const loadAllButton = () => fgi.find("button#loadall");
+  //   const resetButton = () => fgi.find("button#reset");
 
-    expect(() => loadButton.simulate("click")).toThrowError();
-    expect(() => loadAllButton.simulate("click")).toThrowError();
-    expect(() => resetButton.simulate("click")).toThrowError();
-  });
+  //   expect(() => loadButton.simulate("click")).toThrowError();
+  //   expect(() => loadAllButton.simulate("click")).toThrowError();
+  //   expect(() => resetButton.simulate("click")).toThrowError();
+  // });
 });
 
 describe("Wrapped Floodgate for saveState testing", () => {
@@ -494,5 +557,86 @@ describe("Wrapped Floodgate for saveState testing", () => {
     expect(getFgi().state.renderedItems).toMatchObject(
       wfgi.state().savedState.data.slice(0, 3)
     );
+  });
+});
+
+describe("Conrolled Floodgate for parent state-controlled testing", () => {
+  it("1. Should render 3 items", () => {
+    const controlledFGI = mount(<ControlledFloodgate />);
+    const getFG = () => controlledFGI.find(Floodgate);
+    const getLI = () => controlledFGI.find("li");
+    const getFGInstance = () => getFG().instance();
+
+    expect(getLI()).toHaveLength(3);
+  });
+  it("2. Should fetch 1 items, then render on LoadNext", () => {
+    const controlledFGI = mount(<ControlledFloodgate />);
+    const getFG = () => controlledFGI.find(Floodgate);
+    const getLI = () => controlledFGI.find("li");
+    const getFGInstance = () => getFG().instance();
+
+    const fetchButton = controlledFGI.find("button#fetch");
+    const loadButton = controlledFGI.find("button#loadNext");
+
+    expect(getLI()).toHaveLength(3);
+    expect(getFGInstance().state.allItemsRendered).toEqual(true);
+
+    // Fetch one number
+    fetchButton.simulate("click");
+
+    // expect(getFGInstance().state.allItemsRendered).toEqual(false);
+    expect(getFGInstance().state.renderedItems).toHaveLength(
+      getFGInstance().state.items.length - 1
+    );
+    expect(getFGInstance().state.items).toHaveLength(
+      getFGInstance().props.data.length
+    );
+
+    // Load new item
+    loadButton.simulate("click");
+
+    expect(getLI()).toHaveLength(getFGInstance().state.items.length);
+
+    const fgState = getFGInstance().state;
+    expect(fgState.items).toHaveLength(4);
+    expect(fgState.renderedItems).toMatchObject(fgState.items);
+    expect(fgState.currentIndex).toEqual(fgState.items.length);
+    expect(fgState.allItemsRendered).toEqual(true);
+  });
+  it("3. Should fetch 2 items, render 1 new item on LoadNext", () => {
+    const controlledFGI = mount(<ControlledFloodgate />);
+    const getFG = () => controlledFGI.find(Floodgate);
+    const getLI = () => controlledFGI.find("li");
+    const getFGInstance = () => getFG().instance();
+
+    const fetchButton = controlledFGI.find("button#fetch");
+    const loadButton = controlledFGI.find("button#loadNext");
+
+    expect(getLI()).toHaveLength(3);
+    expect(getFGInstance().state.allItemsRendered).toEqual(true);
+
+    // Fetch two numbers
+    fetchButton.simulate("click");
+    fetchButton.simulate("click");
+
+    expect(getFGInstance().state.renderedItems).toHaveLength(
+      getFGInstance().state.items.length - 2
+    );
+    expect(getFGInstance().state.items).toHaveLength(
+      getFGInstance().props.data.length
+    );
+
+    // Load new item
+    loadButton.simulate("click");
+    expect(getLI()).toHaveLength(getFGInstance().state.items.length - 1);
+
+    loadButton.simulate("click");
+    expect(getLI()).toHaveLength(getFGInstance().state.items.length);
+
+    const fgState = getFGInstance().state;
+    expect(fgState.items).toHaveLength(5);
+    expect(fgState.renderedItems).toMatchObject(fgState.items);
+    expect(fgState.currentIndex).toEqual(fgState.items.length);
+    expect(fgState.allItemsRendered).toEqual(true);
   });
 });
