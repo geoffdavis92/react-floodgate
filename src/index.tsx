@@ -41,7 +41,11 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
       renderedItems: [],
       currentIndex: 0,
       allItemsRendered: false,
-      prevProps: { data, increment, initial }
+      prevProps: {
+        data,
+        increment,
+        initial
+      }
     };
     this[initGeneratorSymbol] = this[initGeneratorSymbol].bind(this);
     this.loadAll = this.loadAll.bind(this);
@@ -50,31 +54,17 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
     this.saveState = this.saveState.bind(this);
     this[initGeneratorSymbol]();
   }
-  static getDerivedStateFromProps(props, state): object | null {
-    const { data, increment, initial } = props;
-    const {
-      data: prevData,
-      increment: prevIncrement,
-      initial: prevInitial
-    } = state.prevProps;
-    if (
-      JSON.stringify({ data, increment, initial }) !==
-      JSON.stringify({
-        data: prevData,
-        increment: prevIncrement,
-        initial: prevInitial
-      })
-    ) {
-      return {
-        items: props.data,
-        allItemsRendered: false,
-        // JSON.stringify(data) !== JSON.stringify(state.renderedItems),
-        prevProps: props
-      };
-    }
-    return null;
-  }
-  [initGeneratorSymbol]() {
+  // static getDerivedStateFromProps(props, state): object | null {
+  //   if (props !== state.prevProps) {
+  //     return {
+  //       items: props.data,
+  //       allItemsRendered: false,
+  //       prevProps: props
+  //     };
+  //   }
+  //   return null;
+  // }
+  private [initGeneratorSymbol]() {
     this.queue = generator(
       this.state.items,
       this.props.increment,
@@ -84,32 +74,19 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
   componentDidMount(): void {
     this.loadNext({ silent: true });
   }
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState): void {
     const { data, increment, initial } = this.props;
-    const {
-      data: prevData,
-      increment: prevIncrement,
-      initial: prevInitial
-    } = prevProps;
-    if (
-      JSON.stringify({
-        data,
+    if (this.props !== prevProps) {
+      this.queue = generator(
+        data.slice(prevState.currentIndex, data.length),
         increment,
-        initial
-      }) !==
-      JSON.stringify({
-        data: prevData,
-        increment: prevIncrement,
-        initial: prevInitial
-      })
-    ) {
-      this.queue = generator(data, increment, prevState.currentIndex);
-      this.setState(
-        () => ({
-          renderedItems: []
-        }),
-        () => this.loadNext({ silent: true })
+        increment
       );
+      const items = data;
+      this.setState(() => ({
+        items,
+        allItemsRendered: items.length === prevState.renderedItems
+      }));
     }
   }
   componentWillUnmount(): void {
