@@ -26,50 +26,19 @@ storiesOf("Welcome", module).add("to Storybook", () => (
 ));
 
 storiesOf("Bugfix: state-controlled-props", module).add("test", () => {
+  class RClass extends React.Component {
+    render() {
+      return this.props.children;
+    }
+  }
   class LoadMore extends React.Component {
     constructor() {
       super();
       this.state = {
-        renderCount: 6,
-        data: [
-          {
-            userId: 1,
-            id: 1,
-            title:
-              "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-            body:
-              "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
-          },
-          {
-            userId: 1,
-            id: 2,
-            title: "qui est esse",
-            body:
-              "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla"
-          },
-          {
-            userId: 1,
-            id: 3,
-            title:
-              "ea molestias quasi exercitationem repellat qui ipsa sit aut",
-            body:
-              "et iusto sed quo iure\nvoluptatem occaecati omnis eligendi aut ad\nvoluptatem doloribus vel accusantium quis pariatur\nmolestiae porro eius odio et labore et velit aut"
-          },
-          {
-            userId: 1,
-            id: 4,
-            title: "eum et est occaecati",
-            body:
-              "ullam et saepe reiciendis voluptatem adipisci\nsit amet autem assumenda provident rerum culpa\nquis hic commodi nesciunt rem tenetur doloremque ipsam iure\nquis sunt voluptatem rerum illo velit"
-          },
-          {
-            userId: 1,
-            id: 5,
-            title: "nesciunt quas odio",
-            body:
-              "repudiandae veniam quaerat sunt sed\nalias aut fugiat sit autem sed est\nvoluptatem omnis possimus esse voluptatibus quis\nest aut tenetur dolor neque"
-          }
-        ]
+        renderCount: 0,
+        fetchComplete: false,
+        fetchActive: false,
+        data: [console.count, console.debug, console.log]
       };
       this.pushInterval = false;
       this.getData = this.getData.bind(this);
@@ -92,16 +61,24 @@ storiesOf("Bugfix: state-controlled-props", module).add("test", () => {
         cachedFloodgateState: FloodgateState
       }));
     }
-    addDataToState(data) {
+    addDataToState() {
+      const data = [console.warn, console.error];
+
       setTimeout(
         () =>
           this.setState(
-            prevState => ({
-              fetchActive: false,
-              renderCount: prevState.renderCount + 1,
-              data: [...prevState.data, data]
-            }),
-            () => {} //console.log(this.state)
+            prevState => {
+              const theItem = data[prevState.renderCount]
+                ? data[prevState.renderCount]
+                : false;
+              return {
+                fetchActive: false,
+                fetchComplete: prevState.renderCount + 1 >= data.length,
+                renderCount: prevState.renderCount + 1,
+                data: [...prevState.data, theItem].filter(x => x)
+              };
+            },
+            () => {}
           ),
         500
       );
@@ -110,9 +87,11 @@ storiesOf("Bugfix: state-controlled-props", module).add("test", () => {
       this.setState(
         () => ({ fetchActive: true }),
         () => {
-          this.getData()
-            .then(res => res.json())
-            .then(this.addDataToState);
+          // this.getData()
+          // .then(res => res.json())
+          // .then(
+          this.addDataToState();
+          // );
         }
       );
     }
@@ -122,13 +101,13 @@ storiesOf("Bugfix: state-controlled-props", module).add("test", () => {
           <Floodgate data={this.state.data} initial={3} increment={1}>
             {({ items, loadNext, loadComplete }) => (
               <div>
-                {items.map(item => <p>{item.title}</p>)}
+                {items.map(fn => <section>{fn.name}</section>)}
                 <button onClick={loadNext} disabled={loadComplete}>
                   Load More
                 </button>
                 <button
                   onClick={this.handleClick}
-                  disabled={this.state.fetchActive}
+                  disabled={this.state.fetchActive || this.state.fetchComplete}
                 >
                   fetch more
                 </button>
@@ -351,6 +330,75 @@ storiesOf("Floodgate/simple", module)
       }}
     </Floodgate>
   ))
+  .add("Parent-Controlled Floodgate", () => {
+    class LoadMore extends React.Component {
+      constructor() {
+        super();
+        this.state = {
+          fetchComplete: false,
+          fetchActive: false,
+          data: [0, 1, 2]
+        };
+        this.saveState = this.saveState.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.addDataToState = this.addDataToState.bind(this);
+      }
+      saveState(FloodgateState) {
+        this.setState(prevState => ({
+          cachedFloodgateState: FloodgateState
+        }));
+      }
+      addDataToState() {
+        setTimeout(
+          () =>
+            this.setState(
+              prevState => {
+                return {
+                  fetchActive: false,
+                  fetchComplete: false,
+                  data: [...prevState.data, prevState.data.length]
+                };
+              },
+              () => {}
+            ),
+          500
+        );
+      }
+      handleClick() {
+        this.setState(
+          () => ({ fetchActive: true }),
+          () => {
+            this.addDataToState();
+          }
+        );
+      }
+      render() {
+        return (
+          <div>
+            <Floodgate data={this.state.data} initial={3} increment={1}>
+              {({ items, loadNext, loadComplete }) => (
+                <div>
+                  <ul>{items.map(n => <li>{n}</li>)}</ul>
+                  <button onClick={loadNext} disabled={loadComplete}>
+                    Load More
+                  </button>
+                  <button
+                    onClick={this.handleClick}
+                    disabled={
+                      this.state.fetchActive || this.state.fetchComplete
+                    }
+                  >
+                    fetch more
+                  </button>
+                </div>
+              )}
+            </Floodgate>
+          </div>
+        );
+      }
+    }
+    return <LoadMore />;
+  })
   .add("With saveLoadState", () => {
     return (
       <StatefulToggle
