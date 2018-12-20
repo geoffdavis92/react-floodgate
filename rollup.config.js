@@ -5,14 +5,10 @@ import babel from "rollup-plugin-babel";
 import commonjs from "rollup-plugin-commonjs";
 import resolve from "rollup-plugin-node-resolve";
 import ts from "rollup-plugin-typescript2";
-import uglify from "rollup-plugin-uglify";
-import { minify as minify_es } from "uglify-es";
 
 const r = (filepath, encoding = "utf8") =>
   JSON.parse(fs.readFileSync(filepath, { encoding }));
 const { version } = r("package.json");
-const dev = process.env.NODE_ENV === "dev";
-const bundle = process.argv.includes("--bundle");
 
 const commonPlugins = [
   alias({
@@ -46,54 +42,22 @@ const config = {
       format: "cjs",
       name: "Floodgate",
       banner: `/** floodgate v${version} : commonjs bundle **/`,
-      exports: "named"
+      exports: "named",
+      sourcemap: false
     },
     {
       file: "dist/floodgate.esm.js",
       format: "es",
       name: "Floodgate",
-      banner: `/** floodgate v${version} : es bundle **/`
+      banner: `/** floodgate v${version} : es bundle **/`,
+      sourcemap: false
     },
     {
       file: "dist/floodgate.js",
       format: "iife",
       name: "Floodgate",
-      banner: `/** floodgate v${version} : iife bundle **/`
-    }
-  ],
-  plugins: [...commonPlugins, bundle && uglify({}, minify_es)],
-  external: [
-    "react",
-    "react-dom",
-    "prop-types",
-    path.resolve("./src/types.d.ts")
-  ]
-};
-
-const devConfig = {
-  input: "./src/index.tsx",
-  output: [
-    {
-      file: "dist/floodgate.dev.cjs.js",
-      format: "cjs",
-      name: "Floodgate",
-      banner: `/** floodgate v${version} : commonjs bundle **/\n/** DEVELOPMENT FILE **/`,
-      exports: "named",
-      sourcemap: "./dist/"
-    },
-    {
-      file: "dist/floodgate.dev.esm.js",
-      format: "es",
-      name: "Floodgate",
-      banner: `/** floodgate v${version} : es bundle **/\n/** DEVELOPMENT FILE **/`,
-      sourcemap: "./dist/"
-    },
-    {
-      file: "dist/floodgate.dev.js",
-      format: "iife",
-      name: "Floodgate",
-      banner: `/** floodgate v${version} : iife bundle **/\n/** DEVELOPMENT FILE **/`,
-      sourcemap: "./dist/"
+      banner: `/** floodgate v${version} : iife bundle **/`,
+      sourcemap: false
     }
   ],
   plugins: [...commonPlugins],
@@ -105,4 +69,4 @@ const devConfig = {
   ]
 };
 
-export default [config, devConfig];
+export default [config];
