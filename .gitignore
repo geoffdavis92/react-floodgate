@@ -8,4 +8,5 @@ node_modules/
 .DS_Store 
 .travis.yml.swp 
 package-lock.json
-demo.js 
+demo.js  
+yarn.lock
