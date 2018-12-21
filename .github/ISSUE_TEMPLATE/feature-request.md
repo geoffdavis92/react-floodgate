@@ -44,4 +44,7 @@ React version bump: `^` -->
 	- Include testing steps and types
 -->
 ## Checklist:
+- [ ] Relevant tests written and pass
 - [ ] Merge into `master`
+- [ ] Dist files built
+- [ ] Published to npm
