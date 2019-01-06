@@ -4,10 +4,12 @@ import * as React from "react";
 import * as PropTypes from "prop-types";
 import { generator } from "./functions";
 
+const initGeneratorSymbol = Symbol.for("initGenerator");
+
 class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
   // types
   data: Array<any>;
-  queue: Generator;
+  queue: Generator | null;
   state: FloodgateState;
 
   // static props
@@ -17,7 +19,10 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
     initial: PropTypes.number,
     increment: PropTypes.number,
     saveStateOnUnmount: PropTypes.bool,
-    exportState: PropTypes.func
+    exportState: PropTypes.func,
+    onLoadNext: PropTypes.func,
+    onLoadComplete: PropTypes.func,
+    onReset: PropTypes.func
   };
   static defaultProps = {
     initial: 5,
@@ -29,20 +34,50 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
   constructor(props: FloodgateProps) {
     super(props);
     const { data, increment, initial } = props;
-    this.queue = generator(data, increment, initial);
+    this.queue = null;
     this.data = data;
     this.state = {
+      items: this.data,
       renderedItems: [],
       currentIndex: 0,
-      allItemsRendered: false
+      allItemsRendered: false,
+      prevProps: {
+        data,
+        increment,
+        initial
+      }
     };
+    this[initGeneratorSymbol] = this[initGeneratorSymbol].bind(this);
     this.loadAll = this.loadAll.bind(this);
     this.loadNext = this.loadNext.bind(this);
     this.reset = this.reset.bind(this);
     this.saveState = this.saveState.bind(this);
+    this[initGeneratorSymbol](
+      this.state.items,
+      this.props.increment,
+      this.props.initial
+    );
+  }
+  [initGeneratorSymbol](items, increment, initial) {
+    this.queue = generator(items, increment, initial);
   }
   componentDidMount(): void {
     this.loadNext({ silent: true });
+  }
+  componentDidUpdate(prevProps, prevState): void {
+    const { data, increment, initial } = this.props;
+    if (this.props !== prevProps) {
+      this[initGeneratorSymbol](
+        data.slice(prevState.currentIndex, data.length),
+        increment,
+        increment
+      );
+      const items = data;
+      this.setState(() => ({
+        items,
+        allItemsRendered: items.length === prevState.renderedItems.length
+      }));
+    }
   }
   componentWillUnmount(): void {
     // Prevent unwanted cacheing by setting saveStateOnUnmount to false
@@ -106,7 +141,8 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
           ];
           // Check if all data items have been rendered
           const dataLengthMatches: boolean =
-            newRenderedData.length === this.data.length;
+            newRenderedData.length === prevState.items.length;
+
           return {
             renderedItems: newRenderedData,
             currentIndex: newRenderedData.length,

@@ -42,6 +42,10 @@ React version bump: `^` -->
 	- Be descriptive
 	- Include low-level code additions/removals
 	- Include testing steps and types
+	- Any new checklist items should come *before* the following list
 -->
 ## Checklist:
+- [ ] Relevant tests written and pass
 - [ ] Merge into `master`
+- [ ] Dist files built
+- [ ] Published to npm

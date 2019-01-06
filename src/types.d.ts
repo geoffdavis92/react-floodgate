@@ -21,20 +21,26 @@ type FloodgateProps = {
     saveState: Function,
     FloodgateContext: React.Context<any>
   }) => JSX.Element,
-  data: Array<any>,
+  data: any[],
   increment: number,
   initial: number,
   saveStateOnUnmount?: boolean,
-  exportState?: Function
+  exportState?: Function,
   onLoadNext?: Function,
   onLoadComplete?: Function,
   onReset?: Function
 };
 
 type FloodgateState = {
-  renderedItems: Array<any>,
+  items: any[],
+  renderedItems: any[],
   allItemsRendered: boolean,
-  currentIndex?: number
+  currentIndex?: number,
+  prevProps: {
+    data: FloodgateProps['data'],
+    increment: FloodgateProps['increment'],
+    initial: FloodgateProps['initial']
+  }
 };
 
 export {

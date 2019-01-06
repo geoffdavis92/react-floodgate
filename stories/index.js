@@ -236,6 +236,73 @@ storiesOf("Floodgate/simple", module)
       }}
     </Floodgate>
   ))
+  .add("Parent-Controlled Floodgate", () => {
+    class LoadMore extends React.Component {
+      constructor() {
+        super();
+        this.state = {
+          fetchComplete: false,
+          fetchActive: false,
+          data: [0, 1, 2]
+        };
+        this.saveState = this.saveState.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.addDataToState = this.addDataToState.bind(this);
+      }
+      saveState(FloodgateState) {
+        this.setState(prevState => ({
+          cachedFloodgateState: FloodgateState
+        }));
+      }
+      addDataToState() {
+        setTimeout(
+          () =>
+            this.setState(
+              prevState => {
+                return {
+                  fetchActive: false,
+                  fetchComplete: false,
+                  data: [...prevState.data, prevState.data.length]
+                };
+              },
+              () => {}
+            ),
+          500
+        );
+      }
+      handleClick() {
+        this.setState(
+          () => ({ fetchActive: true }),
+          () => {
+            this.addDataToState();
+          }
+        );
+      }
+      render() {
+        return (
+          <div>
+            <Floodgate data={this.state.data} initial={3} increment={1}>
+              {({ items, loadNext, loadComplete }) => (
+                <div>
+                  <ul>{items.map(n => <li>{n}</li>)}</ul>
+                  <button onClick={loadNext} disabled={loadComplete}>
+                    Load More
+                  </button>
+                  <button
+                    onClick={this.handleClick}
+                    disabled={this.state.fetchActive}
+                  >
+                    fetch more
+                  </button>
+                </div>
+              )}
+            </Floodgate>
+          </div>
+        );
+      }
+    }
+    return <LoadMore />;
+  })
   .add("With saveLoadState", () => {
     return (
       <StatefulToggle

@@ -1,5 +1,5 @@
 <h1 align="center">react-floodgate 🌊</h1>
-<p align="center">Configurable and flexible React component for incrementally displaying data.</p>
+<p align="center">Configurable and flexible "load more" component for React</p>
 
 ---
 
@@ -42,7 +42,7 @@ or
 
 ```javascript
 const BasicExample = props => (
-  <Floodgate items={["hello","world","!"]} initial={3} increment={1}>
+  <Floodgate data={["hello","world","!"]} initial={3} increment={1}>
     {
       ({ items }) => (
         <ul>
@@ -62,7 +62,7 @@ const BasicExample = props => (
 */
 
 const LoadMoreExample = props => (
-  <Floodgate items={['foo','bar','baz','buzz','daz','doz']} initial={3} increment={1}>
+  <Floodgate data={['foo','bar','baz','buzz','daz','doz']} initial={3} increment={1}>
     {
       ({ items, loadNext, loadComplete }) => (
         <React.Fragment>

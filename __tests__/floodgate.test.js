@@ -2,18 +2,17 @@ import "./__test_utils__";
 import React from "react";
 import jest from "jest";
 import jest_mock from "jest-mock";
-import Enzyme, { render, shallow, mount } from "enzyme";
+import Enzyme, { render, mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import toJSON from "enzyme-to-json";
 
 import Floodgate from "../dist/floodgate.esm";
-import { logMsg, loopSimulation, theOfficeData } from "../src/helpers";
-import toJson from "enzyme-to-json";
+import { loopSimulation, theOfficeData } from "../src/helpers";
 
 // configure Enzyme
 Enzyme.configure({ adapter: new Adapter() });
 
-// Wrapped instance
+// Wrapped instance for unMount
 class WrappedFloodgate extends React.Component {
   static defaultProps = {
     floodgateSaveStateOnUnmount: true
@@ -79,7 +78,9 @@ class WrappedFloodgate extends React.Component {
           >
             {({ items, loadNext, loadAll, reset, loadComplete }) => (
               <main>
-                {items.map(({ name }) => <p key={name}>{name}</p>)}
+                {items.map(({ name }) => (
+                  <p key={name}>{name}</p>
+                ))}
                 {(!loadComplete && (
                   <span>
                     <button id="load" onClick={loadNext}>
@@ -94,7 +95,8 @@ class WrappedFloodgate extends React.Component {
                   </span>
                 )) || (
                   <p>
-                    All items loaded.<br />
+                    All items loaded.
+                    <br />
                     <button id="reset" onClick={reset}>
                       Reset
                     </button>
@@ -111,6 +113,70 @@ class WrappedFloodgate extends React.Component {
 
 function FCCTest(props) {
   return <p>{props.chidlren}</p>;
+}
+
+// Wrapped instance for prop updates
+class ControlledFloodgate extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      fetchComplete: false,
+      fetchActive: false,
+      data: [0, 1, 2]
+    };
+    this.saveState = this.saveState.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.addDataToState = this.addDataToState.bind(this);
+  }
+  saveState(FloodgateState) {
+    this.setState(prevState => ({
+      cachedFloodgateState: FloodgateState
+    }));
+  }
+  addDataToState() {
+    this.setState(prevState => {
+      return {
+        fetchActive: false,
+        fetchComplete: false,
+        data: [...prevState.data, prevState.data.length]
+      };
+    });
+  }
+  handleClick() {
+    this.setState(
+      () => ({ fetchActive: true }),
+      () => {
+        this.addDataToState();
+      }
+    );
+  }
+  render() {
+    return (
+      <div>
+        <Floodgate data={this.state.data} initial={3} increment={1}>
+          {({ items, loadNext, loadComplete }) => (
+            <div>
+              <ul>
+                {items.map(n => (
+                  <li key={n.toString()}>{n}</li>
+                ))}
+              </ul>
+              <button id="loadNext" onClick={loadNext} disabled={loadComplete}>
+                Load More
+              </button>
+              <button
+                id="fetch"
+                onClick={this.handleClick}
+                disabled={this.state.fetchActive || this.state.fetchComplete}
+              >
+                fetch more
+              </button>
+            </div>
+          )}
+        </Floodgate>
+      </div>
+    );
+  }
 }
 
 // Floodgate instance
@@ -145,7 +211,8 @@ const FloodgateInstance = ({
           </span>
         )) || (
           <p>
-            All items loaded.<br />
+            All items loaded.
+            <br />
             <button id="reset" onClick={reset}>
               Reset
             </button>
@@ -399,6 +466,22 @@ describe("A. Floodgate", () => {
     loadButton().simulate("click");
     expect(mockedLoadNextCallback.mock.calls.length).toEqual(0);
   });
+  // it("14. Should give propType error when non-function value passed to event callback props", () => {
+  //   const fgi = mount(
+  //     <FloodgateInstance
+  //       onLoadNext={{ shouldError: true }}
+  //       onLoadComplete={{ shouldError: true }}
+  //       onReset={{ shouldError: true }}
+  //     />
+  //   );
+  //   const loadButton = fgi.find("button#load");
+  //   const loadAllButton = () => fgi.find("button#loadall");
+  //   const resetButton = () => fgi.find("button#reset");
+
+  //   expect(() => loadButton.simulate("click")).toThrowError();
+  //   expect(() => loadAllButton.simulate("click")).toThrowError();
+  //   expect(() => resetButton.simulate("click")).toThrowError();
+  // });
 });
 
 describe("B. Wrapped Floodgate for saveState testing", () => {
@@ -486,19 +569,97 @@ describe("B. Wrapped Floodgate for saveState testing", () => {
   });
 });
 
-describe("C. Context-Wrapped Floodgate", () => {
+describe("C. Controlled Floodgate for parent state-controlled testing", () => {
+  it("1. Should render 3 items", () => {
+    const controlledFGI = mount(<ControlledFloodgate />);
+    const getFG = () => controlledFGI.find(Floodgate);
+    const getLI = () => controlledFGI.find("li");
+
+    expect(getLI()).toHaveLength(3);
+  });
+
+  it("2. Should fetch 1 items, then render on LoadNext", () => {
+    const controlledFGI = mount(<ControlledFloodgate />);
+    const getFG = () => controlledFGI.find(Floodgate);
+    const getLI = () => controlledFGI.find("li");
+    const getFGInstance = () => getFG().instance();
+
+    const getFetchButton = () => controlledFGI.find("button#fetch");
+    const getLoadButton = () => controlledFGI.find("button#loadNext");
+
+    expect(getLI()).toHaveLength(3);
+    expect(getFGInstance().state.allItemsRendered).toEqual(true);
+
+    // Fetch one number
+    getFetchButton().simulate("click");
+
+    expect(getFGInstance().state.renderedItems).toHaveLength(
+      getFGInstance().state.items.length - 1
+    );
+    expect(getFGInstance().state.items).toHaveLength(
+      getFGInstance().props.data.length
+    );
+
+    // Load new item
+    getLoadButton().simulate("click");
+
+    expect(getLI()).toHaveLength(getFGInstance().state.items.length);
+
+    const fgState = getFGInstance().state;
+    expect(fgState.items).toHaveLength(4);
+    expect(fgState.renderedItems).toMatchObject(fgState.items);
+    expect(fgState.currentIndex).toEqual(fgState.items.length);
+    expect(fgState.allItemsRendered).toEqual(true);
+  });
+
+  it("3. Should fetch 2 items, render 1 new item on LoadNext", () => {
+    const controlledFGI = mount(<ControlledFloodgate />);
+    const getFG = () => controlledFGI.find(Floodgate);
+    const getLI = () => controlledFGI.find("li");
+    const getFGInstance = () => getFG().instance();
+
+    const getFetchButton = () => controlledFGI.find("button#fetch");
+    const getLoadButton = () => controlledFGI.find("button#loadNext");
+
+    expect(getLI()).toHaveLength(3);
+    expect(getFGInstance().state.allItemsRendered).toEqual(true);
+
+    // Fetch two numbers
+    getFetchButton().simulate("click");
+    getFetchButton().simulate("click");
+
+    expect(getFGInstance().state.renderedItems).toHaveLength(
+      getFGInstance().state.items.length - 2
+    );
+    expect(getFGInstance().state.items).toHaveLength(
+      getFGInstance().props.data.length
+    );
+
+    // Load new item
+    expect(getFGInstance().props.data).toMatchObject(
+      getFGInstance().state.items
+    );
+
+    getLoadButton().simulate("click");
+    getFGInstance().loadNext();
+    expect(getLI()).toHaveLength(getFGInstance().state.items.length - 1);
+
+    getLoadButton().simulate("click");
+    expect(getLI()).toHaveLength(getFGInstance().state.items.length);
+
+    const fgState = getFGInstance().state;
+    expect(fgState.items).toHaveLength(5);
+    expect(fgState.renderedItems).toMatchObject(fgState.items);
+    expect(fgState.currentIndex).toEqual(fgState.items.length);
+    expect(fgState.allItemsRendered).toEqual(true);
+  });
+});
+
+describe("D. Context-Wrapped Floodgate", () => {
   it("1. Should provide FloodgateInternals via Context API", () => {
     const fgi = mount(
       <Floodgate data={theOfficeData}>
-        {({
-          items,
-          loadComplete,
-          loadAll,
-          loadNext,
-          reset,
-          saveState,
-          FloodgateContext
-        }) => (
+        {({ FloodgateContext }) => (
           <FloodgateContext.Consumer>
             {ctxProps => <FCCTest {...{ ctxProps }} />}
           </FloodgateContext.Consumer>
@@ -515,6 +676,7 @@ describe("C. Context-Wrapped Floodgate", () => {
       saveState: fgi.instance().saveState
     });
   });
+
   it("2. Should display 5 items, load 3 more from Context controls", () => {
     const fgi = mount(
       <Floodgate data={theOfficeData} increment={3}>
