@@ -55,15 +55,22 @@ class WrappedFloodgate extends React.Component {
     }));
   }
   cacheFloodgateState({ currentIndex: initial }) {
-    this.setState(prevState => ({
-      ...prevState,
-      savedState: {
-        ...prevState.savedState,
-        initial
-      }
-    }));
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        savedState: {
+          ...prevState.savedState,
+          initial
+        }
+      };
+    });
   }
   render() {
+    const ResetButton = ({ reset }) => (
+      <button id="reset" onClick={() => reset({ initial: 3 })}>
+        Reset
+      </button>
+    );
     return (
       <div>
         <button id="toggleFloodgate" onClick={this.toggleFloodgate}>
@@ -79,7 +86,9 @@ class WrappedFloodgate extends React.Component {
           >
             {({ items, loadNext, loadAll, reset, loadComplete }) => (
               <main>
-                {items.map(({ name }) => <p key={name}>{name}</p>)}
+                {items.map(({ name }) => (
+                  <p key={name}>{name}</p>
+                ))}
                 {(!loadComplete && (
                   <span>
                     <button id="load" onClick={loadNext}>
@@ -88,17 +97,14 @@ class WrappedFloodgate extends React.Component {
                     <button id="loadall" onClick={loadAll}>
                       Load All
                     </button>
-                    <button id="reset" onClick={reset}>
-                      Reset
-                    </button>
+                    <ResetButton reset={reset} />
                   </span>
                 )) || (
-                  <p>
-                    All items loaded.<br />
-                    <button id="reset" onClick={reset}>
-                      Reset
-                    </button>
-                  </p>
+                  <div>
+                    All items loaded.
+                    <br />
+                    <ResetButton reset={reset} />
+                  </div>
                 )}
               </main>
             )}
@@ -153,7 +159,11 @@ class ControlledFloodgate extends React.Component {
         <Floodgate data={this.state.data} initial={3} increment={1}>
           {({ items, loadNext, loadComplete }) => (
             <div>
-              <ul>{items.map(n => <li key={n.toString()}>{n}</li>)}</ul>
+              <ul>
+                {items.map(n => (
+                  <li key={n.toString()}>{n}</li>
+                ))}
+              </ul>
               <button id="loadNext" onClick={loadNext} disabled={loadComplete}>
                 Load More
               </button>
@@ -204,7 +214,8 @@ const FloodgateInstance = ({
           </span>
         )) || (
           <p>
-            All items loaded.<br />
+            All items loaded.
+            <br />
             <button id="reset" onClick={reset}>
               Reset
             </button>
@@ -342,13 +353,16 @@ describe("Floodgate", () => {
     ).toMatch("Jim Halpert");
     expect(
       p()
-        .at(theOfficeData.length - 1)
+        .at(fgi.find(Floodgate).instance().props.data.length - 1)
         .text()
     ).toMatch("Angela Schrute");
     expect(loadButton()).toHaveLength(0);
     expect(loadAllButton()).toHaveLength(0);
     expect(resetButton()).toHaveLength(1);
     expect(fgi.find(Floodgate).instance().state.allItemsRendered).toBe(true);
+    expect(fgi.find(Floodgate).instance().state.currentIndex).toBe(
+      fgi.find(Floodgate).instance().props.data.length
+    );
 
     expect(toJSON(fgi)).toMatchSnapshot();
 
@@ -557,6 +571,39 @@ describe("Wrapped Floodgate for saveState testing", () => {
     expect(getFgi().state.renderedItems).toMatchObject(
       wfgi.state().savedState.data.slice(0, 3)
     );
+  });
+  it("4. Should load 3 items, click to load all items, toggle Floodgate, reset should update state based on newInitial argument prop", () => {
+    const wfgi = mount(<WrappedFloodgate floodgateSaveStateOnUnmount />);
+    const getFgi = () => wfgi.find(Floodgate).instance();
+    const getResetBtn = () => wfgi.find("button#reset");
+    const loadAllBtn = wfgi.find("button#loadall");
+    const toggleBtn = wfgi.find("button#toggleFloodgate");
+
+    expect(getFgi().state.currentIndex).toEqual(3);
+    expect(wfgi.find("p")).toHaveLength(3);
+
+    loadAllBtn.simulate("click");
+
+    expect(wfgi.find("p")).toHaveLength(getFgi().props.data.length);
+    expect(getFgi().state.allItemsRendered).toBe(true);
+
+    toggleBtn.simulate("click");
+    wfgi.setState({ showFloodgate: false });
+
+    expect(wfgi.find("p")).toHaveLength(0);
+    expect(wfgi.state().showFloodgate).toBe(false);
+    expect(wfgi.state("savedState")).toMatchObject({
+      data: theOfficeData,
+      initial: theOfficeData.length,
+      increment: 3
+    });
+
+    toggleBtn.simulate("click");
+    expect(wfgi.state().showFloodgate).toBe(true);
+
+    getResetBtn().simulate("click");
+    expect(getFgi().state.currentIndex).toBe(3);
+    expect(wfgi.find("p")).toHaveLength(3);
   });
 });
 
