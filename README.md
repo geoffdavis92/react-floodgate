@@ -294,6 +294,8 @@ The `callback` argument method will be called after `loadNext` has set the compo
 
 *Arguments:* `{ initial?: number, callback?: Function } = {}`
 
+Resets Floodgate's state to the current instance's `data` and `initial` prop values.
+
 The `initial` argument property provides the ability to pass in a custom `initial` value to the next rendering after `reset` is called; this is most useful when writing a [controlled Floodgate component](#controlled-floodgate) and the `exportState` prop is used. For more information on why this is needed, see [pull request #42](https://github.com/geoffdavis92/react-floodgate/pull/42).
 
 The `callback` argument method will be called after `reset` has set the component's state; it will have access to this updated Floodgate `state`.
