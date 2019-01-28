@@ -70,7 +70,7 @@ Uncontrolled Floodgate components are entirely static, and their state will be c
 
 ### Controlled Floodgate
 
-The following is a basic example of a controlled Floodgate implementation; this component has a location to save Floodgate state, and uses those values as Floodgate's props. In order to make sure this 
+The following is a basic example of a controlled Floodgate implementation; this component has a location to save Floodgate state, and uses those values as Floodgate's props. In order to make sure this component does save Floodgate's state, the `exportState` prop will have to have a function passed to it that saves desired Floodgate state properties to the controlling component's state.
 
 ```javascript
 class FloodgateController extends React.Component {
