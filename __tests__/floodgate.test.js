@@ -6,7 +6,7 @@ import Enzyme, { render, mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import toJSON from "enzyme-to-json";
 
-import Floodgate from "../dist/floodgate.esm";
+import Floodgate, { FloodgateContext } from "../dist/floodgate.esm";
 import { loopSimulation, theOfficeData } from "../src/helpers";
 
 // configure Enzyme
@@ -659,7 +659,7 @@ describe("D. Context-Wrapped Floodgate", () => {
   it("1. Should provide FloodgateInternals via Context API", () => {
     const fgi = mount(
       <Floodgate data={theOfficeData}>
-        {({ FloodgateContext }) => (
+        {() => (
           <FloodgateContext.Consumer>
             {ctxProps => <FCCTest {...{ ctxProps }} />}
           </FloodgateContext.Consumer>
@@ -680,7 +680,7 @@ describe("D. Context-Wrapped Floodgate", () => {
   it("2. Should display 5 items, load 3 more from Context controls", () => {
     const fgi = mount(
       <Floodgate data={theOfficeData} increment={3}>
-        {({ items, FloodgateContext }) => (
+        {({ items }) => (
           <div>
             <ul>
               {items.map(item => (
