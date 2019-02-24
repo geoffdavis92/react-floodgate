@@ -55,19 +55,19 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
     this.reset = this.reset.bind(this);
     this.saveState = this.saveState.bind(this);
     this[initGeneratorSymbol](
-      this.state.items,
+      this.props.data,
       this.props.increment,
       this.props.initial
     );
   }
-  [initGeneratorSymbol](items, increment, initial) {
-    this.queue = generator(items, increment, initial);
+  [initGeneratorSymbol](data, increment, initial) {
+    this.queue = generator(data, increment, initial);
   }
   componentDidMount(): void {
     this.loadNext({ silent: true });
   }
   componentDidUpdate(prevProps, prevState): void {
-    const { data, increment, initial } = this.props;
+    const { data, increment } = this.props;
     if (this.props !== prevProps) {
       this[initGeneratorSymbol](
         data.slice(prevState.currentIndex, data.length),
@@ -85,12 +85,24 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
     // Prevent unwanted cacheing by setting saveStateOnUnmount to false
     this.props.saveStateOnUnmount && this.saveState();
   }
-  reset({ callback }: { callback?: Function } = {}): void {
-    this.queue = generator(this.data, this.props.increment, this.props.initial);
+  reset({
+    initial,
+    callback
+  }: { initial?: number, callback?: Function } = {}): void {
+    this[initGeneratorSymbol](
+      this.data,
+      this.props.increment,
+      typeof initial !== "undefined" ? initial : this.props.initial
+    );
+
     this.setState(
       prevState => ({
         renderedItems: [],
-        allItemsRendered: false
+        allItemsRendered: false,
+        prevProps: {
+          ...prevState.prevProps,
+          initial: typeof initial !== "undefined" ? initial : this.props.initial
+        }
       }),
       () => {
         this.loadNext({ silent: true, callback });
@@ -111,6 +123,7 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
           prevState => {
             return {
               renderedItems: this.data,
+              currentIndex: this.data.length,
               allItemsRendered: true
             };
           },
