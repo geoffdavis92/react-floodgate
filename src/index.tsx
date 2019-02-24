@@ -6,6 +6,8 @@ import { generator } from "./functions";
 
 const initGeneratorSymbol = Symbol.for("initGenerator");
 
+const FloodgateContext = React.createContext({});
+
 class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
   // types
   data: Array<any>;
@@ -185,7 +187,6 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
       reset,
       saveState
     };
-    const FloodgateContext = React.createContext(floodgateInternals);
     return (
       <FloodgateContext.Provider value={floodgateInternals}>
         {this.props.children({
@@ -198,3 +199,4 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
 }
 
 export default Floodgate;
+export { FloodgateContext };
