@@ -18,8 +18,7 @@ type FloodgateProps = {
     loadAll: Function,
     loadNext: Function,
     reset: Function,
-    saveState: Function,
-    FloodgateContext: React.Context<any>
+    saveState: Function
   }) => JSX.Element,
   data: any[],
   increment: number,

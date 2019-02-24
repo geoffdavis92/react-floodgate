@@ -190,8 +190,7 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
     return (
       <FloodgateContext.Provider value={floodgateInternals}>
         {this.props.children({
-          ...floodgateInternals,
-          FloodgateContext
+          ...floodgateInternals
         })}
       </FloodgateContext.Provider>
     );
