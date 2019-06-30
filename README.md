@@ -323,18 +323,17 @@ import { FloodgateContext } from "react-floodgate";
 
 const DeepChildControls = (props) => {
   return (
-    <React.Fragment>
+    <div>
       <FloodgateContext.Consumer>
         {({ loadNext, loadAll, reset }) => (
-          <div>
+          <React.Fragment>
             <button onClick={loadNext}>Load More</button>
             <button onClick={loadAll}>Load All</button>
             <button onClick={reset}>Reset</button>
-          </div>
-          )
-        }
+          </React.Fragment>
+        )}
       </FloodgateContext.Consumer>
-    </React.Fragment>
+    </div>
   )
 }
 ```
