@@ -48,7 +48,7 @@ const BasicExample = props => (
     data={[4, 8, 15, 16, 23, 42]}
     initial={3}
     increment={1}
-    saveStateOnUnMount={false}
+    exportStateOnUnMount={false}
     onLoadNext={(stateAtLoadNext) => console.log(stateAtLoadNext)}
     onLoadAll={(stateAtLoadAll) => console.log(stateAtLoadAll)}
     onReset={(stateAtReset) => console.log(stateAtReset)}>
@@ -70,7 +70,7 @@ Uncontrolled Floodgate components are entirely static, and their state will be c
 
 ### Controlled Floodgate
 
-The following is a basic example of a controlled Floodgate implementation; this component has a location to save Floodgate state, and uses those values as Floodgate's props. In order to make sure this component does save Floodgate's state, the `exportState` prop will have to have a function passed to it that saves desired Floodgate state properties to the controlling component's state.
+The following is a basic example of a controlled Floodgate implementation; this component has a location to save Floodgate state, and uses those values as Floodgate's props. In order to make sure this component does save Floodgate's state, the `onExportState` prop will have to have a function passed to it that saves desired Floodgate state properties to the controlling component's state.
 
 ```javascript
 class FloodgateController extends React.Component {
@@ -99,8 +99,8 @@ class FloodgateController extends React.Component {
           data={this.state.FGState.data} 
           increment={this.state.FGState.increment} 
           initial={this.state.FGState.initial}
-          saveStateOnUnmount={true}
-          exportState={newFGState => this.setState(prevState => ({
+          exportStateOnUnmount={true}
+          onExportState={newFGState => this.setState(prevState => ({
             FGState: {
               ...prevState.FGState,
               ...newFGState,
@@ -168,16 +168,16 @@ const ControlledFGInstance = <FloodgateController<any> data={[4, 'eight', 15, 's
 
 ### `Floodgate` props
 
-| name                 | type        | default      | description                                                                               |
-|----------------------|-------------|--------------|-------------------------------------------------------------------------------------------|
-| `data`               | Array\<any> | `null`       | The array of items to be processed by `Floodgate`|                                        |
-| `initial`            | number      | `5`          | How many items are initially available in the render function|                            |
-| `increment`          | number      | `5`          | How many items are added when calling `loadNext`|                                         |
-| `saveStateOnUnmount` | boolean     | *(optional)* | Toggle if `exportState` will be called during `componentWillUnmount`                      |
-| `exportState`        | Function    | *(optional)* | Function to pass up Floodgate's internal state when `componentWillUnmount` fires          |
-| `onLoadNext`         | Function    | *(optional)* | Callback function to run after `loadNext`; runs after inline `callback` argument prop     |
-| `onLoadComplete`     | Function    | *(optional)* | Callback function to run after `loadComplete`; runs after inline `callback` argument prop |
-| `onReset`            | Function    | *(optional)* | Callback function to run after `reset`; runs after inline `callback` argument prop        |
+| name                   | type        | default      | description                                                                                                 |
+|------------------------|-------------|--------------|-------------------------------------------------------------------------------------------------------------|
+| `data`                 | Array\<any> | `null`       | The array of items to be processed by `Floodgate`|                                                          |
+| `initial`              | number      | `5`          | How many items are initially available in the render function|                                              |
+| `increment`            | number      | `5`          | How many items are added when calling `loadNext`|                                                           |
+| `exportStateOnUnmount` | boolean     | *(optional)* | Toggle if `exportState` will be called during `componentWillUnmount`                                        |
+| `onExportState`        | Function    | *(optional)* | Function to pass up Floodgate's internal state when `componentWillUnmount` fires or `exportState` is called |
+| `onLoadNext`           | Function    | *(optional)* | Callback function to run after `loadNext`; runs after inline `callback` argument prop                       |
+| `onLoadComplete`       | Function    | *(optional)* | Callback function to run after `loadComplete`; runs after inline `callback` argument prop                   |
+| `onReset`              | Function    | *(optional)* | Callback function to run after `reset`; runs after inline `callback` argument prop                          |
 
 #### `data`
 
@@ -207,17 +207,17 @@ The length of the first set of items that will be rendered from Floodgate. <!-- 
 
 The length of subsequent sets of items when calling `loadNext`. <!-- If `increment` is negative or zero, this will default to the default value of 5 -->
 
-#### `saveStateOnUnmount`
+#### `exportStateOnUnmount`
 
 *Type:* `boolean = false`
 
-Flag to configure the calling of `props.exportState` when Floodgate triggers the `componentWillUnmount` component lifecycle event.
+Flag to configure the calling of `props.onExportState` when Floodgate triggers the `componentWillUnmount` component lifecycle event.
 
-#### `exportState`       
+#### `onExportState`       
 
 *Arguments:* `{ currentIndex: number, renderedItems: any[], allItemsRendered: boolean }`
 
-Prop callback function that executes when Floodgate triggers the `componentWillUnmount` component lifecycle event. It provides a single object argument that represents a set of internal state properties that can be exported to a different component; this is best used on instances that will be toggled (un)mounted, such as in tabs or a single page application.
+Prop callback function that executes when Floodgate triggers the `componentWillUnmount` component lifecycle event, or when the [`exportState`](#exportState) is called from the render prop function. It provides a single object argument that represents a set of internal state properties that can be exported to a different component; this is best used on instances that will be toggled (un)mounted, such as in tabs or a single page application.
 
 `currentIndex` is a number representing the index of the last item passed through the queue to `state.renderedItems`.
 
@@ -255,7 +255,7 @@ Callback property that fires after the `reset` method is called. This is execute
 | `loadAll`      | Function    | n/a     | `{callback?: Function}`                   | Action: loads all `items`; `callback` prop in argument fires immediately after invocation|                                                                                           |
 | `loadNext`     | Function    | n/a     | `{silent?: boolean, callback?: Function}` | Action: loads the next set of items; `callback` prop in argument fires immediately after invocation, `silent` determinse if `onLoadNext` callback is fired after calling `loadNext`| |
 | `reset`        | Function    | n/a     | `{callback?: Function}`                   | Action: resets the state of the `Floodgate` instance to the initial state; `callback` prop in argument fires immediately after invocation|                                           |
-| `saveState`    | Function    | n/a     | `null`                                    | Action: calls the `exportState` prop callback|                                                                                                                                       |
+| `exportState`  | Function    | n/a     | `null`                                    | Action: calls the `onExportState` prop callback|                                                                                                                                     |
 #### `items`
 
 *Type:* `Array<any> = null`
@@ -296,15 +296,15 @@ The `callback` argument method will be called after `loadNext` has set the compo
 
 Resets Floodgate's state to the current instance's `data` and `initial` prop values.
 
-The `initial` argument property provides the ability to pass in a custom `initial` value to the next rendering after `reset` is called; this is most useful when writing a [controlled Floodgate component](#controlled-floodgate) and the `exportState` prop is used. For more information on why this is needed, see [pull request #42](https://github.com/geoffdavis92/react-floodgate/pull/42).
+The `initial` argument property provides the ability to pass in a custom `initial` value to the next rendering after `reset` is called; this is most useful when writing a [controlled Floodgate component](#controlled-floodgate) and the `onExportState` prop is used. For more information on why this is needed, see [pull request #42](https://github.com/geoffdavis92/react-floodgate/pull/42).
 
 The `callback` argument method will be called after `reset` has set the component's state; it will have access to this updated Floodgate `state`.
 
-#### `saveState`
+#### `exportState`
 
 *Arguments:* `n/a`
 
-Calls the `exportState` prop callback. Any logic to manipulate and/or save Floodgate's state to a parent component should happen in that prop; since the `exportState` arguments are not configurable, there are no arguments for `saveState`.
+Calls the `onExportState` prop callback. Any logic to manipulate and/or save Floodgate's state to a parent component should happen in that prop; since the `onExportState` arguments are not configurable, there are no arguments for `exportState`.
 
 ### Using `FloodgateContext`
 
