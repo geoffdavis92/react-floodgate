@@ -415,6 +415,49 @@ storiesOf("Floodgate/simple", module)
         )}
       </StatefulToggle>
     );
+  })
+  .add("Floodgate children wrapped in Context.Provider", () => {
+    const Display = props => (
+      <ul>{props.items.map(n => <li key={n}>{n}</li>)}</ul>
+    );
+    const Controls = ({ ContextConsumer }) => (
+      <React.Fragment>
+        <ContextConsumer>
+          {({ loadNext, loadAll, loadComplete, reset }) => (
+            <React.Fragment>
+              <button onClick={loadNext} disabled={loadComplete}>
+                Load More
+              </button>{" "}
+              <button onClick={loadAll} disabled={loadComplete}>
+                Load All
+              </button>
+              {loadComplete && (
+                <React.Fragment>
+                  <br />
+                  <button onClick={reset}>Reset</button>
+                </React.Fragment>
+              )}
+            </React.Fragment>
+          )}
+        </ContextConsumer>
+      </React.Fragment>
+    );
+    return (
+      <main>
+        <Floodgate data={generateFilledArray(10)} initial={1} increment={1}>
+          {({ items, FloodgateContext }) => {
+            return (
+              <main>
+                <Display items={items} />
+                <footer>
+                  <Controls ContextConsumer={FloodgateContext.Consumer} />
+                </footer>
+              </main>
+            );
+          }}
+        </Floodgate>
+      </main>
+    );
   });
 storiesOf("Utilities/functions/ErrorMessage", module)
   .add("Generic message", () => (

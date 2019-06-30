@@ -168,16 +168,16 @@ const ControlledFGInstance = <FloodgateController<any> data={[4, 'eight', 15, 's
 
 ### `Floodgate` props
 
-| name                 | type               | default                                                       | description                                                                               |
-|----------------------|--------------------|---------------------------------------------------------------|-------------------------------------------------------------------------------------------|
-| `data`               | Array\<any>|`null` | The array of items to be processed by `Floodgate`             |                                                                                           |
-| `initial`            | number |`5`        | How many items are initially available in the render function |                                                                                           |
-| `increment`          | number |`5`        | How many items are added when calling `loadNext`              |                                                                                           |
-| `saveStateOnUnmount` | boolean            | *(optional)*                                                  | Toggle if `exportState` will be called during `componentWillUnmount`                      |
-| `exportState`        | Function           | *(optional)*                                                  | Function to pass up Floodgate's internal state when `componentWillUnmount` fires          |
-| `onLoadNext`         | Function           | *(optional)*                                                  | Callback function to run after `loadNext`; runs after inline `callback` argument prop     |
-| `onLoadComplete`     | Function           | *(optional)*                                                  | Callback function to run after `loadComplete`; runs after inline `callback` argument prop |
-| `onReset`            | Function           | *(optional)*                                                  | Callback function to run after `reset`; runs after inline `callback` argument prop        |
+| name                 | type        | default      | description                                                                               |
+|----------------------|-------------|--------------|-------------------------------------------------------------------------------------------|
+| `data`               | Array\<any> | `null`       | The array of items to be processed by `Floodgate`|                                        |
+| `initial`            | number      | `5`          | How many items are initially available in the render function|                            |
+| `increment`          | number      | `5`          | How many items are added when calling `loadNext`|                                         |
+| `saveStateOnUnmount` | boolean     | *(optional)* | Toggle if `exportState` will be called during `componentWillUnmount`                      |
+| `exportState`        | Function    | *(optional)* | Function to pass up Floodgate's internal state when `componentWillUnmount` fires          |
+| `onLoadNext`         | Function    | *(optional)* | Callback function to run after `loadNext`; runs after inline `callback` argument prop     |
+| `onLoadComplete`     | Function    | *(optional)* | Callback function to run after `loadComplete`; runs after inline `callback` argument prop |
+| `onReset`            | Function    | *(optional)* | Callback function to run after `reset`; runs after inline `callback` argument prop        |
 
 #### `data`
 
@@ -248,14 +248,14 @@ Callback property that fires after the `reset` method is called. This is execute
 
 **Note:** the `render` function uses a single object argument to expose the following values/functions. Use the ES2015 destructuring syntax to get the most of this pattern. (see the [Usage](#usage) and [Examples](#examples) sections on how to do this)
 
-| name           | type               | default                                       | parameters                                                                                                                                                                          | description |
-|----------------|--------------------|-----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
-| `items`        | Array\<any>|`null` | n/a                                           | State: the subset of items determined by the `intitial` and `increment` props                                                                                                       |             |
-| `loadComplete` | boolean|`false`    | n/a                                           | State: describes if all items have been processed by the `Floodgate` instance                                                                                                       |             |
-| `loadAll`      | Function           | n/a|`{callback?: Function}`                   | Action: loads all `items`; `callback` prop in argument fires immediately after invocation                                                                                           |             |
-| `loadNext`     | Function           | n/a|`{silent?: boolean, callback?: Function}` | Action: loads the next set of items; `callback` prop in argument fires immediately after invocation, `silent` determinse if `onLoadNext` callback is fired after calling `loadNext` |             |
-| `reset`        | Function           | n/a|`{callback?: Function}`                   | Action: resets the state of the `Floodgate` instance to the initial state; `callback` prop in argument fires immediately after invocation                                           |             |
-| `saveState`    | Function           | n/a|`null`                                    | Action: calls the `exportState` prop callback                                                                                                                                       |             |
+| name           | type        | default | parameters                                | description                                                                                                                                                                          |
+|----------------|-------------|---------|-------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `items`        | Array\<any> | `null`  | n/a                                       | State: the subset of items determined by the `intitial` and `increment` props|                                                                                                       |
+| `loadComplete` | boolean     | `false` | n/a                                       | State: describes if all items have been processed by the `Floodgate` instance|                                                                                                       |
+| `loadAll`      | Function    | n/a     | `{callback?: Function}`                   | Action: loads all `items`; `callback` prop in argument fires immediately after invocation|                                                                                           |
+| `loadNext`     | Function    | n/a     | `{silent?: boolean, callback?: Function}` | Action: loads the next set of items; `callback` prop in argument fires immediately after invocation, `silent` determinse if `onLoadNext` callback is fired after calling `loadNext`| |
+| `reset`        | Function    | n/a     | `{callback?: Function}`                   | Action: resets the state of the `Floodgate` instance to the initial state; `callback` prop in argument fires immediately after invocation|                                           |
+| `saveState`    | Function    | n/a     | `null`                                    | Action: calls the `exportState` prop callback|                                                                                                                                       |
 #### `items`
 
 *Type:* `Array<any> = null`
@@ -305,6 +305,69 @@ The `callback` argument method will be called after `reset` has set the componen
 *Arguments:* `n/a`
 
 Calls the `exportState` prop callback. Any logic to manipulate and/or save Floodgate's state to a parent component should happen in that prop; since the `exportState` arguments are not configurable, there are no arguments for `saveState`.
+
+### Using `FloodgateContext`
+
+Starting in `v0.6.0`, Floodgate provides a named export `FloodgateContext` that affords the use of the [React Context API](https://reactjs.org/docs/context.html).
+
+The `FloodgateContext`'s `Consumer` component exposes the same object argument as the [`Floodgate#render` function](#render-function).
+
+#### Usage
+
+This `FloodgateContext` object can be used anywhere in the render prop function of a `Floodgate` instance.
+
+First, define a component that uses the `Consumer` component:
+```javascript
+// DeepChildControls.js
+import { FloodgateContext } from "react-floodgate";
+
+const DeepChildControls = (props) => {
+  return (
+    <div>
+      <FloodgateContext.Consumer>
+        {({ loadNext, loadAll, reset }) => (
+          <React.Fragment>
+            <button onClick={loadNext}>Load More</button>
+            <button onClick={loadAll}>Load All</button>
+            <button onClick={reset}>Reset</button>
+          </React.Fragment>
+        )}
+      </FloodgateContext.Consumer>
+    </div>
+  )
+}
+```
+
+Then, import and use this component under a Floodgate render prop:
+```javascript
+// LoadMoreArticles.js
+import Floodgate from "react-floodgate";
+import DeepChildControls from "./DeepChildControls";
+
+export default function LoadMoreArticles(props) {
+  return (
+    <Floodgate data={props.data} initial={5} increment={5}>
+      {({ items }) => (
+        <div>
+          <h3>Articles</h3>
+          <section>
+            {items.map((story) => (
+              <article>
+                <h4>{story.title}</h4>
+                <p>{story.excerpt}</p>
+              </article>
+            ))}
+            <footer>
+              {/* Use DeepChildControls here */}
+              <DeepChildControls />
+            </footer>
+          </section>
+        </div>
+      )}
+    </Floodgate>
+  )
+}
+```
 
 ## Examples
 

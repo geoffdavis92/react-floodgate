@@ -1,14 +1,13 @@
-import rAFPolyfill from "./__test_utils__";
+import "./__test_utils__";
 import React from "react";
 import jest from "jest";
 import jest_mock from "jest-mock";
-import Enzyme, { render, shallow, mount } from "enzyme";
+import Enzyme, { render, mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import toJSON from "enzyme-to-json";
 
-import Floodgate from "../dist/floodgate.esm";
-import { logMsg, loopSimulation, theOfficeData } from "../src/helpers";
-import toJson from "enzyme-to-json";
+import Floodgate, { FloodgateContext } from "../dist/floodgate.esm";
+import { loopSimulation, theOfficeData } from "../src/helpers";
 
 // configure Enzyme
 Enzyme.configure({ adapter: new Adapter() });
@@ -115,6 +114,10 @@ class WrappedFloodgate extends React.Component {
   }
 }
 
+function FCCTest(props) {
+  return <p>{props.chidlren}</p>;
+}
+
 // Wrapped instance for prop updates
 class ControlledFloodgate extends React.Component {
   constructor() {
@@ -134,16 +137,13 @@ class ControlledFloodgate extends React.Component {
     }));
   }
   addDataToState() {
-    this.setState(
-      prevState => {
-        return {
-          fetchActive: false,
-          fetchComplete: false,
-          data: [...prevState.data, prevState.data.length]
-        };
-      },
-      () => {}
-    );
+    this.setState(prevState => {
+      return {
+        fetchActive: false,
+        fetchComplete: false,
+        data: [...prevState.data, prevState.data.length]
+      };
+    });
   }
   handleClick() {
     this.setState(
@@ -226,7 +226,7 @@ const FloodgateInstance = ({
   </Floodgate>
 );
 
-describe("Floodgate", () => {
+describe("A. Floodgate", () => {
   // simple check to make sure Floodgate renders
   it("1. Should render the Floodgate component", () => {
     const fgi = render(<FloodgateInstance />);
@@ -356,6 +356,7 @@ describe("Floodgate", () => {
         .at(fgi.find(Floodgate).instance().props.data.length - 1)
         .text()
     ).toMatch("Angela Schrute");
+    expect(toJSON(fgi)).toMatchSnapshot();
     expect(loadButton()).toHaveLength(0);
     expect(loadAllButton()).toHaveLength(0);
     expect(resetButton()).toHaveLength(1);
@@ -489,7 +490,7 @@ describe("Floodgate", () => {
   // });
 });
 
-describe("Wrapped Floodgate for saveState testing", () => {
+describe("B. Wrapped Floodgate for saveState testing", () => {
   it("1. Should render a wrapped Floodgate instance", () => {
     const wfgi = mount(<WrappedFloodgate floodgateSaveStateOnUnmount />);
     expect(toJSON(wfgi)).toMatchSnapshot();
@@ -607,31 +608,30 @@ describe("Wrapped Floodgate for saveState testing", () => {
   });
 });
 
-describe("Conrolled Floodgate for parent state-controlled testing", () => {
+describe("C. Controlled Floodgate for parent state-controlled testing", () => {
   it("1. Should render 3 items", () => {
     const controlledFGI = mount(<ControlledFloodgate />);
     const getFG = () => controlledFGI.find(Floodgate);
     const getLI = () => controlledFGI.find("li");
-    const getFGInstance = () => getFG().instance();
 
     expect(getLI()).toHaveLength(3);
   });
+
   it("2. Should fetch 1 items, then render on LoadNext", () => {
     const controlledFGI = mount(<ControlledFloodgate />);
     const getFG = () => controlledFGI.find(Floodgate);
     const getLI = () => controlledFGI.find("li");
     const getFGInstance = () => getFG().instance();
 
-    const fetchButton = controlledFGI.find("button#fetch");
-    const loadButton = controlledFGI.find("button#loadNext");
+    const getFetchButton = () => controlledFGI.find("button#fetch");
+    const getLoadButton = () => controlledFGI.find("button#loadNext");
 
     expect(getLI()).toHaveLength(3);
     expect(getFGInstance().state.allItemsRendered).toEqual(true);
 
     // Fetch one number
-    fetchButton.simulate("click");
+    getFetchButton().simulate("click");
 
-    // expect(getFGInstance().state.allItemsRendered).toEqual(false);
     expect(getFGInstance().state.renderedItems).toHaveLength(
       getFGInstance().state.items.length - 1
     );
@@ -640,7 +640,7 @@ describe("Conrolled Floodgate for parent state-controlled testing", () => {
     );
 
     // Load new item
-    loadButton.simulate("click");
+    getLoadButton().simulate("click");
 
     expect(getLI()).toHaveLength(getFGInstance().state.items.length);
 
@@ -650,21 +650,22 @@ describe("Conrolled Floodgate for parent state-controlled testing", () => {
     expect(fgState.currentIndex).toEqual(fgState.items.length);
     expect(fgState.allItemsRendered).toEqual(true);
   });
+
   it("3. Should fetch 2 items, render 1 new item on LoadNext", () => {
     const controlledFGI = mount(<ControlledFloodgate />);
     const getFG = () => controlledFGI.find(Floodgate);
     const getLI = () => controlledFGI.find("li");
     const getFGInstance = () => getFG().instance();
 
-    const fetchButton = controlledFGI.find("button#fetch");
-    const loadButton = controlledFGI.find("button#loadNext");
+    const getFetchButton = () => controlledFGI.find("button#fetch");
+    const getLoadButton = () => controlledFGI.find("button#loadNext");
 
     expect(getLI()).toHaveLength(3);
     expect(getFGInstance().state.allItemsRendered).toEqual(true);
 
     // Fetch two numbers
-    fetchButton.simulate("click");
-    fetchButton.simulate("click");
+    getFetchButton().simulate("click");
+    getFetchButton().simulate("click");
 
     expect(getFGInstance().state.renderedItems).toHaveLength(
       getFGInstance().state.items.length - 2
@@ -674,10 +675,15 @@ describe("Conrolled Floodgate for parent state-controlled testing", () => {
     );
 
     // Load new item
-    loadButton.simulate("click");
+    expect(getFGInstance().props.data).toMatchObject(
+      getFGInstance().state.items
+    );
+
+    getLoadButton().simulate("click");
+    getFGInstance().loadNext();
     expect(getLI()).toHaveLength(getFGInstance().state.items.length - 1);
 
-    loadButton.simulate("click");
+    getLoadButton().simulate("click");
     expect(getLI()).toHaveLength(getFGInstance().state.items.length);
 
     const fgState = getFGInstance().state;
@@ -685,5 +691,68 @@ describe("Conrolled Floodgate for parent state-controlled testing", () => {
     expect(fgState.renderedItems).toMatchObject(fgState.items);
     expect(fgState.currentIndex).toEqual(fgState.items.length);
     expect(fgState.allItemsRendered).toEqual(true);
+  });
+});
+
+describe("D. Context-Wrapped Floodgate", () => {
+  it("1. Should provide FloodgateInternals via Context API", () => {
+    const fgi = mount(
+      <Floodgate data={theOfficeData}>
+        {() => (
+          <FloodgateContext.Consumer>
+            {ctxProps => <FCCTest {...{ ctxProps }} />}
+          </FloodgateContext.Consumer>
+        )}
+      </Floodgate>
+    );
+    expect(toJSON(fgi)).toMatchSnapshot();
+    expect(fgi.find(FCCTest).props().ctxProps).toMatchObject({
+      items: fgi.instance().state.renderedItems,
+      loadComplete: fgi.instance().state.allItemsRendered,
+      loadAll: fgi.instance().loadAll,
+      loadNext: fgi.instance().loadNext,
+      reset: fgi.instance().reset,
+      saveState: fgi.instance().saveState
+    });
+  });
+
+  it("2. Should display 5 items, load 3 more from Context controls", () => {
+    const fgi = mount(
+      <Floodgate data={theOfficeData} increment={3}>
+        {({ items }) => (
+          <div>
+            <ul>
+              {items.map(item => (
+                <li key={item.username}>{item.name}</li>
+              ))}
+            </ul>
+            <section id="controls">
+              <FloodgateContext.Consumer>
+                {({ loadNext, loadAll }) => (
+                  <React.Fragment>
+                    <button onClick={loadNext} id="load-next">
+                      Load Next
+                    </button>
+                    <button onClick={loadAll} id="load-all">
+                      Load All
+                    </button>
+                  </React.Fragment>
+                )}
+              </FloodgateContext.Consumer>
+            </section>
+          </div>
+        )}
+      </Floodgate>
+    );
+    expect(toJSON(fgi)).toMatchSnapshot();
+    expect(fgi.find("li")).toHaveLength(5);
+
+    fgi.find("#load-next").simulate("click");
+
+    expect(fgi.find("li")).toHaveLength(8);
+
+    fgi.find("#load-all").simulate("click");
+
+    expect(fgi.find("li")).toHaveLength(theOfficeData.length);
   });
 });
