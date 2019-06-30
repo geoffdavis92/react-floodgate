@@ -15,7 +15,7 @@ Enzyme.configure({ adapter: new Adapter() });
 // Wrapped instance for unMount
 class WrappedFloodgate extends React.Component {
   static defaultProps = {
-    floodgateSaveStateOnUnmount: true
+    floodgateExportStateOnUnmount: true
   };
   constructor() {
     super();
@@ -80,8 +80,8 @@ class WrappedFloodgate extends React.Component {
             data={this.state.savedState.data}
             initial={this.state.savedState.initial}
             increment={this.state.savedState.increment}
-            saveStateOnUnmount={this.props.floodgateSaveStateOnUnmount}
-            exportState={this.cacheFloodgateState}
+            exportStateOnUnmount={this.props.floodgateExportStateOnUnmount}
+            onExportState={this.cacheFloodgateState}
           >
             {({ items, loadNext, loadAll, reset, loadComplete }) => (
               <main>
@@ -127,11 +127,11 @@ class ControlledFloodgate extends React.Component {
       fetchActive: false,
       data: [0, 1, 2]
     };
-    this.saveState = this.saveState.bind(this);
+    this.exportState = this.exportState.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.addDataToState = this.addDataToState.bind(this);
   }
-  saveState(FloodgateState) {
+  exportState(FloodgateState) {
     this.setState(prevState => ({
       cachedFloodgateState: FloodgateState
     }));
@@ -492,11 +492,11 @@ describe("A. Floodgate", () => {
 
 describe("B. Wrapped Floodgate for saveState testing", () => {
   it("1. Should render a wrapped Floodgate instance", () => {
-    const wfgi = mount(<WrappedFloodgate floodgateSaveStateOnUnmount />);
+    const wfgi = mount(<WrappedFloodgate floodgateExportStateOnUnmount />);
     expect(toJSON(wfgi)).toMatchSnapshot();
   });
   it("2. Should load 3 items, and save the currentIndex to the WrappedFloodgate state on cWU", () => {
-    const wfgi = mount(<WrappedFloodgate floodgateSaveStateOnUnmount />);
+    const wfgi = mount(<WrappedFloodgate floodgateExportStateOnUnmount />);
     const fgi = wfgi.find(Floodgate).instance();
     const loadBtn = wfgi.find("button#load");
     const toggleBtn = wfgi.find("button#toggleFloodgate");
@@ -519,7 +519,7 @@ describe("B. Wrapped Floodgate for saveState testing", () => {
     });
   });
   it("2. Should load 3 items, click to load 3 more items, toggle Floodgate, and persist Floodgate state through mounting/re-mounting", () => {
-    const wfgi = mount(<WrappedFloodgate floodgateSaveStateOnUnmount />);
+    const wfgi = mount(<WrappedFloodgate floodgateExportStateOnUnmount />);
     const getFgi = () => wfgi.find(Floodgate).instance();
     const loadBtn = wfgi.find("button#load");
     const toggleBtn = wfgi.find("button#toggleFloodgate");
@@ -548,7 +548,7 @@ describe("B. Wrapped Floodgate for saveState testing", () => {
     expect(getFgi().state.currentIndex).toBe(6);
   });
   it("3. Should load 3 items, toggle Floodgate, randomly splice data entries, then persist Floodgate index state through mounting/re-mounting", () => {
-    const wfgi = mount(<WrappedFloodgate floodgateSaveStateOnUnmount />);
+    const wfgi = mount(<WrappedFloodgate floodgateExportStateOnUnmount />);
     const getFgi = () => wfgi.find(Floodgate).instance();
     const toggleBtn = wfgi.find("button#toggleFloodgate");
 
@@ -574,7 +574,7 @@ describe("B. Wrapped Floodgate for saveState testing", () => {
     );
   });
   it("4. Should load 3 items, click to load all items, toggle Floodgate, reset should update state based on newInitial argument prop", () => {
-    const wfgi = mount(<WrappedFloodgate floodgateSaveStateOnUnmount />);
+    const wfgi = mount(<WrappedFloodgate floodgateExportStateOnUnmount />);
     const getFgi = () => wfgi.find(Floodgate).instance();
     const getResetBtn = () => wfgi.find("button#reset");
     const loadAllBtn = wfgi.find("button#loadall");
@@ -712,7 +712,7 @@ describe("D. Context-Wrapped Floodgate", () => {
       loadAll: fgi.instance().loadAll,
       loadNext: fgi.instance().loadNext,
       reset: fgi.instance().reset,
-      saveState: fgi.instance().saveState
+      exportState: fgi.instance().exportState
     });
   });
 
