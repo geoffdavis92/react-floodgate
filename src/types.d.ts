@@ -18,13 +18,13 @@ type FloodgateProps = {
     loadAll: Function,
     loadNext: Function,
     reset: Function,
-    saveState: Function
+    exportState: Function
   }) => JSX.Element,
   data: any[],
   increment: number,
   initial: number,
-  saveStateOnUnmount?: boolean,
-  exportState?: Function,
+  exportStateOnUnmount?: boolean,
+  onExportState?: Function,
   onLoadNext?: Function,
   onLoadComplete?: Function,
   onReset?: Function
