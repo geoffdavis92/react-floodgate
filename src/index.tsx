@@ -20,7 +20,7 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
     data: PropTypes.array.isRequired,
     initial: PropTypes.number,
     increment: PropTypes.number,
-    saveStateOnUnmount: PropTypes.bool,
+    exportStateOnUnmount: PropTypes.bool,
     exportState: PropTypes.func,
     onLoadNext: PropTypes.func,
     onLoadComplete: PropTypes.func,
@@ -29,7 +29,7 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
   static defaultProps = {
     initial: 5,
     increment: 5,
-    saveStateOnUnmount: true
+    exportStateOnUnmount: true
   };
 
   // methods
@@ -53,7 +53,7 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
     this.loadAll = this.loadAll.bind(this);
     this.loadNext = this.loadNext.bind(this);
     this.reset = this.reset.bind(this);
-    this.saveState = this.saveState.bind(this);
+    this.exportState = this.exportState.bind(this);
     this[initGeneratorSymbol](
       this.props.data,
       this.props.increment,
@@ -82,8 +82,8 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
     }
   }
   componentWillUnmount(): void {
-    // Prevent unwanted cacheing by setting saveStateOnUnmount to false
-    this.props.saveStateOnUnmount && this.saveState();
+    // Prevent unwanted cacheing by setting exportStateOnUnmount to false
+    this.props.exportStateOnUnmount && this.exportState();
   }
   reset({
     initial,
@@ -180,17 +180,17 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
       );
     }
   }
-  saveState() {
+  exportState() {
     const { renderedItems, currentIndex, allItemsRendered } = this.state;
-    this.props.exportState &&
-      this.props.exportState({
+    this.props.onExportState &&
+      this.props.onExportState({
         currentIndex,
         renderedItems,
         allItemsRendered
       });
   }
   render() {
-    const { loadAll, loadNext, reset, saveState } = this;
+    const { loadAll, loadNext, reset, exportState } = this;
     const { renderedItems, allItemsRendered } = this.state;
     const floodgateInternals = {
       items: renderedItems,
@@ -198,7 +198,7 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
       loadAll,
       loadNext,
       reset,
-      saveState
+      exportState
     };
     return (
       <FloodgateContext.Provider value={floodgateInternals}>
