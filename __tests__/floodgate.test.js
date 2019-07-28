@@ -856,7 +856,15 @@ describe("D. Context-Wrapped Floodgate", () => {
     );
 
     getAllButton().simulate("click");
-    expect(getFG().data).toMatchObject(getFG().props.data);
+    expect(getFG().state.items).toMatchObject(getFG().props.data);
     expect(getStringList().children().length).toBe(getFG().props.data.length);
+    expect(getStringList().children().length).toBe(
+      getFG().state.renderedItems.length
+    );
+
+    getResetButton().simulate("click");
+
+    expect(getFG().props.initial).toBe(getFG().state.renderedItems.length);
+    expect(getFG().props.initial).toBe(getStringList().children().length);
   });
 });
