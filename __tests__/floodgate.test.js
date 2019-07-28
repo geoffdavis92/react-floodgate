@@ -755,4 +755,108 @@ describe("D. Context-Wrapped Floodgate", () => {
 
     expect(fgi.find("li")).toHaveLength(theOfficeData.length);
   });
+
+  it("3. Updates Async Data from Props", () => {
+    function* stringGen() {
+      while (true) {
+        yield Math.floor(Math.random() * 1000).toString();
+      }
+    }
+
+    const StringGeneratorContext = React.createContext([]);
+    class StringGenerator extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          strings: []
+        };
+        this.generator = stringGen();
+        this.iterate = this.iterate.bind(this);
+      }
+      componentDidMount() {
+        this.iterate();
+      }
+      iterate() {
+        if (this.state.strings.length < this.props.count) {
+          return this.setState(prevState => ({
+            strings: [...prevState.strings, this.generator.next().value]
+          }));
+        }
+      }
+      render() {
+        return (
+          <StringGeneratorContext.Provider value={this.state.strings}>
+            {this.props.children}
+          </StringGeneratorContext.Provider>
+        );
+      }
+    }
+    const fgi = mount(
+      <StringGenerator count={10}>
+        <StringGeneratorContext.Consumer>
+          {strings => (
+            <React.Fragment>
+              {strings.length ? (
+                <Floodgate data={strings} initial={3} increment={1}>
+                  {({ items, loadNext, loadAll, reset, loadComplete }) => (
+                    <React.Fragment>
+                      <ul id="string-list">
+                        {items.map(s => (
+                          <li
+                            key={
+                              s.replace(/\s/g, "_") +
+                              Math.floor(Math.random() * 1000)
+                            }
+                          >
+                            {s}
+                          </li>
+                        ))}
+                      </ul>
+                      <button id="next" onClick={loadNext}>
+                        Next
+                      </button>
+                      <button id="all" onClick={loadAll}>
+                        All
+                      </button>
+                      <button id="reset" onClick={reset}>
+                        Reset
+                      </button>
+                    </React.Fragment>
+                  )}
+                </Floodgate>
+              ) : null}
+            </React.Fragment>
+          )}
+        </StringGeneratorContext.Consumer>
+      </StringGenerator>
+    );
+    const getFG = () => fgi.find(Floodgate).instance();
+    const getStringGen = () => fgi.find(StringGenerator).instance();
+    const getNextButton = () => fgi.find("#next");
+    const getAllButton = () => fgi.find("#all");
+    const getResetButton = () => fgi.find("#reset");
+    const getStringList = () => fgi.find("#string-list");
+
+    getStringGen().iterate();
+    getStringGen().iterate();
+    expect(getFG().props.data).toHaveLength(
+      getStringGen().state.strings.length
+    );
+    expect(getStringList().children.length).toBe(1);
+
+    getNextButton().simulate("click");
+
+    expect(getStringList().children().length).toBe(2);
+    getStringGen().iterate();
+    getStringGen().iterate();
+    getStringGen().iterate();
+
+    expect(getFG().props.data).toHaveLength(
+      getStringGen().state.strings.length
+    );
+
+    getAllButton().simulate("click");
+    expect(getFG().data).toMatchObject(getFG().props.data);
+    expect(getStringList().children().length).toBe(getFG().props.data.length);
+  });
 });
