@@ -69,16 +69,22 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
   componentDidUpdate(prevProps, prevState): void {
     const { data, increment } = this.props;
     if (this.props !== prevProps) {
+      // Initialize new generator
       this[initGeneratorSymbol](
         data.slice(prevState.currentIndex, data.length),
         increment,
         increment
       );
+
+      // Set new state
       const items = data;
       this.setState(() => ({
         items,
         allItemsRendered: items.length === prevState.renderedItems.length
       }));
+
+      // Update data property
+      this.data = data;
     }
   }
   componentWillUnmount(): void {
