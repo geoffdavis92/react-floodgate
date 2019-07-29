@@ -1,6 +1,6 @@
 {
 	"name": "react-floodgate",
-	"version": "0.6.1",
+	"version": "1.0.0",
 	"description": "Configurable and flexible \"load more\" component for React",
 	"keywords": [
 		"react",
