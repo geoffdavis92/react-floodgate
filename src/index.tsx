@@ -10,7 +10,6 @@ const FloodgateContext = React.createContext({});
 
 class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
   // types
-  data: Array<any>;
   queue: Generator | null;
   state: FloodgateState;
 
@@ -37,9 +36,8 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
     super(props);
     const { data, increment, initial } = props;
     this.queue = null;
-    this.data = data;
     this.state = {
-      items: this.data,
+      items: data,
       renderedItems: [],
       currentIndex: 0,
       allItemsRendered: false,
@@ -69,11 +67,14 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
   componentDidUpdate(prevProps, prevState): void {
     const { data, increment } = this.props;
     if (this.props !== prevProps) {
+      // Initialize new generator
       this[initGeneratorSymbol](
         data.slice(prevState.currentIndex, data.length),
         increment,
         increment
       );
+
+      // Set new state
       const items = data;
       this.setState(() => ({
         items,
@@ -90,7 +91,7 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
     callback
   }: { initial?: number, callback?: Function } = {}): void {
     this[initGeneratorSymbol](
-      this.data,
+      this.props.data,
       this.props.increment,
       typeof initial !== "undefined" ? initial : this.props.initial
     );
@@ -122,8 +123,8 @@ class Floodgate extends React.Component<FloodgateProps, FloodgateState> {
       ? this.setState(
           prevState => {
             return {
-              renderedItems: this.data,
-              currentIndex: this.data.length,
+              renderedItems: this.props.data,
+              currentIndex: this.props.data.length,
               allItemsRendered: true
             };
           },
