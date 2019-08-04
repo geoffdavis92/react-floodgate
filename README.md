@@ -384,11 +384,23 @@ export default function LoadMoreArticles(props) {
 
 ## Contributors
 
+### Creating Issues
+
 **[Request a feature](https://github.com/geoffdavis92/react-floodgate/issues/new?template=feature-request.md&projects=geoffdavis92/react-floodgate/1&labels=feature)**
 
 **[Request maintenance](https://github.com/geoffdavis92/react-floodgate/issues/new?template=maintenance.md&projects=geoffdavis92/react-floodgate/1&labels=dx)**
 
 **[Request a documentation update](https://github.com/geoffdavis92/react-floodgate/issues/new?template=documentation.md&projects=geoffdavis92/react-floodgate/3&labels=github,dx)**
+
+### Setup for Development 
+
+1. Clone/fork this repository
+2. Install dependencies using yarn or npm.
+3. Run any of the following commands:
+   - `npm run start`: Starts the Rollup watch script for building from `/src`
+   - `npm run storybook`: Starts the [Storybook](https://storybook.js.org/) development environment
+   - `npm run test`: Runs [Jest](https://jestjs.io/) tests once
+   - `npm run test:watch`: Same as `test`, but sets up Jest and watches for changes
 
 ## LICENSE
 
