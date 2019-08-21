@@ -371,7 +371,7 @@ export default function LoadMoreArticles(props) {
 
 ## Examples
 
-### [Codesandbox Examples](https://codesandbox.io/dashboard/sandboxes/react-floodgate-examples)
+### [Codesandbox Examples](https://codesandbox.io/search?query=&page=1&configure%5BhitsPerPage%5D=12&refinementList%5Btags%5D%5B0%5D=react-floodgate-examples)
 
 - [Floodgate basics](https://codesandbox.io/embed/floodgate-basics-ighcr?fontsize=14&module=%2Fsrc%2Findex.tsx)
 - [Parent-controlled Floodgate](https://codesandbox.io/embed/controlled-floodgate-pp2ww?fontsize=14&module=%2Fsrc%2Findex.tsx)
