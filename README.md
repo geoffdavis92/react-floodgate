@@ -1,3 +1,13 @@
+## Floodgate and it's owner [@geoffdavis92](https://github.com/geoffdavis92) stand with the Black community
+
+If you are financially able, please consider donating to [Black Lives Matter](https://secure.actblue.com/donate/ms_blm_homepage_2019) or any number of metropolitan bail funds ([list in this link](https://bit.ly/bailfundslegalhelp)).
+
+Open source takes cooperation and expertise from all over the world, from people of all ethnic, racial, and national backgrounds; so does fighting for freedom and against police/state brutality and murder.
+
+Black. Lives. Matter.
+
+---
+
 <h1 align="center">react-floodgate 🌊</h1>
 <p align="center">Configurable and flexible "load more" component for React</p>
 
