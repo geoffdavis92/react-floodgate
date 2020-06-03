@@ -1,4 +1,4 @@
-## Floodgate and it's owner [@geoffdavis92](https://github.com/geoffdavis92) stand with the Black community
+## Floodgate and it's maintainer [@geoffdavis92](https://github.com/geoffdavis92) stand with the Black community
 
 If you are financially able, please consider donating to [Black Lives Matter](https://secure.actblue.com/donate/ms_blm_homepage_2019) or any number of metropolitan bail funds ([list in this link](https://bit.ly/bailfundslegalhelp)).
 
